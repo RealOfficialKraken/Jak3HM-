@@ -1,0 +1,7 @@
+(in-package goal)
+
+;Lisp
+;name: wasteland-spawner.gc
+
+
+;(declare-type neo-sat nav-enemy)
