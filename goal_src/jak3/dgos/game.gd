@@ -472,4 +472,14 @@
   "debris.o"
   "shield-sphere.o"
   "entity-debug.o" ;; added
+  "actor-def.o"
+  "mod-save-stats.o"
+  "jak3-custom-code.o"
+  "xp-level.o"
+  "wasteland-spawner.o"
+  "rope-system-h.o"
+  "rope-system.o"
+  "rope-prim-system-h.o"
+  "rope-prim-system.o"
+  "neo-satellite.o"
  ))

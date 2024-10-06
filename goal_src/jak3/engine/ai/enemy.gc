@@ -7,6 +7,8 @@
 
 ;; DECOMP BEGINS
 
+(defun-extern enemy-killed? float none)
+
 (defmethod copy-enemy-info! ((this enemy-info) (arg0 enemy-info))
   (mem-copy! (&-> this type) (&-> arg0 type) 420)
   0
@@ -1033,8 +1035,8 @@
       )
   (set! (-> this water-max-height) 8192.0)
   (if (logtest? (-> *game-info* secrets) (game-secrets hero-mode))
-      (set! (-> this hit-points) (* 2.0 (-> this enemy-info default-hit-points)))
-      (set! (-> this hit-points) (-> this enemy-info default-hit-points))
+      (set! (-> this hit-points) (+ (* 2.0 (-> this enemy-info default-hit-points)) (* (the float enemy-noto) 3)))
+      (set! (-> this hit-points) (+ (-> this enemy-info default-hit-points) (* (the float enemy-noto) 3)))
       )
   (let* ((v1-37 *game-info*)
          (a0-10 (+ (-> v1-37 attack-id) 1))
@@ -2124,6 +2126,11 @@
          (f30-0 (enemy-method-63 this f0-0))
          )
     (set! (-> this hit-points) (- (-> this hit-points) f30-0))
+    (#when PC_PORT
+      (when (and 
+              (zero? (-> this hit-points))
+            )
+        (enemy-killed? (rand-vu-float-range 15.0 50.0))))
     (if (not (logtest? (-> this enemy-flags) (enemy-flag auto-reset-penetrate)))
         (set! (-> this root penetrated-by) (get-penetrated-by this))
         )

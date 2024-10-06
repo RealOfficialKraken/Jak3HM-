@@ -5,6 +5,69 @@
 ;; name in dgo: game-info-h
 ;; dgos: GAME
 
+(define extra-offthetop 0.0)
+    (define draw-levelup-noto #f)
+    (define draw-levelup-guns #f)
+    (define lvl2i 0)
+    (define lvli 0)
+    (define *xp-gain* 0.0)
+    (define xp-draw #t)
+    (define xpi 0)
+    (define enemy-noto 0)
+    (define start-was-uprising #f)
+    (define wasi 0)
+
+  (define matt-str (new 'global 'string 2048 (the-as string #f)))
+  (define *pc-encoded-matt-str* (new 'global 'string 2048 (the-as string #f)))
+
+  (define notoriety-level 0)
+  (define cars-level 0)
+  (define guns-level 0)
+  (define eco-level 0)
+
+  (define in-debug? #t)
+
+  (define bm-string "")
+  (define gm-string "")
+  (define sq-string "")
+  (define noto-string "")
+  (define r3-noto #f)
+  (define r3-guns #f)
+  (define r3-cars #f)
+  (define fuel-alternative 0.0)
+  (define notoi 0)
+  (define anim-noto 0)
+  (define max-modg 5)
+  (define max-modb 3)
+  (define uni-count1 #f)
+  (define uni 0)
+  (define in-modifiers? #f)
+  (define in-gunmods? #f)
+  (define in-superpowers? #f)
+  (define in-skill? #f)
+  (define on-vehicle? #f)
+
+  (define menu-slot 0)
+  (define menu-type 0)
+  (define menu-select 0)
+
+  (define in-menu? #f)
+
+  (define has-boost-tap? #f)
+  (define has-fast-attacks? #f)
+  (define has-luck-stat? #f)
+  (define has-triple-jump? #f)
+  (define has-flight-boost? #f)
+  (define has-enemy-hp? #f)
+  (define has-ambush? #f)
+  (define has-more-enemies? #f)
+  (define camera-locked? #f)
+
+  (define-extern *xp-gain* float)
+  (define-extern xp-draw symbol)
+  (define-extern xp-string string)
+  (define-extern notoriety-level int)
+  (define-extern xpi int)
 
 ;; +++game-items
 (defenum game-items
