@@ -53,6 +53,20 @@
 
   (define in-menu? #f)
 
+  (define in-satbattle? #f)
+  (define cdr-satbattle #f)
+  (define darkmakersleft 0)
+  (define cdr-i 0)
+  (define in-desert-game-task? #f)
+  (define spawned-deserta1-poi? #f)
+  (define spawned-deserta2-poi? #f)
+  (define spawned-desertb1-poi? #f)
+  (define spawned-desertb2-poi? #f)
+  (define spawned-desertc1-poi? #f)
+  (define spawned-desertc2-poi? #f)
+  (define spawned-desertd1-poi? #f)
+  (define spawned-desertd2-poi? #f)
+
   (define has-boost-tap? #f)
   (define has-fast-attacks? #f)
   (define has-luck-stat? #f)

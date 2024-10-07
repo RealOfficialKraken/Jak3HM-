@@ -193,6 +193,7 @@
   :virtual #t
   :code (behavior ()
     (until #f
+      (set! in-desert-game-task? #t)
       (suspend)
       (cond
         ((= (status-of-level-and-borrows *level* 'desert #f) 'active)
@@ -372,6 +373,7 @@
       )
     (suspend)
     (until #f
+      (set! in-desert-game-task? #t)
       (when (and *target* (focus-test? *target* pilot-riding))
         (let ((gp-0 (handle->process (-> *target* pilot vehicle))))
           (if (if (type? gp-0 v-snake)
@@ -405,6 +407,7 @@
       )
     (suspend)
     (until #f
+      (set! in-desert-game-task? #t)
       (when (and *target* (focus-test? *target* pilot-riding))
         (let ((gp-0 (handle->process (-> *target* pilot vehicle))))
           (when (if (type? gp-0 v-turtle)
@@ -471,6 +474,7 @@
     (suspend-for (seconds 1)
       )
     (open! (-> self node-info) 'event)
+    (set! in-desert-game-task? #t)
     (talker-spawn-func (-> *talker-speech* 83) *entity-pool* (target-pos 0) (the-as region #f))
     (sleep-code)
     )
@@ -527,6 +531,7 @@
   :code (behavior ()
     (local-vars (v1-1 object))
     (until #f
+      (set! in-desert-game-task? #t)
       (let ((v1-0 *target*))
         (set! v1-1
               (and v1-0
@@ -558,6 +563,7 @@
     (set-setting! 'pilot-exit #f 0.0 0)
     (open! (-> self node-info) 'event)
     (let ((t9-2 (-> (method-of-type task-manager active) code)))
+      (set! in-desert-game-task? #t)
       (if t9-2
           ((the-as (function none) t9-2))
           )
@@ -573,6 +579,7 @@
 (defstate active (task-manager-vehicle-wait)
   :virtual #t
   :code (behavior ()
+    (set! in-desert-game-task? #t)
     (while (not (and *target* (focus-test? *target* pilot-riding)))
       (suspend)
       )
@@ -592,6 +599,7 @@
   :enter (behavior ()
     (call-parent-state-handler enter)
     (set-setting! 'airlock #f 0.0 0)
+    (set! in-desert-game-task? #t)
     )
   :trans (behavior ()
     (if (and *target* (not (logtest? (-> *target* focus-status) (focus-status pilot-riding))))

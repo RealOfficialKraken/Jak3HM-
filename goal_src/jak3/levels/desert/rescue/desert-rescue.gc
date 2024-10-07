@@ -1795,6 +1795,7 @@
   :virtual #t
   :event task-manager-event-handler
   :enter (behavior ()
+    (set! in-desert-game-task? #t)
     (call-parent-state-handler enter)
     (set! (-> self entity) #f)
     (dotimes (v1-2 (-> self passenger-pos length))

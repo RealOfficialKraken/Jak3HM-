@@ -497,6 +497,7 @@
        #f
        )
      (set! mode 'game)
+     (set! in-desert-game-task? #f)
      (set! (-> this auto-save-count) 1)
      (set! (-> *setting-control* user-default auto-save) #f)
      (set! (-> this money) 0.0)
@@ -792,7 +793,7 @@
        (let ((s5-1 (the int arg1)))
          (when (not (or (task-complete? this (the-as game-task s5-1)) (>= (the-as uint 1) (the-as uint s5-1))))
            ;(set! (-> this task-deaths) 0)
-
+          (set! in-desert-game-task? #f)
           (+! (-> *game-info* karma) (/ (* 130 notoriety-level) 2))
           (set! *xp-gain* (the float (/ (* 130 notoriety-level) 2)))
           (set! xp-string "Mission Complete")

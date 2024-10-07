@@ -997,6 +997,40 @@ Bad modifiers:
 (when (and 
 (= in-debug? #t)
 *debug-segment* 
+(= in-desert-game-task? #t)
+)
+    (clear matt-str)
+    (clear *pc-encoded-matt-str*)
+    (format matt-str "<COLOR_WHITE>in-desert-game-task? <COLOR_GREEN>#t"
+    )
+    (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+    (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+    (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+    (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 510 70 0.0 (font-color default) (font-flags right shadow kerning large))))
+    (set! (-> font-ctx scale) 0.325)
+    (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+)
+
+(when (and 
+(= in-debug? #t)
+*debug-segment* 
+(= in-desert-game-task? #f)
+)
+    (clear matt-str)
+    (clear *pc-encoded-matt-str*)
+    (format matt-str "<COLOR_WHITE>in-desert-game-task? <COLOR_RED>#f"
+    )
+    (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+    (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+    (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+    (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 510 70 0.0 (font-color default) (font-flags right shadow kerning large))))
+    (set! (-> font-ctx scale) 0.325)
+    (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+)
+
+(when (and 
+(= in-debug? #t)
+*debug-segment* 
 )
     (clear matt-str)
     (clear *pc-encoded-matt-str*)

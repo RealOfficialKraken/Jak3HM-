@@ -1,4 +1,7 @@
 (in-package goal)
+
+;name: actor-def.gc
+
 #|
 (defbehavior dp-bipedal-init-by-other dp-bipedal ((vec vector))
   (init-enemy-collision! self)

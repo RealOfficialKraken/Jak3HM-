@@ -174,7 +174,11 @@
         (logior! (-> arg0 entity extra perm status) (entity-perm-status error))
         )
     (declare-type neo-sat process-focusable)
-      (when (type? arg0 neo-sat)
+    (declare-type dp-bipedal process-focusable)
+      (when (or 
+              (type? arg0 neo-sat)
+              (type? arg0 dp-bipedal)
+            )
         (add-process-drawable-to-nav-mesh *default-nav-mesh* arg0 #t)
         (return 0)
       )

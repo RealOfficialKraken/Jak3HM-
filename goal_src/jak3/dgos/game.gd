@@ -482,4 +482,6 @@
   "rope-prim-system-h.o"
   "rope-prim-system.o"
   "neo-satellite.o"
+  "dp-bipedal-shot.o"
+  "dp-bipedal.o"
  ))

@@ -15,13 +15,7 @@
 
 ;; DECOMP BEGINS
 
-(defskelgroup skel-neo-sat neo-satellite neo-satellite-lod0-jg neo-satellite-idle-ja
-              ((neo-satellite-lod0-mg (meters 999999)))
-              :bounds (static-spherem 0 0 0 20)
-              :shadow neo-satellite-shadow-mg
-              :origin-joint-index 3
-              :global-effects 32
-              )
+
 
 (set! (-> *lightning-spec-id-table* 22) (new 'static 'lightning-spec
                                           :name "neo-sat-lightning-shock"
@@ -1697,7 +1691,7 @@
         (set! (-> this focus-pos quad) (-> (get-trans (the-as process-focusable a0-19) 0) quad))
         )
     )
-  (let ((f0-18 (/ (-> this hit-points) (-> this enemy-info default-hit-points))))
+  (let ((f0-18 (/ (-> this hit-points) (+ (* 2.0 (-> this enemy-info default-hit-points)) (* (the float enemy-noto) 18)))))
     (when (< 0.0 f0-18)
       (cond
         ((< f0-18 0.27)
@@ -1712,7 +1706,7 @@
              0
              40960.0
              )
-           (set! (-> this next-lightning-time) (+ (current-time) (seconds 0.35)))
+           (set! (-> this next-lightning-time) (+ (current-time) (seconds 0.25)))
            )
          )
         ((< f0-18 0.6)
@@ -3131,6 +3125,17 @@
               (when (and (< f28-0 f26-0) (>= f30-0 f26-0))
                 (set! (-> self next-lightning-time) (+ (seconds 1000) (current-time)))
                 (sound-play "sat-explode")
+                (enemy-killed? (rand-vu-float-range 300.0 600.0))
+                (set! spawned-deserta1-poi? #f)
+                (set! spawned-deserta2-poi? #f)
+                (set! spawned-desertb1-poi? #f)
+                (set! spawned-desertb2-poi? #f)
+                (set! spawned-desertc1-poi? #f)
+                (set! spawned-desertc2-poi? #f)
+                (set! spawned-desertd1-poi? #f)
+                (set! spawned-desertd2-poi? #f)
+                (set! in-satbattle? #f)
+                (set! cdr-satbattle #t)
                 (set! hand
                       (process->handle
                         (-> (cond

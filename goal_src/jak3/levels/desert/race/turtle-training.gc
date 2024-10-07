@@ -267,6 +267,7 @@
 (defstate active (task-manager-desert-turtle-training)
   :virtual #t
   :code (behavior ()
+    (set! in-desert-game-task? #t)
     (set-setting! 'pilot-exit #f 0.0 0)
     (set-setting! 'pilot-death #t 0.0 0)
     (set-setting! 'scarf 'abs 1.0 0)

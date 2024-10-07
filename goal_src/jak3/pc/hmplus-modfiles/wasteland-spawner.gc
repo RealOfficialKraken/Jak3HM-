@@ -5,3 +5,382 @@
 
 
 ;(declare-type neo-sat nav-enemy)
+
+(defskelgroup skel-neo-sat neo-satellite neo-satellite-lod0-jg neo-satellite-idle-ja
+              ((neo-satellite-lod0-mg (meters 999999)))
+              :bounds (static-spherem 0 0 0 20)
+              :shadow neo-satellite-shadow-mg
+              :origin-joint-index 3
+              :global-effects 32
+              )
+
+(defun-extern spawn-roaming-satellite vector none)
+
+
+(defun spawn-manipy-sat ((vec vector) (stri string))
+  (process-spawn manipy
+                 :init
+                 manipy-init
+                 vec
+                 #f
+                 (art-group-get-by-name *level* "skel-neo-sat" (the (pointer level) #f))
+                 #f
+                 0
+                 #f
+                 :name stri)
+  (none)
+)
+
+(defun wasteland-spawn! ()
+
+    (when   ;cooldown for satbattle
+        (and
+            (= cdr-satbattle #t)
+            (= in-satbattle? #f)
+            *target*
+            (not *scene-player*)
+            (= (paused?) #f)
+            (= (pause-allowed?) #t)
+        )
+            (+! cdr-i 1)
+            (when (= cdr-i 6000)
+                (set! cdr-i 0)
+                (set! cdr-satbattle #f)
+            )
+        )
+
+    (when   ;force jak out of a vehicle
+            (and 
+                (focus-test? *target* pilot)
+                (= in-satbattle? #t)
+                *target*
+                (not *scene-player*)
+                (= (paused?) #f)
+                (= (pause-allowed?) #t)
+            )
+                (send-event *target* 'end-mode 'pilot)
+        )
+    (when ;look for spawn params while in desert
+        (and
+            *target*
+            (not *scene-player*)
+            (= (paused?) #f)
+            (= (pause-allowed?) #t)
+            (= in-satbattle? #f)
+            (= cdr-satbattle #f)
+            (or
+                (task-node-closed? (game-task-node desert-rescue-hold-doors))
+                (logtest? (-> *game-info* secrets) (game-secrets hero-mode))
+            )
+        )
+        ;This is for spawning the manipy inside a big radius, waiting for jak to get close
+        (when (= in-desert-game-task? #f)
+            (let ( 
+                (rng-percent (rand-vu-percent? 0.137)) ;actual is 0.00137
+                (bigsphere-rad 837000.0)
+                (biggersphere-rad 1337000.0)
+                (noticesphere-rad 137000.0)
+                )
+                    ;;;;;;;;;;;;;;;;;;;;DESERTB1;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    (let ((desert-spawn (new 'static 'vector :x (meters 3154.2802) :y (meters 19.5781) :z (meters 541.2550) :w 1.0)))
+                        (when 
+                            (and
+                                (= spawned-desertb1-poi? #t)
+                                (= cdr-satbattle #f)
+                                (> (vector-vector-distance (target-pos 0) desert-spawn) biggersphere-rad)
+                            )
+                                (kill-by-name "manipy-sat-desertb1" *default-pool*)
+                                (set! spawned-desertb1-poi? #f)
+                        )
+                        (when 
+                            (and
+                                (= spawned-desertb1-poi? #f)
+                                rng-percent
+                                (= cdr-satbattle #f)
+                                (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
+                            )
+                                (spawn-manipy-sat desert-spawn "manipy-sat-desertb1")
+                                (set! spawned-desertb1-poi? #t)
+                        )
+
+                        (when 
+                            (and
+                                (= spawned-desertb1-poi? #t)
+                                (= cdr-satbattle #f)
+                                (<= (vector-vector-distance (target-pos 0) desert-spawn) noticesphere-rad)
+                            )
+                                (kill-by-name "manipy-sat-desertb1" *default-pool*)
+                                (spawn-roaming-satellite desert-spawn)
+                                (set! in-satbattle? #t)
+                                (set! enemy-noto 10)
+                                (set! cdr-satbattle #t)
+
+                        )
+                    )
+                    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+                    ;;;;;;;;;;;;;;;;;;;;DESERTB2;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    (let ((desert-spawn (new 'static 'vector :x (meters 3732.4335) :y (meters 22.4331) :z (meters 824.4011) :w 1.0)))
+                        (when 
+                            (and
+                                (= spawned-desertb2-poi? #t)
+                                (= cdr-satbattle #f)
+                                (> (vector-vector-distance (target-pos 0) desert-spawn) biggersphere-rad)
+                            )
+                                (kill-by-name "manipy-sat-desertb2" *default-pool*)
+                                (set! spawned-desertb2-poi? #f)
+                        )
+                        (when 
+                            (and
+                                (= spawned-desertb2-poi? #f)
+                                rng-percent
+                                (= cdr-satbattle #f)
+                                (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
+                            )
+                                (spawn-manipy-sat desert-spawn "manipy-sat-desertb2")
+                                (set! spawned-desertb2-poi? #t)
+                        )
+                        (when 
+                            (and
+                                (= spawned-desertb2-poi? #t)
+                                (= cdr-satbattle #f)
+                                (<= (vector-vector-distance (target-pos 0) desert-spawn) noticesphere-rad)
+                            )
+                                (kill-by-name "manipy-sat-desertb2" *default-pool*)
+                                (spawn-roaming-satellite desert-spawn)
+                                (set! in-satbattle? #t)
+                                (set! enemy-noto 15)
+                                (set! cdr-satbattle #t)
+
+                        )
+                    )
+                    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+                    ;;;;;;;;;;;;;;;;;;;;DESERTD1;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    (let ((desert-spawn (new 'static 'vector :x (meters 2292.9907) :y (meters 13.4341) :z (meters 1500.0242) :w 1.0)))
+                        (when 
+                            (and
+                                (= spawned-desertd1-poi? #t)
+                                (= cdr-satbattle #f)
+                                (> (vector-vector-distance (target-pos 0) desert-spawn) biggersphere-rad)
+                            )
+                                (kill-by-name "manipy-sat-desertd1" *default-pool*)
+                                (set! spawned-desertd1-poi? #f)
+                        )
+                        (when 
+                            (and
+                                (= spawned-desertd1-poi? #f)
+                                rng-percent
+                                (= cdr-satbattle #f)
+                                (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
+                            )
+                                (spawn-manipy-sat desert-spawn "manipy-sat-desertd1")
+                                (set! spawned-desertd1-poi? #t)
+                        )
+                        (when 
+                            (and
+                                (= spawned-desertd1-poi? #t)
+                                (= cdr-satbattle #f)
+                                (<= (vector-vector-distance (target-pos 0) desert-spawn) noticesphere-rad)
+                            )
+                                (kill-by-name "manipy-sat-desertd1" *default-pool*)
+                                (spawn-roaming-satellite desert-spawn)
+                                (set! in-satbattle? #t)
+                                (set! enemy-noto 15)
+                                (set! cdr-satbattle #t)
+
+                        )
+                    )
+                    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+                    ;;;;;;;;;;;;;;;;;;;;DESERTD2;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    (let ((desert-spawn (new 'static 'vector :x (meters 3940.3449) :y (meters 52.2336) :z (meters 2400.6291) :w 1.0)))
+                        (when 
+                            (and
+                                (= spawned-desertd2-poi? #t)
+                                (= cdr-satbattle #f)
+                                (> (vector-vector-distance (target-pos 0) desert-spawn) biggersphere-rad)
+                            )
+                                (kill-by-name "manipy-sat-desertd2" *default-pool*)
+                                (set! spawned-desertd2-poi? #f)
+                        )
+                        (when 
+                            (and
+                                (= spawned-desertd2-poi? #f)
+                                rng-percent
+                                (= cdr-satbattle #f)
+                                (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
+                            )
+                                (spawn-manipy-sat desert-spawn "manipy-sat-desertd2")
+                                (set! spawned-desertd2-poi? #t)
+                        )
+                        (when 
+                            (and
+                                (= spawned-desertd2-poi? #t)
+                                (= cdr-satbattle #f)
+                                (<= (vector-vector-distance (target-pos 0) desert-spawn) noticesphere-rad)
+                            )
+                                (kill-by-name "manipy-sat-desertd2" *default-pool*)
+                                (spawn-roaming-satellite desert-spawn)
+                                (set! in-satbattle? #t)
+                                (set! enemy-noto (rand-vu-int-range 10 32))
+                                (set! cdr-satbattle #t)
+
+                        )
+                    )
+                    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    
+                    ;;;;;;;;;;;;;;;;;;;;DESERTA1;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    (let ((desert-spawn (new 'static 'vector :x (meters 1317.8349) :y (meters 36.3553) :z (meters 283.1715) :w 1.0)))
+                        (when 
+                            (and
+                                (= spawned-deserta1-poi? #t)
+                                (= cdr-satbattle #f)
+                                (> (vector-vector-distance (target-pos 0) desert-spawn) biggersphere-rad)
+                            )
+                                (kill-by-name "manipy-sat-deserta1" *default-pool*)
+                                (set! spawned-deserta1-poi? #f)
+                        )
+                        (when 
+                            (and
+                                (= spawned-deserta1-poi? #f)
+                                rng-percent
+                                (= cdr-satbattle #f)
+                                (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
+                            )
+                                (spawn-manipy-sat desert-spawn "manipy-sat-deserta1")
+                                (set! spawned-deserta1-poi? #t)
+                        )
+                        (when 
+                            (and
+                                (= spawned-deserta1-poi? #t)
+                                (= cdr-satbattle #f)
+                                (<= (vector-vector-distance (target-pos 0) desert-spawn) noticesphere-rad)
+                            )
+                                (kill-by-name "manipy-sat-deserta1" *default-pool*)
+                                (spawn-roaming-satellite desert-spawn)
+                                (set! in-satbattle? #t)
+                                (set! enemy-noto (rand-vu-int-range 10 32))
+                                (set! cdr-satbattle #t)
+
+                        )
+                    )
+                    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+                    ;;;;;;;;;;;;;;;;;;;;DESERTA2;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    (let ((desert-spawn (new 'static 'vector :x (meters 187.9950) :y (meters 28.1093) :z (meters 139.6443) :w 1.0)))
+                        (when 
+                            (and
+                                (= spawned-deserta2-poi? #t)
+                                (= cdr-satbattle #f)
+                                (> (vector-vector-distance (target-pos 0) desert-spawn) biggersphere-rad)
+                            )
+                                (kill-by-name "manipy-sat-deserta2" *default-pool*)
+                                (set! spawned-deserta2-poi? #f)
+                        )
+                        (when 
+                            (and
+                                (= spawned-deserta2-poi? #f)
+                                rng-percent
+                                (= cdr-satbattle #f)
+                                (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
+                            )
+                                (spawn-manipy-sat desert-spawn "manipy-sat-deserta2")
+                                (set! spawned-deserta2-poi? #t)
+                        )
+                        (when 
+                            (and
+                                (= spawned-deserta2-poi? #t)
+                                (= cdr-satbattle #f)
+                                (<= (vector-vector-distance (target-pos 0) desert-spawn) noticesphere-rad)
+                            )
+                                (kill-by-name "manipy-sat-deserta2" *default-pool*)
+                                (spawn-roaming-satellite desert-spawn)
+                                (set! in-satbattle? #t)
+                                (set! enemy-noto (rand-vu-int-range 10 32))
+                                (set! cdr-satbattle #t)
+
+                        )
+                    )
+                    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+                    ;;;;;;;;;;;;;;;;;;;;DESERTC1;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    (let ((desert-spawn (new 'static 'vector :x (meters 188.3177) :y (meters 44.0940) :z (meters 1591.0695) :w 1.0)))
+                        (when 
+                            (and
+                                (= spawned-desertc1-poi? #t)
+                                (= cdr-satbattle #f)
+                                (> (vector-vector-distance (target-pos 0) desert-spawn) biggersphere-rad)
+                            )
+                                (kill-by-name "manipy-sat-desertc1" *default-pool*)
+                                (set! spawned-desertc1-poi? #f)
+                        )
+                        (when 
+                            (and
+                                (= spawned-desertc1-poi? #f)
+                                rng-percent
+                                (= cdr-satbattle #f)
+                                (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
+                            )
+                                (spawn-manipy-sat desert-spawn "manipy-sat-desertc1")
+                                (set! spawned-desertc1-poi? #t)
+                        )
+                        (when 
+                            (and
+                                (= spawned-desertc1-poi? #t)
+                                (= cdr-satbattle #f)
+                                (<= (vector-vector-distance (target-pos 0) desert-spawn) noticesphere-rad)
+                            )
+                                (kill-by-name "manipy-sat-desertc1" *default-pool*)
+                                (spawn-roaming-satellite desert-spawn)
+                                (set! in-satbattle? #t)
+                                (set! enemy-noto (rand-vu-int-range 10 32))
+                                (set! cdr-satbattle #t)
+
+                        )
+                    )
+                    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    
+                    ;;;;;;;;;;;;;;;;;;;;DESERTC2;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    (let ((desert-spawn (new 'static 'vector :x (meters 188.3177) :y (meters 44.0940) :z (meters 1591.0695) :w 1.0)))
+                        (when 
+                            (and
+                                (= spawned-desertc2-poi? #t)
+                                (= cdr-satbattle #f)
+                                (> (vector-vector-distance (target-pos 0) desert-spawn) biggersphere-rad)
+                            )
+                                (kill-by-name "manipy-sat-desertc2" *default-pool*)
+                                (set! spawned-desertc2-poi? #f)
+                        )
+                        (when 
+                            (and
+                                (= spawned-desertc2-poi? #f)
+                                rng-percent
+                                (= cdr-satbattle #f)
+                                (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
+                            )
+                                (spawn-manipy-sat desert-spawn "manipy-sat-desertc2")
+                                (set! spawned-desertc2-poi? #t)
+                        )
+                        (when 
+                            (and
+                                (= spawned-desertc2-poi? #t)
+                                (= cdr-satbattle #f)
+                                (<= (vector-vector-distance (target-pos 0) desert-spawn) noticesphere-rad)
+                            )
+                                (kill-by-name "manipy-sat-desertc2" *default-pool*)
+                                (spawn-roaming-satellite desert-spawn)
+                                (set! in-satbattle? #t)
+                                (set! enemy-noto (rand-vu-int-range 10 32))
+                                (set! cdr-satbattle #t)
+
+                        )
+                    )
+                    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+            )
+        )
+    )
+
+    
+    (none)
+)

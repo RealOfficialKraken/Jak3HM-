@@ -1402,6 +1402,7 @@
 (defstate active (task-manager-desert-bbush-get-to)
   :virtual #t
   :event (behavior ((proc process) (argc int) (message symbol) (block event-message-block))
+    (set! in-desert-game-task? #t)
     (case message
       (('notify)
        (case (-> block param 0)

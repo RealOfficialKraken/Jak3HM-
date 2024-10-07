@@ -2015,6 +2015,7 @@
   :virtual #t
   :enter (behavior ()
     (when (>= 0.0 (-> self hit-points))
+      (declare-type vehicle process-focusable)
       (let ((a0-1 (handle->process (-> self incoming attacker-handle))))
         (if (and (logtest? (-> self fact enemy-options) (enemy-option user12))
                  a0-1
@@ -3219,3 +3220,19 @@
         )
   (go (method-of-object this idle))
   )
+
+(defbehavior dp-bipedal-init-by-other dp-bipedal ((vec vector))
+  (stack-size-set! (-> self main-thread) 512)
+  (vector-copy! (-> self root trans) vec)
+  (quaternion-identity! (-> self root quat))
+  (vector-identity! (-> self root scale))
+  (init-enemy! self)
+  (set! (-> self hit-points) (+ (* 2.0 (-> self enemy-info default-hit-points)) (* (the float enemy-noto) 3)))
+  (go (method-of-object self ambush))
+  (none)
+)
+
+(defun spawn-themaker ((vec vector))
+  (process-spawn dp-bipedal vec :name "dp-bipedal" :stack-size #x14000)
+  (none)
+)

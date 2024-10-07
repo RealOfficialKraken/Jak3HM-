@@ -159,6 +159,7 @@
         (when ;DESERT
             (and
                 (= (-> (level-get-target-inside *level*) name) 'desert)
+                (= in-satbattle? #f)
                 (!= enemy-noto notoriety-level)
                 (= start-was-uprising #f)
             )
