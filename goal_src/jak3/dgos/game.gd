@@ -474,6 +474,7 @@
   "entity-debug.o" ;; added
   "actor-def.o"
   "mod-save-stats.o"
+  "skill-healthbars.o"
   "jak3-custom-code.o"
   "xp-level.o"
   "wasteland-spawner.o"
@@ -482,6 +483,7 @@
   "rope-prim-system-h.o"
   "rope-prim-system.o"
   "neo-satellite.o"
+  "dp-bipedal-part.o"
   "dp-bipedal-shot.o"
   "dp-bipedal.o"
  ))

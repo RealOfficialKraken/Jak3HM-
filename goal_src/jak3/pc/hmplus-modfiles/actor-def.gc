@@ -10,7 +10,8 @@
   (quaternion-identity! (-> self root quat))
   (vector-identity! (-> self root scale))
   (init-enemy! self)
-  (let ((nav (find-nearest-nav-mesh vec 0.0)) ;; try to find a nav mesh in the vicinity
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      (let ((nav (find-nearest-nav-mesh vec 0.0)) ;; try to find a nav mesh in the vicinity
         ;; verts for the path
         (cverts (new 'static 'inline-array vector 3
                 (static-vectorm 1 0 0)
@@ -29,6 +30,7 @@
     (set! (-> self path curve cverts) cverts)
     (set! (-> self path curve num-cverts) 3)
     )
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (set! (-> self hit-points) (+ (-> self enemy-info default-hit-points) 35.0))
   (go-idle self)
   )|#

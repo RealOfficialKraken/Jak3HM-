@@ -1783,11 +1783,11 @@
   :enter (behavior ()
     (let ((gp-0 (new 'stack-no-clear 'shield-sphere-spawn-params)))
       (set! (-> gp-0 owner) (process->handle self))
-      (set! (-> gp-0 sphere-size) 3.25)
+      (set! (-> gp-0 sphere-size) 5.25)
       (set! (-> gp-0 track-joint) 27)
       (set! (-> gp-0 enable-time) (seconds 0.1))
       (set! (-> gp-0 disable-time) (seconds 0.1))
-      (set! (-> gp-0 shield-strength) 10)
+      (set! (-> gp-0 shield-strength) (+ 10 enemy-noto))
       (set! (-> gp-0 shield-type) (shield-type shield-type-0))
       (if (new 'static 'vector :z -7168.0 :w 1.0)
           (set! (-> gp-0 offset-vec quad) (-> (new 'static 'vector :z -7168.0 :w 1.0) quad))
@@ -3222,17 +3222,38 @@
   )
 
 (defbehavior dp-bipedal-init-by-other dp-bipedal ((vec vector))
-  (stack-size-set! (-> self main-thread) 512)
-  (vector-copy! (-> self root trans) vec)
-  (quaternion-identity! (-> self root quat))
-  (vector-identity! (-> self root scale))
-  (init-enemy! self)
-  (set! (-> self hit-points) (+ (* 2.0 (-> self enemy-info default-hit-points)) (* (the float enemy-noto) 3)))
+      (init-enemy-collision! self)
+      (set! (-> self root trans quad) (-> vec quad))
+      (quaternion-identity! (-> self root quat))
+      (vector-identity! (-> self root scale))
+      (init-enemy! self)
+      (set! (-> self hit-points) (+ (-> self enemy-info default-hit-points) (* enemy-noto 2)))
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      (let ((nav (find-nearest-nav-mesh vec 0.0)) ;; try to find a nav mesh in the vicinity
+        ;; verts for the path
+        (cverts (new 'static 'inline-array vector 3
+                (static-vectorm 1 0 0)
+                (static-vectorm 0 1 0)
+                (static-vectorm 0 0 1)
+                )
+          )
+        )
+    ;; if a nav mesh is close by, use that, otherwise use default
+    (if nav
+      (change-to nav self)
+      (change-to *default-nav-mesh* self)
+      )
+    ;; allocate path
+    (set! (-> self path) (new 'process 'path-control self 'path 0.0 (the entity #f) #f))
+    (set! (-> self path curve cverts) cverts)
+    (set! (-> self path curve num-cverts) 3)
+    )
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (go (method-of-object self ambush))
   (none)
 )
 
-(defun spawn-themaker ((vec vector))
-  (process-spawn dp-bipedal vec :name "dp-bipedal" :stack-size #x14000)
+(defun spawn-dark-maker ((vec vector))
+  (process-spawn dp-bipedal vec :name "dp-bipedal")
   (none)
 )

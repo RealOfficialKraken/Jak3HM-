@@ -1691,7 +1691,8 @@
         (set! (-> this focus-pos quad) (-> (get-trans (the-as process-focusable a0-19) 0) quad))
         )
     )
-  (let ((f0-18 (/ (-> this hit-points) (+ (* 2.0 (-> this enemy-info default-hit-points)) (* (the float enemy-noto) 18)))))
+
+  (let ((f0-18 (-> this hit-points) (* 1000.0 (* (the float enemy-noto) 64.0))))
     (when (< 0.0 f0-18)
       (cond
         ((< f0-18 0.27)
@@ -2023,7 +2024,7 @@
     (dotimes (gp-0 (-> *neo-sat-laser-array* length))
       (neo-sat-method-206 self (-> *neo-sat-laser-array* gp-0 joint) #f)
       )
-    (set! (-> self spin-current) 49152.0)
+    (set! (-> self spin-current) (* 98304.0 (/ enemy-noto 4)))
     (quaternion-rotate-y!
       (-> self disc-joint rotation)
       (-> self disc-joint rotation)
@@ -2077,7 +2078,7 @@
     (dotimes (gp-0 (-> *neo-sat-laser-array* length))
       (neo-sat-method-206 self (-> *neo-sat-laser-array* gp-0 joint) #f)
       )
-    (set! (-> self spin-current) 49152.0)
+    (set! (-> self spin-current) (* 98304.0 (/ enemy-noto 4)))
     (quaternion-rotate-y!
       (-> self disc-joint rotation)
       (-> self disc-joint rotation)
@@ -2125,7 +2126,7 @@
            (f30-0 (* f0-1 f0-1))
            )
       (set! (-> self bob-speed-scalar) (lerp 1.0 10.0 f30-0))
-      (set! (-> self spin-current) (lerp 49152.0 98304.0 f30-0))
+      (set! (-> self spin-current) (lerp (* 49152.0 (/ enemy-noto 4)) (* 98304.0 (/ enemy-noto 4)) f30-0))
       )
     (quaternion-rotate-y!
       (-> self disc-joint rotation)
@@ -2512,11 +2513,11 @@
     (the-as float v0-1)
     )
   )
-
+;(f26-0 (* (the float (* enemy-noto 3.0)) (- 3.0 (the float (+ (-> this current-stage) 1)))))
 (defmethod damage-enemy! ((this neo-sat) (arg0 object) (arg1 event-message-block))
   (let ((f30-0 (call-parent-method this arg0 arg1)))
     (let ((f28-0 (-> this hit-points))
-          (f26-0 (* 30.0 (- 3.0 (the float (+ (-> this current-stage) 1)))))
+          (f26-0 (* 700.0 (* (the float enemy-noto) 64.0)))
           )
       (sound-play "sat-hit")
       (when (>= f26-0 f28-0)
@@ -2531,6 +2532,27 @@
     f30-0
     )
   )
+  #|
+
+  (when 
+           (and 
+           (= (-> self current-stage) 1)
+           (>= enemy-noto 36)
+           )
+             (bipedal-spawnsat)
+           )
+           (when (= (-> self current-stage) 2)
+             (bipedal-spawnsat)
+           )
+           (when 
+           (and 
+           (= (-> self current-stage) 3)
+           (>= enemy-noto 16)
+           )
+             (bipedal-spawnsat)
+           )
+
+           |#
 
 (defstate neo-sat-sit-and-spin (neo-sat)
   :virtual #t
@@ -2538,7 +2560,11 @@
     (case message
       (('rise-up)
        (+! (-> self current-stage) 1)
-       (cond
+       (when (= (-> self current-stage) 1)
+        (bipedal-spawnsat)
+       )
+       (when (task-node-closed? (game-task-node desert-rescue-resolution))
+        (cond
          ((= (-> self current-stage) 3)
           (+! (-> self current-stage) -1)
           (set! (-> self was-spinning?) #t)
@@ -2549,6 +2575,20 @@
            (go-virtual ground-burst)
            )
          )
+       )
+       (when (not (task-node-closed? (game-task-node desert-rescue-resolution)))
+        (cond
+         ((= (-> self current-stage) 3)
+          (+! (-> self current-stage) -1)
+          (set! (-> self was-spinning?) #t)
+          (go-virtual die)
+          )
+         (else
+           (set! (-> self was-spinning?) #t)
+           (go-virtual ground-burst)
+           )
+         )
+       )
        )
       (else
         (enemy-event-handler proc argc message block)
@@ -2855,6 +2895,23 @@
   :virtual #t
   :event enemy-event-handler
   :enter (behavior ()
+    (when 
+           (and 
+           (= (-> self current-stage) 1)
+           (>= enemy-noto 36)
+           )
+             (bipedal-spawnsat)
+           )
+           (when (= (-> self current-stage) 2)
+             (bipedal-spawnsat)
+           )
+           (when 
+           (and 
+           (= (-> self current-stage) 3)
+           (>= enemy-noto 16)
+           )
+             (bipedal-spawnsat)
+           )
     (set! (-> self ground-offset) 4096.0)
     (set! (-> self desired-float-height) -163840.0)
     (set! (-> self bob-speed-scalar) 1.0)
@@ -2898,7 +2955,7 @@
     (if (-> self on-ground?)
         (go-virtual neo-sat-drill-impact)
         )
-    (set! (-> self spin-current) 98304.0)
+    (set! (-> self spin-current) (* 98304.0 (/ enemy-noto 4)))
     (quaternion-rotate-y!
       (-> self disc-joint rotation)
       (-> self disc-joint rotation)
@@ -2922,13 +2979,13 @@
     (let ((v1-4 (-> self current-stage)))
       (cond
         ((zero? v1-4)
-         (set! (-> self max-speed) 32768.0)
+         (set! (-> self max-speed) (* 32768.0 (/ enemy-noto 4)))
          )
         ((= v1-4 1)
-         (set! (-> self max-speed) 36864.0)
+         (set! (-> self max-speed) (* 36864.0 (/ enemy-noto 4)))
          )
         ((= v1-4 2)
-         (set! (-> self max-speed) 40960.0)
+         (set! (-> self max-speed) (* 4096.0 (/ enemy-noto 4)))
          )
         )
       )
@@ -3019,9 +3076,9 @@
           (neo-sat-method-206 self (-> *neo-sat-laser-array* s5-2 joint) gp-1)
           )
         )
-      (let ((f0-24 (lerp 16384.0 32768.0 (/ (fabs (-> self laser-rotate-angle)) (fabs f30-1)))))
+      (let ((f0-24 (lerp (* 16384.0 (/ enemy-noto 4)) (* 32768.0 (/ enemy-noto 4)) (/ (fabs (-> self laser-rotate-angle)) (fabs f30-1)))))
         (if (< 32585.955 f0-24)
-            (set! f0-24 (lerp 32768.0 49152.0 (* 0.00055555557 (the float (- (current-time) (-> self state-time))))))
+            (set! f0-24 (lerp (* 32768.0 (/ enemy-noto 4)) (* 49152.0 (/ enemy-noto 4)) (* 0.00055555557 (the float (- (current-time) (-> self state-time))))))
             )
         (set! (-> self spin-current) f0-24)
         )
@@ -3125,7 +3182,7 @@
               (when (and (< f28-0 f26-0) (>= f30-0 f26-0))
                 (set! (-> self next-lightning-time) (+ (seconds 1000) (current-time)))
                 (sound-play "sat-explode")
-                (enemy-killed? (rand-vu-float-range 300.0 600.0))
+                (enemy-killed? (rand-vu-float-range 145.0 215.0))
                 (set! spawned-deserta1-poi? #f)
                 (set! spawned-deserta2-poi? #f)
                 (set! spawned-desertb1-poi? #f)

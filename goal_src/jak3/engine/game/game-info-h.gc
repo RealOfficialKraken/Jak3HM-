@@ -54,6 +54,8 @@
   (define in-menu? #f)
 
   (define in-satbattle? #f)
+  (defun-extern kill-all-sat (none))
+  (defun-extern bipedal-spawnsat (none))
   (define cdr-satbattle #f)
   (define darkmakersleft 0)
   (define cdr-i 0)
