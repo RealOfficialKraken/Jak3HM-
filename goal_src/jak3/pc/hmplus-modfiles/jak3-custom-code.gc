@@ -204,10 +204,11 @@ Bad modifiers:
 (= in-gunmods? #f)
 (= in-superpowers? #f)
 (= on-vehicle? #f)
+(not (focus-test? *target* pilot))
 )
 (set! in-menu? #t)
 (camera-locked)
-(set! menu-slot 0)
+(set! menu-slot 1)
 (set! menu-type 0)
 (when (= (-> *game-info* total-deaths) 0)
     (level-up-cars! 1)
@@ -442,7 +443,7 @@ Bad modifiers:
         )
     (+! menu-select 1)
     (when (> menu-select 2)
-        (set! menu-select 0)
+        (set! menu-select 1)
     )
     )
 
@@ -452,7 +453,7 @@ Bad modifiers:
         (cpad-pressed? 0 up)
         )
     (-! menu-select 1)
-    (when (< menu-select 0)
+    (when (< menu-select 1)
         (set! menu-select 2)
     )
     )
@@ -465,7 +466,7 @@ Bad modifiers:
 (= in-superpowers? #f)
 (= in-skill? #f)
 )
-    (when ;main-down
+    (when ;modifiers-down
         (and 
         (= in-menu? #t)
         (cpad-pressed? 0 down)
@@ -476,7 +477,7 @@ Bad modifiers:
     )
     )
 
-    (when ;main-up
+    (when ;modifiers-up
         (and 
         (= in-menu? #t)
         (cpad-pressed? 0 up)
@@ -495,7 +496,7 @@ Bad modifiers:
 (= in-superpowers? #f)
 (= in-skill? #f)
 )
-    (when ;main-down
+    (when ;gunmods-down
         (and 
         (= in-menu? #t)
         (cpad-pressed? 0 down)
@@ -506,7 +507,7 @@ Bad modifiers:
     )
     )
 
-    (when ;main-up
+    (when ;gunmods-up
         (and 
         (= in-menu? #t)
         (cpad-pressed? 0 up)
@@ -525,7 +526,7 @@ Bad modifiers:
 (= in-superpowers? #t)
 (= in-skill? #f)
 )
-    (when ;main-down
+    (when ;superpowers-down
         (and 
         (= in-menu? #t)
         (cpad-pressed? 0 down)
@@ -536,7 +537,7 @@ Bad modifiers:
     )
     )
 
-    (when ;main-up
+    (when ;superpowers-up
         (and 
         (= in-menu? #t)
         (cpad-pressed? 0 up)
@@ -557,9 +558,7 @@ Bad modifiers:
 )
     (clear matt-str)
     (clear *pc-encoded-matt-str*)
-    (format matt-str "<COLOR_RED>Hero<COLOR_BLUE>Mode<COLOR_ORANGE>+ <COLOR_YELLOW>Mod Menu~%<COLOR_YELLOW>Modifiers are active!~%<COLOR_RED>~S <COLOR_WHITE>VS <COLOR_GREEN>~S~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_ORANGE>(<COLOR_GREEN>Triangle<COLOR_ORANGE>)<COLOR_YELLOW> Back/Exit~%<COLOR_ORANGE>(<COLOR_BLUE>X<COLOR_ORANGE>) <COLOR_YELLOW>Select Option"
-    bm-string
-    gm-string
+    (format matt-str "<COLOR_RED>Hero<COLOR_BLUE>Mode<COLOR_ORANGE>+ <COLOR_YELLOW>Mod Menu~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_ORANGE>(<COLOR_GREEN>Triangle<COLOR_ORANGE>)<COLOR_YELLOW> Back/Exit~%<COLOR_ORANGE>(<COLOR_BLUE>X<COLOR_ORANGE>) <COLOR_YELLOW>Select Option"
     )
     (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
     (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -577,9 +576,7 @@ Bad modifiers:
 )
     (clear matt-str)
     (clear *pc-encoded-matt-str*)
-    (format matt-str "<COLOR_RED>Hero<COLOR_BLUE>Mode<COLOR_ORANGE>+ <COLOR_YELLOW>Mod Menu~%<COLOR_YELLOW>Modifiers are active!~%<COLOR_RED>~S <COLOR_WHITE>VS <COLOR_GREEN>~S~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_ORANGE>(<COLOR_GREEN>Triangle<COLOR_ORANGE>)<COLOR_GREEN> Back/Exit~%<COLOR_ORANGE>(<COLOR_BLUE>X<COLOR_ORANGE>) <COLOR_YELLOW>Select Option"
-    bm-string
-    gm-string
+    (format matt-str "<COLOR_RED>Hero<COLOR_BLUE>Mode<COLOR_ORANGE>+ <COLOR_YELLOW>Mod Menu~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_ORANGE>(<COLOR_GREEN>Triangle<COLOR_ORANGE>)<COLOR_GREEN> Back/Exit~%<COLOR_ORANGE>(<COLOR_BLUE>X<COLOR_ORANGE>) <COLOR_YELLOW>Select Option"
     )
     (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
     (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -597,9 +594,7 @@ Bad modifiers:
 )
     (clear matt-str)
     (clear *pc-encoded-matt-str*)
-    (format matt-str "<COLOR_RED>Hero<COLOR_BLUE>Mode<COLOR_ORANGE>+ <COLOR_YELLOW>Mod Menu~%<COLOR_YELLOW>Modifiers are active!~%<COLOR_RED>~S <COLOR_WHITE>VS <COLOR_GREEN>~S~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_ORANGE>(<COLOR_GREEN>Triangle<COLOR_ORANGE>)<COLOR_YELLOW> Back/Exit~%<COLOR_ORANGE>(<COLOR_BLUE>X<COLOR_ORANGE>) <COLOR_GREEN>Select Option"
-    bm-string
-    gm-string
+    (format matt-str "<COLOR_RED>Hero<COLOR_BLUE>Mode<COLOR_ORANGE>+ <COLOR_YELLOW>Mod Menu~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_ORANGE>(<COLOR_GREEN>Triangle<COLOR_ORANGE>)<COLOR_YELLOW> Back/Exit~%<COLOR_ORANGE>(<COLOR_BLUE>X<COLOR_ORANGE>) <COLOR_GREEN>Select Option"
     )
     (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
     (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -619,9 +614,7 @@ Bad modifiers:
 )
     (clear matt-str)
     (clear *pc-encoded-matt-str*)
-    (format matt-str "<COLOR_RED>Hero<COLOR_BLUE>Mode<COLOR_ORANGE>+ <COLOR_YELLOW>Mod Menu~%<COLOR_YELLOW>Modifiers are active!~%<COLOR_RED>~S <COLOR_WHITE>VS <COLOR_GREEN>~S~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_ORANGE>(<COLOR_GREEN>Triangle<COLOR_ORANGE>)<COLOR_YELLOW> Back/Exit~%<COLOR_ORANGE>(<COLOR_PINK>SQUARE<COLOR_ORANGE>) <COLOR_RED>~s"
-    bm-string
-    gm-string
+    (format matt-str "<COLOR_RED>Hero<COLOR_BLUE>Mode<COLOR_ORANGE>+ <COLOR_YELLOW>Mod Menu~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_ORANGE>(<COLOR_GREEN>Triangle<COLOR_ORANGE>)<COLOR_YELLOW> Back/Exit~%<COLOR_ORANGE>(<COLOR_PINK>SQUARE<COLOR_ORANGE>) <COLOR_RED>~s"
     sq-string
     )
     (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
@@ -640,10 +633,7 @@ Bad modifiers:
 )
     (clear matt-str)
     (clear *pc-encoded-matt-str*)
-    (format matt-str "<COLOR_RED>Hero<COLOR_BLUE>Mode<COLOR_ORANGE>+ <COLOR_YELLOW>Mod Menu~%<COLOR_YELLOW>Modifiers are active!~%<COLOR_RED>~S <COLOR_WHITE>VS <COLOR_GREEN>~S~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_ORANGE>(<COLOR_GREEN>Triangle<COLOR_ORANGE>)<COLOR_GREEN> Back/Exit~%<COLOR_ORANGE>(<COLOR_PINK>SQUARE<COLOR_ORANGE>) <COLOR_RED>~s"
-    bm-string
-    gm-string
-    sq-string
+    (format matt-str "<COLOR_RED>Hero<COLOR_BLUE>Mode<COLOR_ORANGE>+ <COLOR_YELLOW>Mod Menu~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_ORANGE>(<COLOR_GREEN>Triangle<COLOR_ORANGE>)<COLOR_GREEN> Back/Exit~%<COLOR_ORANGE>(<COLOR_PINK>SQUARE<COLOR_ORANGE>) <COLOR_RED>~s"
     )
     (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
     (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -661,10 +651,7 @@ Bad modifiers:
 )
     (clear matt-str)
     (clear *pc-encoded-matt-str*)
-    (format matt-str "<COLOR_RED>Hero<COLOR_BLUE>Mode<COLOR_ORANGE>+ <COLOR_YELLOW>Mod Menu~%<COLOR_YELLOW>Modifiers are active!~%<COLOR_RED>~S <COLOR_WHITE>VS <COLOR_GREEN>~S~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_ORANGE>(<COLOR_GREEN>Triangle<COLOR_ORANGE>)<COLOR_YELLOW> Back/Exit~%<COLOR_ORANGE>(<COLOR_PINK>SQUARE<COLOR_ORANGE>) <COLOR_GREEN>~s"
-    bm-string
-    gm-string
-    sq-string
+    (format matt-str "<COLOR_RED>Hero<COLOR_BLUE>Mode<COLOR_ORANGE>+ <COLOR_YELLOW>Mod Menu~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_ORANGE>(<COLOR_GREEN>Triangle<COLOR_ORANGE>)<COLOR_YELLOW> Back/Exit~%<COLOR_ORANGE>(<COLOR_PINK>SQUARE<COLOR_ORANGE>) <COLOR_GREEN>~s"
     )
     (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
     (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -684,9 +671,7 @@ Bad modifiers:
 )
     (clear matt-str)
     (clear *pc-encoded-matt-str*)
-    (format matt-str "<COLOR_RED>Hero<COLOR_BLUE>Mode<COLOR_ORANGE>+ <COLOR_YELLOW>Mod Menu~%<COLOR_YELLOW>Modifiers are active!~%<COLOR_RED>~S <COLOR_WHITE>VS <COLOR_GREEN>~S~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_ORANGE>(<COLOR_GREEN>Triangle<COLOR_ORANGE>)<COLOR_YELLOW> Back/Exit"
-    bm-string
-    gm-string
+    (format matt-str "<COLOR_RED>Hero<COLOR_BLUE>Mode<COLOR_ORANGE>+ <COLOR_YELLOW>Mod Menu~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_ORANGE>(<COLOR_GREEN>Triangle<COLOR_ORANGE>)<COLOR_YELLOW> Back/Exit"
     )
     (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
     (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -704,9 +689,7 @@ Bad modifiers:
 )
     (clear matt-str)
     (clear *pc-encoded-matt-str*)
-    (format matt-str "<COLOR_RED>Hero<COLOR_BLUE>Mode<COLOR_ORANGE>+ <COLOR_YELLOW>Mod Menu~%<COLOR_YELLOW>Modifiers are active!~%<COLOR_RED>~S <COLOR_WHITE>VS <COLOR_GREEN>~S~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_ORANGE>(<COLOR_GREEN>Triangle<COLOR_ORANGE>)<COLOR_GREEN> Back/Exit"
-    bm-string
-    gm-string
+    (format matt-str "<COLOR_RED>Hero<COLOR_BLUE>Mode<COLOR_ORANGE>+ <COLOR_YELLOW>Mod Menu~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_ORANGE>(<COLOR_GREEN>Triangle<COLOR_ORANGE>)<COLOR_GREEN> Back/Exit"
     )
     (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
     (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -724,9 +707,7 @@ Bad modifiers:
 )
     (clear matt-str)
     (clear *pc-encoded-matt-str*)
-    (format matt-str "<COLOR_RED>Hero<COLOR_BLUE>Mode<COLOR_ORANGE>+ <COLOR_YELLOW>Mod Menu~%<COLOR_YELLOW>Modifiers are active!~%<COLOR_RED>~S <COLOR_WHITE>VS <COLOR_GREEN>~S~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_ORANGE>(<COLOR_GREEN>Triangle<COLOR_ORANGE>)<COLOR_YELLOW> Back/Exit"
-    bm-string
-    gm-string
+    (format matt-str "<COLOR_RED>Hero<COLOR_BLUE>Mode<COLOR_ORANGE>+ <COLOR_YELLOW>Mod Menu~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_ORANGE>(<COLOR_GREEN>Triangle<COLOR_ORANGE>)<COLOR_YELLOW> Back/Exit"
     )
     (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
     (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -749,7 +730,7 @@ Bad modifiers:
     (= menu-select 0)
         (clear matt-str)
         (clear *pc-encoded-matt-str*)
-        (format matt-str "<COLOR_ORANGE>Select Menu:~%~%<COLOR_RED>Modifiers <COLOR_GREEN>(<) <COLOR_RED>(LOCKED)~%<COLOR_BLUE>Gun Mods <COLOR_WHITE>(<)~%<COLOR_PINK>Skills <COLOR_WHITE>(<)"
+        (format matt-str "<COLOR_ORANGE>Select Menu:~%~%<COLOR_BLUE>Gun Mods <COLOR_WHITE>(<)~%<COLOR_PINK>Skills <COLOR_WHITE>(<)"
         )
         (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
         (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -762,7 +743,7 @@ Bad modifiers:
     (= menu-select 1)
         (clear matt-str)
         (clear *pc-encoded-matt-str*)
-        (format matt-str "<COLOR_ORANGE>Select Menu:~%~%<COLOR_RED>Modifiers <COLOR_WHITE>(<) <COLOR_RED>(LOCKED)~%<COLOR_BLUE>Gun Mods <COLOR_GREEN>(<)~%<COLOR_PINK>Skills <COLOR_WHITE>(<)"
+        (format matt-str "<COLOR_ORANGE>Select Menu:~%~%<COLOR_BLUE>Gun Mods <COLOR_GREEN>(<)~%<COLOR_PINK>Skills <COLOR_WHITE>(<)"
         )
         (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
         (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -775,7 +756,7 @@ Bad modifiers:
     (= menu-select 2)
         (clear matt-str)
         (clear *pc-encoded-matt-str*)
-        (format matt-str "<COLOR_ORANGE>Select Menu:~%~%<COLOR_RED>Modifiers <COLOR_WHITE>(<) <COLOR_RED>(LOCKED)~%<COLOR_BLUE>Gun Mods <COLOR_WHITE>(<)~%<COLOR_PINK>Skills <COLOR_GREEN>(<)"
+        (format matt-str "<COLOR_ORANGE>Select Menu:~%~%<COLOR_BLUE>Gun Mods <COLOR_WHITE>(<)~%<COLOR_PINK>Skills <COLOR_GREEN>(<)"
         )
         (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
         (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -883,10 +864,10 @@ Bad modifiers:
     (= menu-slot 0)
         (clear matt-str)
         (clear *pc-encoded-matt-str*)
-        (format matt-str "<COLOR_PINK>All Skills:~%~%<COLOR_RED>Notoriety Level ~d <COLOR_GREEN>(<)~%<COLOR_RED>Guns ~d <COLOR_WHITE>(<)~%<COLOR_RED>Eco ~d <COLOR_WHITE>(<)"
+        (format matt-str "<COLOR_PINK>All Skills:~%~%<COLOR_ORANGE>Notoriety <COLOR_GREEN>Level <COLOR_CYAN> ~d <COLOR_GREEN>(<)~%<COLOR_RED>Guns <COLOR_GREEN>Level<COLOR_CYAN> ~d <COLOR_WHITE>(<)~%<COLOR_PINK>Vehicle <COLOR_GREEN>Level<COLOR_CYAN> ~d <COLOR_WHITE>(<)"
         notoriety-level
         guns-level
-        eco-level
+        cars-level
         )
         (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
         (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -899,10 +880,10 @@ Bad modifiers:
     (= menu-slot 1)
         (clear matt-str)
         (clear *pc-encoded-matt-str*)
-        (format matt-str "<COLOR_PINK>All Skills:~%~%<COLOR_RED>Notoriety Level ~d <COLOR_WHITE>(<)~%<COLOR_RED>Guns ~d <COLOR_GREEN>(<)~%<COLOR_RED>Eco ~d <COLOR_WHITE>(<)"
+        (format matt-str "<COLOR_PINK>All Skills:~%~%<COLOR_ORANGE>Notoriety <COLOR_GREEN>Level <COLOR_CYAN> ~d <COLOR_WHITE>(<)~%<COLOR_RED>Guns <COLOR_GREEN>Level<COLOR_CYAN> ~d <COLOR_GREEN>(<)~%<COLOR_PINK>Vehicle <COLOR_GREEN>Level<COLOR_CYAN> ~d <COLOR_WHITE>(<)"
         notoriety-level
         guns-level
-        eco-level
+        cars-level
         )
         (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
         (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -915,10 +896,10 @@ Bad modifiers:
     (= menu-slot 2)
         (clear matt-str)
         (clear *pc-encoded-matt-str*)
-        (format matt-str "<COLOR_PINK>All Skills:~%~%<COLOR_RED>Notoriety Level ~d <COLOR_WHITE>(<)~%<COLOR_RED>Guns ~d <COLOR_WHITE>(<)~%<COLOR_RED>Eco ~d <COLOR_GREEN>(<)"
+        (format matt-str "<COLOR_PINK>All Skills:~%~%<COLOR_ORANGE>Notoriety <COLOR_GREEN>Level <COLOR_CYAN> ~d <COLOR_WHITE>(<)~%<COLOR_RED>Guns <COLOR_GREEN>Level<COLOR_CYAN> ~d <COLOR_WHITE>(<)~%<COLOR_PINK>Vehicle <COLOR_GREEN>Level<COLOR_CYAN> ~d <COLOR_GREEN>(<)"
         notoriety-level
         guns-level
-        eco-level
+        cars-level
         )
         (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
         (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -941,7 +922,7 @@ Bad modifiers:
     (= menu-slot 0)
         (clear matt-str)
         (clear *pc-encoded-matt-str*)
-        (format matt-str "<COLOR_PINK>Notoriety Level: ~d ~%~%<COLOR_ORANGE>Your Notoriety Level controls how fast, strong, and how much HP Jak has.~%However, enemies will also become stronger, too.~%~%<COLOR_YELLOW>Complete Main-Line/Side Missions, and level other skills to earn XP"
+        (format matt-str "<COLOR_ORANGE>Notoriety Level:<COLOR_CYAN> ~d ~%~%<COLOR_GREEN>Your Notoriety Level controls how fast, strong, and how much HP Jak has.~%~%Enemies will also have a level for themselves, all tied to the areas they're in~%~%<COLOR_YELLOW>Complete Main-Line/Side Missions, and level other skills to earn XP"
         notoriety-level
         )
         (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
@@ -950,12 +931,29 @@ Bad modifiers:
         (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 255 50 0.0 (font-color default) (font-flags middle shadow kerning large))))
         (set! (-> font-ctx scale) 0.325)
         (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+        (draw-XP-bar)
+        (when 
+            (or
+                (!= noto-draw-x 190)
+                (!= noto-draw-y 60)
+                (!= guns-draw-x 190)
+                (!= guns-draw-y 60)
+                (!= car-draw-x 190)
+                (!= car-draw-y 60)
+            )
+                (set! noto-draw-x 190)
+                (set! noto-draw-y 60)
+                (set! guns-draw-x 190)
+                (set! guns-draw-y 60)
+                (set! car-draw-x 190)
+                (set! car-draw-y 60)
+            )
     )
     (when
     (= menu-slot 1)
         (clear matt-str)
         (clear *pc-encoded-matt-str*)
-        (format matt-str "<COLOR_YELLOW>Guns: ~d ~%~%<COLOR_ORANGE>Jak's guns can be upgraded to fire faster, bigger, and stronger.~%~%<COLOR_YELLOW>Deplete ammo to earn XP in this area."
+        (format matt-str "<COLOR_RED>Guns:<COLOR_CYAN> ~d ~%~%<COLOR_ORANGE>Jak's guns can be upgraded to fire faster, bigger, and stronger.~%~%<COLOR_YELLOW>Deplete ammo to earn XP"
         guns-level
         )
         (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
@@ -964,13 +962,30 @@ Bad modifiers:
         (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 255 50 0.0 (font-color default) (font-flags middle shadow kerning large))))
         (set! (-> font-ctx scale) 0.325)
         (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+        (draw-XP-bar)
+        (when 
+            (or
+                (!= noto-draw-x 190)
+                (!= noto-draw-y 60)
+                (!= guns-draw-x 190)
+                (!= guns-draw-y 60)
+                (!= car-draw-x 190)
+                (!= car-draw-y 60)
+            )
+                (set! noto-draw-x 190)
+                (set! noto-draw-y 60)
+                (set! guns-draw-x 190)
+                (set! guns-draw-y 60)
+                (set! car-draw-x 190)
+                (set! car-draw-y 60)
+            )
     )
     (when
     (= menu-slot 2)
         (clear matt-str)
         (clear *pc-encoded-matt-str*)
-        (format matt-str "<COLOR_RED>Eco Channeling: ~d ~%~%<COLOR_ORANGE>Jak's eco channeling abilities can cost less, and also replenish itself in certain circumstances.~%~%<COLOR_YELLOW>Use Dark or Light abilities to earn XP in this area."
-        eco-level
+        (format matt-str "<COLOR_PINK>Vehicles:<COLOR_CYAN> ~d ~%~%<COLOR_ORANGE>Wasteland cars can have better output damage on guns, alongside bigger boost times.~%~%<COLOR_YELLOW>Destroy other Marauder Cars to earn XP"
+        cars-level
         )
         (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
         (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -978,6 +993,23 @@ Bad modifiers:
         (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 255 50 0.0 (font-color default) (font-flags middle shadow kerning large))))
         (set! (-> font-ctx scale) 0.325)
         (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+        (draw-XP-bar)
+        (when 
+            (or
+                (!= noto-draw-x 190)
+                (!= noto-draw-y 60)
+                (!= guns-draw-x 190)
+                (!= guns-draw-y 60)
+                (!= car-draw-x 190)
+                (!= car-draw-y 60)
+            )
+                (set! noto-draw-x 190)
+                (set! noto-draw-y 60)
+                (set! guns-draw-x 190)
+                (set! guns-draw-y 60)
+                (set! car-draw-x 190)
+                (set! car-draw-y 60)
+            )
     )
 )
 

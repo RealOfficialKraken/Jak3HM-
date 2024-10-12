@@ -61,109 +61,143 @@
     (none)
 )
 
-(define level-percent 0.0)
-(define guns-percent 0.0)
-(define vehicle-percent 0.0)
+
 
 (defun draw-XP-bar ()
+(when 
+    (and
+        *target*
+        (not *scene-player*)
+        (= (paused?) #f)
+        (= (pause-allowed?) #t)
+    )
+    
+    )
     ;;;;;;;;;;;;;;;;;;;;;;;;;Notoriety;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (let 
-    (
-        (x 190)
-        (y 11)
-        (progress level-percent)
-        (arg3 (new 'static 'rgba 
-            :r 255
-            :g 255
-            :b 0
-            :a #x40
+    (when 
+        (or 
+            (= in-menu? #f)
+            (and
+                (= in-skill? #t)
+                (= menu-slot 0)
             )
+        )
+        (let 
+            (
+                (x noto-draw-x)
+                (y noto-draw-y)
+                (progress level-percent)
+                (arg3 (new 'static 'rgba 
+                    :r 255
+                    :g 255
+                    :b 0
+                    :a #x40
+                    )
+                    )
             )
-    )
-        (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
-                               (bucket-id particles)
-                               )
-    (draw-sprite2d-xy s2-0 x y 125 6 (new 'static 'rgba :a (-> arg3 a)) #x3fffff)
-    (draw-sprite2d-xy s2-0 (+ x 1) (+ y 1) (the int (* 123.0 progress)) 4 arg3 #x3fffff)
-    )
+                (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
+                                    (bucket-id particles)
+                                    )
+            (draw-sprite2d-xy s2-0 x y 125 6 (new 'static 'rgba :a (-> arg3 a)) #x3fffff)
+            (draw-sprite2d-xy s2-0 (+ x 1) (+ y 1) (the int (* 123.0 progress)) 4 arg3 #x3fffff)
+            )
 
-    (let (
-            (level-cap (the float (* (+ (* notoriety-level 60) (* notoriety-level 100)) notoriety-level)))
-            (arg1 (-> *game-info* karma))
-            )
-                (when (!= level-percent (/ arg1 level-cap))
-                    (set! level-percent (/ arg1 level-cap))
-                )
+            (let (
+                    (level-cap (the float (* (+ (* notoriety-level 60) (* notoriety-level 100)) notoriety-level)))
+                    (arg1 (-> *game-info* karma))
+                    )
+                        (when (!= level-percent (/ arg1 level-cap))
+                            (set! level-percent (/ arg1 level-cap))
+                        )
+                    )
             )
     )
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;Guns;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (when (task-node-closed? (game-task-node arena-fight-1-introduction))
-    (let 
-    (
-        (x 30)
-        (y 11)
-        (progress guns-percent)
-        (arg3 (new 'static 'rgba 
-            :r 255
-            :g 1
-            :b 0
-            :a #x40
+(when 
+        (or 
+            (= in-menu? #f)
+            (and
+                (= in-skill? #t)
+                (= menu-slot 1)
             )
+        )
+        (when (task-node-closed? (game-task-node arena-fight-1-introduction))
+            (let 
+            (
+                (x guns-draw-x)
+                (y guns-draw-y)
+                (progress guns-percent)
+                (arg3 (new 'static 'rgba 
+                    :r 255
+                    :g 1
+                    :b 0
+                    :a #x40
+                    )
+                    )
             )
-    )
-        (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
-                               (bucket-id particles)
-                               )
-    (draw-sprite2d-xy s2-0 x y 125 6 (new 'static 'rgba :a (-> arg3 a)) #x3fffff)
-    (draw-sprite2d-xy s2-0 (+ x 1) (+ y 1) (the int (* 123.0 progress)) 4 arg3 #x3fffff)
-    )
+                (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
+                                    (bucket-id particles)
+                                    )
+            (draw-sprite2d-xy s2-0 x y 125 6 (new 'static 'rgba :a (-> arg3 a)) #x3fffff)
+            (draw-sprite2d-xy s2-0 (+ x 1) (+ y 1) (the int (* 123.0 progress)) 4 arg3 #x3fffff)
+            )
 
-    (let (
-            (level-cap (the float (* (+ (* guns-level 120) (* guns-level 200)) guns-level)))
-            (arg1 (the float (-> *game-info* buzzer-total)))
+            (let (
+                    (level-cap (the float (* (+ (* guns-level 120) (* guns-level 200)) guns-level)))
+                    (arg1 (the float (-> *game-info* buzzer-total)))
+                    )
+                        (when (!= guns-percent (/ arg1 level-cap))
+                            (set! guns-percent (/ arg1 level-cap))
+                        )
+                    )
             )
-                (when (!= guns-percent (/ arg1 level-cap))
-                    (set! guns-percent (/ arg1 level-cap))
-                )
-            )
-    )
-  )
+        )
+)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;Vehicles;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (when (!= (-> *game-info* total-deaths) 0)
-    (let 
-    (
-        (x 350)
-        (y 11)
-        (progress vehicle-percent)
-        (arg3 (new 'static 'rgba 
-            :r 255
-            :g 0
-            :b 255
-            :a #x40
+(when 
+        (or 
+            (= in-menu? #f)
+            (and
+                (= in-skill? #t)
+                (= menu-slot 2)
             )
+        )
+        (when (!= (-> *game-info* total-deaths) 0)
+            (let 
+            (
+                (x car-draw-x)
+                (y car-draw-y)
+                (progress vehicle-percent)
+                (arg3 (new 'static 'rgba 
+                    :r 255
+                    :g 0
+                    :b 255
+                    :a #x40
+                    )
+                    )
             )
-    )
-        (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
-                               (bucket-id particles)
-                               )
-    (draw-sprite2d-xy s2-0 x y 125 6 (new 'static 'rgba :a (-> arg3 a)) #x3fffff)
-    (draw-sprite2d-xy s2-0 (+ x 1) (+ y 1) (the int (* 123.0 progress)) 4 arg3 #x3fffff)
-    )
+                (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
+                                    (bucket-id particles)
+                                    )
+            (draw-sprite2d-xy s2-0 x y 125 6 (new 'static 'rgba :a (-> arg3 a)) #x3fffff)
+            (draw-sprite2d-xy s2-0 (+ x 1) (+ y 1) (the int (* 123.0 progress)) 4 arg3 #x3fffff)
+            )
 
-    (let (
-            (level-cap (the float (* (+ (* cars-level 30) (* cars-level 175)) cars-level)))
-            (arg1 (-> *game-info* fuel))
+            (let (
+                    (level-cap (the float (* (+ (* cars-level 30) (* cars-level 175)) cars-level)))
+                    (arg1 (-> *game-info* fuel))
+                    )
+                        (when (!= vehicle-percent (/ arg1 level-cap))
+                            (set! vehicle-percent (/ arg1 level-cap))
+                        )
+                    )
             )
-                (when (!= vehicle-percent (/ arg1 level-cap))
-                    (set! vehicle-percent (/ arg1 level-cap))
-                )
-            )
-    )
-  )
+        )
+)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   (none)
@@ -225,6 +259,96 @@
         )
             (set! extra-offthetop (- (-> *game-info* fuel) (* (+ (* cars-level 30) (* cars-level 175)) cars-level)))
             (level-up-cars! 1)
+        )
+
+        (when (= enemy-hp #t)
+            (+! hpi 1)
+                (let (
+                    (color-string "<COLOR_WHITE>") ;color tags for levels
+                    )
+                    (when (and  
+                                (< enemy-noto (+ notoriety-level 3))
+                                (> enemy-noto (- notoriety-level 3))
+                                (not (string= color-string "<COLOR_YELLOW>"))
+                            )
+                                (set! color-string "<COLOR_YELLOW>")
+                            )
+                            (when (and  
+                                (>= enemy-noto (+ notoriety-level 3))
+                                (not (string= color-string "<COLOR_RED>"))
+                            )
+                                (set! color-string "<COLOR_RED>")
+                            )
+                            (when (and  
+                                (< enemy-noto (- notoriety-level 3))
+                                (> enemy-noto (- notoriety-level 7))
+                                (not (string= color-string "<COLOR_GREEN>"))
+                            )
+                                (set! color-string "<COLOR_GREEN>")
+                            )
+                            (when (and  
+                                (< enemy-noto (- notoriety-level 7))
+                                (not (string= color-string "<COLOR_GRAY>"))
+                            )
+                                (set! color-string "<COLOR_GRAY>")
+                            )
+                (when 
+                (and
+                    *target*
+                    (not *scene-player*)
+                    (= (paused?) #f)
+                    (= (pause-allowed?) #t)
+                    (= in-menu? #f)
+                    (= r3-noto #f)
+                )
+                (clear matt-str)
+                (clear *pc-encoded-matt-str*)
+                (format matt-str "~s~%~%<COLOR_WHITE>Lv. ~s~d"
+                enemy-string
+                color-string
+                enemy-noto
+                )
+                (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+                (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+                (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+                (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 255 10 0.0 (font-color default) (font-flags middle shadow kerning large))))
+                (set! (-> font-ctx scale) 0.325)
+                (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+                (let (
+                            (level-cap hpbar-max-hit-points)
+                            (arg1 hpbar-hit-points)
+                            )
+                                (when (!= enemy-hp-percent (/ arg1 level-cap))
+                                    (set! enemy-hp-percent (/ arg1 level-cap))
+                                )
+                            )
+                (let 
+                    (
+                        (x 100)
+                        (y 21)
+                        (progress enemy-hp-percent) ;enemy-hp-percent
+                        (arg3 (new 'static 'rgba 
+                            :r 255
+                            :g 0
+                            :b 0
+                            :a #x40
+                            )
+                            )
+                    )
+                        (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
+                                            (bucket-id particles)
+                                            )
+                    (draw-sprite2d-xy s2-0 x y 310 8 (new 'static 'rgba :a (-> arg3 a)) #x3fffff)
+                    (draw-sprite2d-xy s2-0 (+ x 1) (+ y 1) (the int (* 310.0 progress)) 6 arg3 #x3fffff)
+                    )
+
+                    )
+            )
+                (when (= hpi 400)
+                    (set! hpi 0)
+                    (set! enemy-hp #f)
+                )
+            )
         )
 
 
@@ -446,7 +570,7 @@
         (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
         (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
         (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
-        (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 255 30 0.0 (font-color default) (font-flags middle shadow kerning large))))
+        (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 255 50 0.0 (font-color default) (font-flags middle shadow kerning large))))
         (set! (-> font-ctx scale) 0.325)
         (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
     )
@@ -521,11 +645,17 @@
             )
             (when (and (> notoi 21) (< notoi 353))
                 (draw-XP-bar)
+                (set! noto-draw-x 190)
+                (set! noto-draw-y 11)
+                (set! guns-draw-x 30)
+                (set! guns-draw-y 11)
+                (set! car-draw-x 350)
+                (set! car-draw-y 11)
             )
             (when (>= notoi 370)
                 (-! anim-noto 1)
             )
-            (when (= notoi 390)
+            (when (or (= notoi 390)(= in-menu? #t))
                 (set! notoi 0)
                 (set! anim-noto -30)
                 (set! r3-noto #f)
@@ -540,6 +670,7 @@
         (= (paused?) #f)
         (= (pause-allowed?) #t)
         (= r3-noto #t)
+        (= in-menu? #f)
     )
         (clear matt-str)
         (clear *pc-encoded-matt-str*)
@@ -562,6 +693,7 @@
         (= (paused?) #f)
         (= (pause-allowed?) #t)
         (= r3-noto #t)
+        (= in-menu? #f)
         (task-node-closed? (game-task-node arena-fight-1-introduction))
     )
         (clear matt-str)
@@ -585,6 +717,7 @@
         (= (paused?) #f)
         (= (pause-allowed?) #t)
         (= r3-noto #t)
+        (= in-menu? #f)
         (!= (-> *game-info* total-deaths) 0)
     )
         (clear matt-str)
