@@ -27,6 +27,19 @@
 
   (define in-debug? #f)
 
+  (defun-extern draw-XP-bar (none))
+
+  (define has-yellow-2 #f)
+  (define has-yellow-3 #f)
+  (define has-red-2 #f)
+  (define has-red-3 #f)
+  (define has-blue-1 #f)
+  (define has-blue-2 #f)
+  (define has-blue-3 #f)
+  (define has-dark-1 #f)
+  (define has-dark-2 #f)
+  (define has-dark-3 #f)
+
   (define noto-draw-x 0)
   (define noto-draw-y 0)
   (define guns-draw-x 0)

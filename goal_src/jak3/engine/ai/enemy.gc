@@ -9,9 +9,6 @@
 
 (defun-extern enemy-killed? float none)
 
-(define-extern wlander-male type)
-(declare-type wlander-male process-focusable)
-
 (defmethod copy-enemy-info! ((this enemy-info) (arg0 enemy-info))
   (mem-copy! (&-> this type) (&-> arg0 type) 420)
   0
@@ -1693,15 +1690,7 @@
                   (set! hpbar-max-hit-points (+ (* 2.0 (-> this enemy-info default-hit-points)) (* (the float enemy-noto) 3)))
                   (set! hpbar-hit-points (-> this hit-points))
                   (set! enemy-hp #t)
-                  (when (type? wlander-male citizen)
-                    (set! enemy-string "Wastelander")
-                  )
-                  (when 
-                    (and 
-                      (not (type? wlander-male citizen))
-                    )
-                      (set! enemy-string (the string this))
-                    )
+                  (set! enemy-string (the string this))
                   (set! hpi 0)
                   )
               (let ((s2-2 (penetrate->next-state this proc block f0-1)))
