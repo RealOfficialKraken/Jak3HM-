@@ -474,7 +474,6 @@
   "entity-debug.o" ;; added
   "actor-def.o"
   "mod-save-stats.o"
-  "skill-healthbars.o"
   "jak3-custom-code.o"
   "xp-level.o"
   "wasteland-spawner.o"
