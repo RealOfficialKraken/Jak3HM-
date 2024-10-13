@@ -52,6 +52,15 @@
     (none)
 )
 
+(defun mod-killed? ((xp-gain float))
+    (+! (-> *game-info* fuel) (* xp-gain enemy-noto))
+    (set! xp-string "Duplicate Gunmod turned to Vehicle XP")
+    (set! *xp-gain* (* xp-gain enemy-noto))
+    (set! xp-draw #t)
+    (set! xpi 0)
+    (none)
+)
+
 (defun enemy-killed? ((xp-gain float))
     (+! (-> *game-info* karma) (* xp-gain enemy-noto))
     (set! xp-string "Enemy Killed")

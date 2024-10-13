@@ -127,7 +127,10 @@
 
   (define in-menu? #f)
 
+  (defun-extern give-random-weapon (none))
+  (defun-extern mod-killed? float none)
   (define in-satbattle? #f)
+  (define *desert-spawn* (new-stack-vector0))
   (defun-extern kill-all-sat (none))
   (defun-extern bipedal-spawnsat (none))
   (define cdr-satbattle #f)
