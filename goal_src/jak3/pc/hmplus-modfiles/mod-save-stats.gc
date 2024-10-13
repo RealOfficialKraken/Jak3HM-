@@ -163,7 +163,7 @@
 (when 
 (and 
 (!= (/ (mod (-> *game-info* task-deaths) 1000000) 100000) 1)
-(task-node-closed? (game-task-node arena-fight-2-gun-training))
+(task-node-closed? (game-task-node arena-fight-2-fight))
 (logtest? (-> *game-info* features) (game-feature gun-red-2))
 )
 (set! has-red-2 #f)
@@ -330,6 +330,7 @@
 (and 
 (!= (/ (mod (-> *game-info* continue-deaths) 10000) 1000) 1)
 (logtest? (-> *game-info* features) (game-feature gun-blue-1))
+(task-node-closed? (game-task-node arena-fight-3-fight))
 )
 (set! has-blue-1 #f)
 (logclear! (-> *game-info* features) (game-feature gun-blue-1))

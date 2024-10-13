@@ -288,9 +288,9 @@
                             )
                             (when (and  
                                 (< enemy-noto (- notoriety-level 7))
-                                (not (string= color-string "<COLOR_GRAY>"))
+                                (not (string= color-string "<COLOR_BROWN>"))
                             )
-                                (set! color-string "<COLOR_GRAY>")
+                                (set! color-string "<COLOR_TRANSPARENT>")
                             )
                 (when 
                 (and
@@ -734,5 +734,31 @@
         (set! (-> font-ctx scale) 0.325)
         (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
     )
+
+    (when (focus-test? *target* pilot) ;for the turbo meter, also referenced in wvehicle.gc and wvehicle-util.gc
+            (let 
+            (
+                (x 7)
+                (y 348)
+                (progress turbo-amount-hud) ;turbo-amount-hud
+                (arg3 (new 'static 'rgba 
+                    :r 255
+                    :g 0
+                    :b 155
+                    :a #x40
+                    )
+                    )
+            )
+                (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
+                                    (bucket-id particles)
+                                    )
+            (draw-sprite2d-xy s2-0 x y 63 14 (new 'static 'rgba :a (-> arg3 a)) #x3fffff)
+            (draw-sprite2d-xy s2-0 (+ x 1) (+ y 1) (the int (* 61.0 progress)) 12 arg3 #x3fffff)
+            )
+        )
+        
+        
+    )
+
     (none)
 )

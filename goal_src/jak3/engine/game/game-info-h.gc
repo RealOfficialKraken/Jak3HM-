@@ -5,6 +5,45 @@
 ;; name in dgo: game-info-h
 ;; dgos: GAME
 
+(define-extern civilian type)
+(define-extern sig type)
+(define-extern ashelin type)
+(define-extern jinx type)
+(define-extern mog type)
+(define-extern grim type)
+(define-extern juicer type)
+(define-extern grunt type)
+(define-extern flitter type)
+(define-extern wasp type)
+(define-extern spyder type)
+(define-extern metalhead-predator type)
+(define-extern metalhead-grunt type)
+(define-extern metalhead-flitter type)
+(define-extern crimson-guard-hover type)
+(define-extern crimson-guard-level type)
+(define-extern roboguard-level type)
+(defun remap-enemy-type-name ((en-type type))
+  "returns the appropriate type name (symbol) for the stats tracker"
+
+  (cond
+    ((= en-type metalhead-predator) 'predator)
+    ((= en-type metalhead-grunt) 'grunt)
+    ((= en-type metalhead-flitter) 'flitter)
+    ((= en-type crimson-guard-level) 'crimson-guard)
+    ((= en-type crimson-guard-hover) 'crimson-guard)
+    ((= en-type roboguard-level) 'roboguard)
+
+    ((type-type? en-type civilian) 'civilian)
+    ((type-type? en-type sig) 'sig)
+    ((type-type? en-type ashelin) 'ashelin)
+    ((type-type? en-type juicer) 'juicer)
+    ((type-type? en-type grunt) 'grunt)
+    ((type-type? en-type flitter) 'flitter)
+    ((type-type? en-type wasp) 'wasp)
+    ((type-type? en-type spyder) 'spyder)
+    (else (-> en-type symbol)))
+  )
+
 (define extra-offthetop 0.0)
     (define draw-levelup-noto #f)
     (define draw-levelup-guns #f)
@@ -28,6 +67,13 @@
   (define in-debug? #f)
 
   (defun-extern draw-XP-bar (none))
+
+  (define turbo-held? #f)
+  (define turbo-supply-float 0.0)
+  (define turbo-max 0.0)
+  (define turbo-amount-hud 0.0)
+  (define refill-turbo #f)
+  (define refi 0)
 
   (define has-yellow-2 #f)
   (define has-yellow-3 #f)
