@@ -32,9 +32,11 @@ Bad modifiers:
 (define menu-unlocked? #f)
 
 
-(defun camera-locked ()
-  (send-event *target* 'draw #f)
-  (set-setting-by-param *setting-control* 'mode-name 'cam-eye 0 0)
+(defun camera-locked ((draw? symbol) (grab? symbol))
+  (send-event *target* 'draw draw?)
+  (when (= grab? #t)
+    (set-setting-by-param *setting-control* 'mode-name 'cam-eye 0 0)
+  )
   (persist-with-delay *setting-control* 'gun (seconds 0.5) 'gun #f 0.0 0)
   (process-grab? *target* #f)
   (set! camera-locked? #t)
@@ -207,7 +209,7 @@ Bad modifiers:
 (not (focus-test? *target* pilot))
 )
 (set! in-menu? #t)
-(camera-locked)
+(camera-locked #t #t)
 (set! menu-slot 1)
 (set! menu-type 0)
 (when (= (-> *game-info* total-deaths) 0)

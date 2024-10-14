@@ -1245,7 +1245,7 @@
     :neck-joint -1
     :notice-distance (meters 30)
     :notice-distance-delta (meters 10)
-    :default-hit-points 90.0
+    :default-hit-points 1900.0
     :gnd-collide-with (collide-spec backgnd obstacle hit-by-others-list)
     :overlaps-others-collide-with-filter (collide-spec jak bot player-list)
     :movement-gravity (meters -100)
@@ -1692,7 +1692,7 @@
         )
     )
 
-  (let ((f0-18 (-> this hit-points) (* 1000.0 (* (the float enemy-noto) 64.0))))
+  (let ((f0-18 (-> this hit-points) (+ (-> this enemy-info default-hit-points) (* (the float enemy-noto) 3))))
     (when (< 0.0 f0-18)
       (cond
         ((< f0-18 0.27)
@@ -2517,7 +2517,7 @@
 (defmethod damage-enemy! ((this neo-sat) (arg0 object) (arg1 event-message-block))
   (let ((f30-0 (call-parent-method this arg0 arg1)))
     (let ((f28-0 (-> this hit-points))
-          (f26-0 (* 700.0 (* (the float enemy-noto) 64.0)))
+          (f26-0 (* 570.0 (- 3.0 (the float (+ (-> this current-stage) 1)))))
           )
       (sound-play "sat-hit")
       (when (>= f26-0 f28-0)

@@ -294,6 +294,7 @@ void extract_common(const ObjectFileDB& db,
   extract_single_ag("DESRESC.DGO", "neo-satellite-ag", db, tex_db, tfrag_level);
   extract_single_ag("PRECA.DGO", "dp-bipedal-ag", db, tex_db, tfrag_level);
   extract_single_ag("ARENACST.DGO", "yellow-barrel-ag", db, tex_db, tfrag_level);
+  extract_single_ag("LKLEEVER.DGO", "kleever-highres-ag", db, tex_db, tfrag_level);
 
   add_all_textures_from_level(tfrag_level, "ARTSPOOL", tex_db);
   extract_art_groups_from_level(db, tex_db, {}, "ARTSPOOL", tfrag_level, art_group_data);

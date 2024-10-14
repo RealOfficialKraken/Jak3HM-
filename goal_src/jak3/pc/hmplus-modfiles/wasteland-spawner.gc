@@ -41,6 +41,62 @@
   (none)
 )
 
+(define task-arrow-spawned? #f)
+
+(defun task-arrow-custom ((vec vector))
+    (let (
+        (gp-3 (new 'stack-no-clear 'task-arrow-params))
+        (self1 (the-as process #f))
+        )
+        (set! (-> gp-3 pos quad) (-> vec quad))
+        (quaternion-identity! (-> gp-3 quat))
+        (set! (-> gp-3 flags) (task-arrow-flags taf3 taf8))
+        (set! (-> gp-3 map-icon) (the-as uint 12))
+        (process-spawn task-arrow gp-3 :name "task-arrow-custom")
+        (set! task-arrow-spawned? #t)
+    )
+)
+
+(defun random-poi ((gem? float))
+    (-! (-> *game-info* gem) gem?)
+    (let (
+            (desertb1 (new 'static 'vector :x (meters 3154.2802) :y (meters 19.5781) :z (meters 541.2550) :w 1.0))
+            (desertb2 (new 'static 'vector :x (meters 3732.4335) :y (meters 22.4331) :z (meters 824.4011) :w 1.0))
+            (desertd1 (new 'static 'vector :x (meters 2292.9907) :y (meters 32.7233) :z (meters 1500.0242) :w 1.0))
+            (desertd2 (new 'static 'vector :x (meters 3940.3449) :y (meters 52.2336) :z (meters 2400.6291) :w 1.0))
+            (deserta1 (new 'static 'vector :x (meters 1317.8349) :y (meters 36.3553) :z (meters 283.1715) :w 1.0))
+            (deserta2 (new 'static 'vector :x (meters 1657.2156) :y (meters 33.8630) :z (meters 386.2038) :w 1.0))
+            (desertc1 (new 'static 'vector :x (meters 280.2767) :y (meters 108.8450) :z (meters 1983.6145) :w 1.0))
+            (desertc2 (new 'static 'vector :x (meters 614.1239) :y (meters 42.8945) :z (meters 3780.4694) :w 1.0))
+            (rnd (rand-vu-int-range 1 8))
+            )
+                (when (= rnd 1)
+                    (task-arrow-custom deserta1)
+                )
+                (when (= rnd 2)
+                    (task-arrow-custom deserta2)
+                )
+                (when (= rnd 3)
+                    (task-arrow-custom desertb1)
+                )
+                (when (= rnd 4)
+                    (task-arrow-custom desertb2)
+                )
+                (when (= rnd 5)
+                    (task-arrow-custom desertc1)
+                )
+                (when (= rnd 6)
+                    (task-arrow-custom desertc2)
+                )
+                (when (= rnd 7)
+                    (task-arrow-custom desertd1)
+                )
+                (when (= rnd 8)
+                    (task-arrow-custom desertd2)
+                )
+            )
+)
+
 (defun-extern spawn-dark-maker vector none)
 
 
@@ -198,7 +254,278 @@
     (none)
 )
 
+(defun spawn-kliever ((vec vector))
+    (let ((kleever (the manipy
+                    (ppointer->process (process-spawn manipy
+                                                      :init
+                                                      manipy-init
+                                                      vec
+                                                      #f
+                                                      (art-group-get-by-name *level* "skel-kleever-highres" (the (pointer level) #f))
+                                                      #f
+                                                      0
+                                                      #f
+                                                      :name "kleever-quest"
+                                                      :from
+                                                      *debug-dead-pool*
+                                                      :stack-size #x18000)))))
+  (send-event kleever 'anim-mode 'loop)
+  (send-event kleever 'art-joint-anim "kleever-highres-idle-city-chase"))
+    (none)
+)
+
+(define *kleever-process* #f)
+(define kleever-shop #f)
+(define getin-kleever-shop #f)
+(define klevi 0)
+
 (defun wasteland-spawn! ()
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;KLIEVERQUEST;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(when
+  (and
+  *target*
+  (not *scene-player*)
+  (= (paused?) #f)
+  (= (pause-allowed?) #t)
+  (= in-desert-game-task? #f)
+  (= in-dialogue? #f)
+  (task-node-closed? (game-task-node desert-rescue-hold-doors))
+  )
+  (let (
+        (kleeverloc (new 'static 'vector :x (meters 2265.2575) :y (meters 30.7381) :z (meters 175.9652)))
+        )
+            (when (and 
+                    (<= (vector-vector-distance (target-pos 0) kleeverloc) 107000.0)
+                    (= *kleever-process* #f)
+                  )
+                (spawn-kliever kleeverloc)
+                (set! *kleever-process* #t)
+            )
+            (when (and 
+                    (> (vector-vector-distance (target-pos 0) kleeverloc) 117000.0)
+                    (= *kleever-process* #t)
+                  )
+                (kill-by-name "kleever-quest" *default-pool*)
+                (set! *kleever-process* #f)
+            )
+            (when (and 
+                    (<= (vector-vector-distance (target-pos 0) kleeverloc) 30000.0)
+                    (= *kleever-process* #t)
+                    (= kleever-shop #f)
+            )
+            (clear matt-str)
+            (clear *pc-encoded-matt-str*)
+            (format matt-str "<COLOR_RED>R3<COLOR_WHITE>: Talk to Kleiver"
+            )
+            (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+            (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+            ;; reset bucket settings prior to drawing - font won't do self for us, and
+            ;; draw-raw-image can sometimes mess them up. (intro sequence)
+            (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+            (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 10 300 0.0 (font-color default) (font-flags shadow kerning large))))
+                (set! (-> font-ctx scale) 0.325)
+                (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+                (when (cpad-pressed? 0 r3)
+                (set! getin-kleever-shop #t)
+            )
+        )
+        )
+        (when (and 
+                (= kleever-shop #f)
+                (= getin-kleever-shop #t)
+            )
+            (+! klevi 1)
+            (when (= klevi 1)
+                (set-vector! (-> *target* control trans) (meters 2264.4641) (meters 30.6794) (meters 168.1648) 1.0)
+            )
+            (when (= klevi 2)
+                (set! in-dialogue? #t)
+                (set! log-sec 0)
+                (send-event *camera* 'teleport-to-vector-start-string (new 'static 'vector :x (meters 2264.6652) :y (meters 34.3564) :z (meters 166.1648)))
+                (camera-locked #f #f)
+                (set! di-s "So, you boys lookin' for some artifacts, aye?")
+                (set! di-s2 "") 
+                (set! di-s3 "")
+                (set! di-s4 "")
+                (set! log-id 1)
+            )
+            (when (= klevi 3)
+                (set! klevi 0)
+                (set! getin-kleever-shop #f)
+            )
+        )
+        (when (= kleever-shop #t)
+            (clear matt-str)
+            (clear *pc-encoded-matt-str*)
+            (format matt-str "<COLOR_RED>R3<COLOR_WHITE>: <COLOR_ORANGE>Locate an artifact in the wasteland <COLOR_RED>(50 gems)~%~%<COLOR_YELLOW>R2<COLOR_WHITE>: <COLOR_ORANGE>Exit"
+            )
+            (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+            (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+            ;; reset bucket settings prior to drawing - font won't do self for us, and
+            ;; draw-raw-image can sometimes mess them up. (intro sequence)
+            (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+            (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 10 300 0.0 (font-color default) (font-flags shadow kerning large))))
+                (set! (-> font-ctx scale) 0.325)
+                (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+        (when (cpad-pressed? 0 l2)
+            (camera-unlocked)
+            (set! kleever-shop #f)
+        )
+        (when 
+            (and 
+                (>= (-> *game-info* gem) 50.0)
+                (cpad-pressed? 0 r3)
+                )
+            (random-poi 50.0)
+            (camera-unlocked)
+            (set! kleever-shop #f)
+        )
+        )
+    )
+
+    (when 
+        (and 
+            (= in-desert-game-task? #t)
+            (= task-arrow-spawned? #t)
+        )
+        (kill-by-name "task-arrow-custom" *default-pool*)
+        (set! task-arrow-spawned? #f)
+    )
+
+    (when 
+        (and
+            (= in-dialogue? #t)
+            (cpad-pressed? 0 x)
+            (= log-id 1)
+        )
+        (+! log-sec 1)
+        (when (= log-sec 1)
+            (set! di-s "Damas says the best time to find artifacts are")
+            (set! di-s2 "when there's nothing actively happening in") 
+            (set! di-s3 "the desert already")
+            (set! di-s4 "")
+        )
+        (when (= log-sec 2)
+            (set! di-s "I'll always be right here when that happens,")
+            (set! di-s2 "scopin' out the wasteland with our") 
+            (set! di-s3 "desert scanner")
+            (set! di-s4 "")
+        )
+        (when (= log-sec 3)
+            (set! di-s "I can give ye boys a tip on some whereabouts,")
+            (set! di-s2 "for a price, of course") 
+            (set! di-s3 "")
+            (set! di-s4 "")
+        )
+        (when (= log-sec 3)
+            (set! di-s "But if you don't want me help,")
+            (set! di-s2 "you can always go out yerselves and look") 
+            (set! di-s3 "around the desert.")
+            (set! di-s4 "I'm sure you'll find something of value")
+        )
+        (when (= log-sec 4)
+            (set! di-s "")
+            (set! di-s2 "") 
+            (set! di-s3 "")
+            (set! di-s4 "")
+            (set! kleever-shop #t)
+            (set! log-id 0)
+            (set! log-sec 0)
+            (set! in-dialogue? #f)
+        )
+    )
+
+
+
+(when 
+(and 
+(= in-dialogue? #t)
+(not (cpad-hold? 0 x))
+)
+    (clear matt-str)
+    (clear *pc-encoded-matt-str*)
+    (format matt-str "<COLOR_WHITE>~S~%~S~%~S~%~S~%~%<COLOR_GREEN>Ok"
+    di-s
+    di-s2
+    di-s3
+    di-s4
+    )
+    (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+    (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+      ;; reset bucket settings prior to drawing - font won't do self for us, and
+      ;; draw-raw-image can sometimes mess them up. (intro sequence)
+      (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+      (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 250 300 0.0 (font-color default) (font-flags middle shadow kerning large))))
+        (set! (-> font-ctx scale) 0.325)
+        (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+)
+
+(when 
+(and 
+(= in-dialogue? #t)
+(cpad-hold? 0 x)
+)
+    (clear matt-str)
+    (clear *pc-encoded-matt-str*)
+    (format matt-str "<COLOR_WHITE>~S~%~S~%~S~%~S~%~%<COLOR_YELLOW>Ok"
+    di-s
+    di-s2
+    di-s3
+    di-s4
+    )
+    (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+    (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+      ;; reset bucket settings prior to drawing - font won't do self for us, and
+      ;; draw-raw-image can sometimes mess them up. (intro sequence)
+      (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+      (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 250 300 0.0 (font-color default) (font-flags middle shadow kerning large))))
+        (set! (-> font-ctx scale) 0.325)
+        (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+)
+
+(when 
+(and 
+(= in-dialogue? #t)
+(not (cpad-hold? 0 x))
+)
+    (clear matt-str)
+    (clear *pc-encoded-matt-str*)
+    (format matt-str "<COLOR_GREEN>-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------~%~%~%~%~%~%~%~%~%-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+    di-s
+    )
+    (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+    (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+      ;; reset bucket settings prior to drawing - font won't do self for us, and
+      ;; draw-raw-image can sometimes mess them up. (intro sequence)
+      (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+      (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 250 285 0.0 (font-color default) (font-flags middle shadow kerning large))))
+        (set! (-> font-ctx scale) 0.325)
+        (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+)
+
+(when 
+(and 
+(= in-dialogue? #t)
+(cpad-hold? 0 x)
+)
+    (clear matt-str)
+    (clear *pc-encoded-matt-str*)
+    (format matt-str "<COLOR_YELLOW>-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------~%~%~%~%~%~%~%~%~%-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+    di-s
+    )
+    (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+    (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+      ;; reset bucket settings prior to drawing - font won't do self for us, and
+      ;; draw-raw-image can sometimes mess them up. (intro sequence)
+      (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+      (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 250 285 0.0 (font-color default) (font-flags middle shadow kerning large))))
+        (set! (-> font-ctx scale) 0.325)
+        (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;SATBATTLE;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -272,6 +599,7 @@
                                 (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
                             )
                                 (spawn-manipy-sat desert-spawn "manipy-sat-desertb1")
+                                (kill-by-name "task-arrow-custom" *default-pool*)
                                 (set! spawned-desertb1-poi? #t)
                         )
 
@@ -314,6 +642,7 @@
                                 (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
                             )
                                 (spawn-manipy-sat desert-spawn "manipy-sat-desertb2")
+                                (kill-by-name "task-arrow-custom" *default-pool*)
                                 (set! spawned-desertb2-poi? #t)
                         )
                         (when 
@@ -355,6 +684,7 @@
                                 (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
                             )
                                 (spawn-manipy-sat desert-spawn "manipy-sat-desertd1")
+                                (kill-by-name "task-arrow-custom" *default-pool*)
                                 (set! spawned-desertd1-poi? #t)
                         )
                         (when 
@@ -396,6 +726,7 @@
                                 (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
                             )
                                 (spawn-manipy-sat desert-spawn "manipy-sat-desertd2")
+                                (kill-by-name "task-arrow-custom" *default-pool*)
                                 (set! spawned-desertd2-poi? #t)
                         )
                         (when 
@@ -437,6 +768,7 @@
                                 (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
                             )
                                 (spawn-manipy-sat desert-spawn "manipy-sat-deserta1")
+                                (kill-by-name "task-arrow-custom" *default-pool*)
                                 (set! spawned-deserta1-poi? #t)
                         )
                         (when 
@@ -478,6 +810,7 @@
                                 (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
                             )
                                 (spawn-manipy-sat desert-spawn "manipy-sat-deserta2")
+                                (kill-by-name "task-arrow-custom" *default-pool*)
                                 (set! spawned-deserta2-poi? #t)
                         )
                         (when 
@@ -519,6 +852,7 @@
                                 (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
                             )
                                 (spawn-manipy-sat desert-spawn "manipy-sat-desertc1")
+                                (kill-by-name "task-arrow-custom" *default-pool*)
                                 (set! spawned-desertc1-poi? #t)
                         )
                         (when 
@@ -560,6 +894,7 @@
                                 (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
                             )
                                 (spawn-manipy-sat desert-spawn "manipy-sat-desertc2")
+                                (kill-by-name "task-arrow-custom" *default-pool*)
                                 (set! spawned-desertc2-poi? #t)
                         )
                         (when 

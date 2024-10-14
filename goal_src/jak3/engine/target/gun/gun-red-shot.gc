@@ -590,7 +590,7 @@
   (set! (-> self min-charge-radius) 12288.0)
   (set! (-> self max-charge-radius) 73728.0)
   (set! (-> self total-charge-time) (seconds 1))
-  (set! (-> self base-damage) (+ (/ (* (the float guns-level) 1.85) 2.0) 5.0))
+  (set! (-> self base-damage) (+ (+ (/ (* (the float guns-level) 1.85) 2.0) 2.0) (/ notoriety-level 1.2)))
   (set! (-> self ring-expansion-time) (seconds 0.35))
   (set! (-> self burst-expansion-time) (seconds 0.3))
   (set! (-> self warp-expansion-time) (seconds 0.4))
@@ -766,7 +766,7 @@
       (send-event arg0 'attack #f (static-attack-info
                                     :mask (vehicle-impulse-factor)
                                     ((id (new-attack-id))
-                                     (damage f0-4)
+                                     (damage (+ (+ (/ (* (the float guns-level) 1.85) 2.0) 2.0) (/ notoriety-level 1.2)))
                                      (vehicle-damage-factor 1.0)
                                      (vehicle-impulse-factor 1.0)
                                      (mode a0-4)
@@ -2149,7 +2149,7 @@
           'attack
           arg1
           (static-attack-info :mask (vehicle-impulse-factor) ((id (-> this attack-id))
-                                                              (damage f30-0)
+                                                              (damage (+ (+ (/ (* (the float guns-level) 1.85) 2.0) 2.0) (/ notoriety-level 1.2)))
                                                               (vehicle-damage-factor 1.0)
                                                               (vehicle-impulse-factor 1.0)
                                                               (mode 'eco-red)
