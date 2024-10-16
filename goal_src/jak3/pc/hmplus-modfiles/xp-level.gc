@@ -27,6 +27,7 @@
 
 (defun level-up-guns! ((arg0 int))
     (+! (-> *game-info* auto-save-count) arg0)
+    (+! (-> *game-info* karma) extra-offthetop)
     (set! (-> *game-info* buzzer-total) extra-offthetop)
     (set! draw-levelup-noto #t)
     (set! noto-string "<COLOR_RED>Guns<COLOR_YELLOW>")
@@ -37,6 +38,7 @@
 (defun level-up-cars! ((arg0 int))
     (+! (-> *game-info* total-deaths) arg0)
     (set! (-> *game-info* fuel) extra-offthetop)
+    (+! (-> *game-info* karma) extra-offthetop)
     (set! draw-levelup-noto #t)
     (set! noto-string "<COLOR_PINK>Vehicle<COLOR_YELLOW>")
     (set! draw-levelup-int (-> *game-info* total-deaths))
@@ -329,6 +331,9 @@
                             )
                                 (when (!= enemy-hp-percent (/ arg1 level-cap))
                                     (set! enemy-hp-percent (/ arg1 level-cap))
+                                )
+                                (when (< level-cap arg1)
+                                    (set! arg1 0.0)
                                 )
                             )
                 (let 
@@ -765,7 +770,6 @@
             (draw-sprite2d-xy s2-0 (+ x 1) (+ y 1) (the int (* 61.0 progress)) 12 arg3 #x3fffff)
             )
         )
-        
         
     )
 
