@@ -27,7 +27,7 @@
 
 (defun level-up-guns! ((arg0 int))
     (+! (-> *game-info* auto-save-count) arg0)
-    (+! (-> *game-info* karma) extra-offthetop)
+    (+! (-> *game-info* karma) (/ extra-offthetop 2))
     (set! (-> *game-info* buzzer-total) extra-offthetop)
     (set! draw-levelup-noto #t)
     (set! noto-string "<COLOR_RED>Guns<COLOR_YELLOW>")
@@ -38,7 +38,7 @@
 (defun level-up-cars! ((arg0 int))
     (+! (-> *game-info* total-deaths) arg0)
     (set! (-> *game-info* fuel) extra-offthetop)
-    (+! (-> *game-info* karma) extra-offthetop)
+    (+! (-> *game-info* karma) (/ extra-offthetop 2))
     (set! draw-levelup-noto #t)
     (set! noto-string "<COLOR_PINK>Vehicle<COLOR_YELLOW>")
     (set! draw-levelup-int (-> *game-info* total-deaths))
@@ -46,7 +46,8 @@
 )
 
 (defun vehicle-killed? ((xp-gain float))
-    (+! (-> *game-info* fuel) (* xp-gain enemy-noto))
+    (+! (-> *game-info* fuel) (/ (* xp-gain enemy-noto) 2))
+    (+! (-> *game-info* karma) (/ (* xp-gain enemy-noto) 4))
     (set! xp-string "Marauder Killed")
     (set! *xp-gain* (* xp-gain enemy-noto))
     (set! xp-draw #t)
@@ -64,7 +65,7 @@
 )
 
 (defun enemy-killed? ((xp-gain float))
-    (+! (-> *game-info* karma) (* xp-gain enemy-noto))
+    (+! (-> *game-info* karma) (/ (* xp-gain enemy-noto) 1.5))
     (set! xp-string "Enemy Killed")
     (set! *xp-gain* (* xp-gain enemy-noto))
     (set! xp-draw #t)
@@ -271,6 +272,19 @@
             (set! extra-offthetop (- (-> *game-info* fuel) (* (+ (* cars-level 30) (* cars-level 175)) cars-level)))
             (level-up-cars! 1)
         )
+
+        (when 
+            (and
+                *target*
+                (not *scene-player*)
+                (= (paused?) #f)
+                (= (pause-allowed?) #t)
+                (task-node-closed? (game-task-node arena-training-1-introduction))
+                (not (task-node-closed? (game-task-node arena-training-1-collect)))
+                (= (-> *game-info* karma) (the int 65))
+            )
+                (set! (-> *game-info* karma) 0.0)
+            )
 
         (when (= enemy-hp #t)
             (+! hpi 1)
