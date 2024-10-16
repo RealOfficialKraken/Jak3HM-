@@ -209,12 +209,9 @@ Bad modifiers:
 (not (focus-test? *target* pilot))
 )
 (set! in-menu? #t)
-(camera-locked #t #t)
+(camera-locked #f #t)
 (set! menu-slot 1)
 (set! menu-type 0)
-(when (= (-> *game-info* total-deaths) 0)
-    (level-up-cars! 1)
-)
 )
 
 (when 
@@ -232,6 +229,9 @@ Bad modifiers:
 )
 (set! in-menu? #f)
 (camera-unlocked)
+(when (= (-> *game-info* total-deaths) 0)
+    (level-up-cars! 1)
+)
 )
 
 (when 
@@ -391,6 +391,9 @@ Bad modifiers:
 (set! in-gunmods? #t)
 (set! menu-slot 0)
 (set! sq-string "Attach Gun Mod")
+(when (= (-> *game-info* total-deaths) 0)
+    (level-up-cars! 1)
+)
 )
 
 (when 
@@ -411,6 +414,9 @@ Bad modifiers:
 (set! in-skill? #f)
 (set! menu-slot 0)
 (set! sq-string "Skill Info")
+(when (= (-> *game-info* total-deaths) 0)
+    (level-up-cars! 1)
+)
 )
 (when 
 (and 
@@ -428,6 +434,9 @@ Bad modifiers:
 )
 (set! in-superpowers? #f)
 (set! in-skill? #t)
+(when (= (-> *game-info* total-deaths) 0)
+    (level-up-cars! 1)
+)
 )
 
 
@@ -1015,7 +1024,7 @@ Bad modifiers:
     )
 )
 
-(when (and (= (-> *game-info* total-deaths) 0)(= menu-unlocked? #t)(= on-vehicle? #f)(not *scene-player*)(= in-menu? #f))
+(when (and (= (-> *game-info* total-deaths) 0)(not (focus-test? *target* pilot))(= menu-unlocked? #t)(= on-vehicle? #f)(not *scene-player*)(= in-menu? #f))
     (clear matt-str)
     (clear *pc-encoded-matt-str*)
     (format matt-str "<COLOR_RED>Press <COLOR_WHITE>R3 <COLOR_RED>to view the HeroMode+ stats!"
@@ -1024,6 +1033,19 @@ Bad modifiers:
     (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
     (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
     (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 255 310 0.0 (font-color default) (font-flags middle shadow kerning large))))
+    (set! (-> font-ctx scale) 0.325)
+    (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+)
+
+(when (and (= (-> *game-info* total-deaths) 0)(= menu-unlocked? #t)(= on-vehicle? #f)(not *scene-player*)(= in-menu? #t))
+    (clear matt-str)
+    (clear *pc-encoded-matt-str*)
+    (format matt-str "<COLOR_WHITE>Welcome to <COLOR_BLUE>Hero<COLOR_RED>Mode<COLOR_CYAN>+~%<COLOR_GREEN>Made by Kraken~%~%<COLOR_CYAN>RPG Elements have been added!~%Information about your levels can be accessed in the <COLOR_ORANGE>Skills<COLOR_CYAN> tab~%~%Weapons are not obtained the traditional way! You only get these two guns to start.~%The new way to get weapons is to find artifacts in the wasteland~%~%Gun Mods are new additions that are incredibly rare, and each one has its own function.~%Good luck finding one of those~%~%Enemies also have a level, so be careful treading into certain areas~%Farming enemies is definitely recommended as the game accelerates enemy levels drastically~%The Desert Wasteland starts enemies 2 levels below, but gradually increases with time, infinitely~%Don't take too long on desert missions!~%~%<COLOR_GREEN>Good Luck!"
+    )
+    (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+    (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+    (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+    (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 255 90 0.0 (font-color default) (font-flags middle shadow kerning large))))
     (set! (-> font-ctx scale) 0.325)
     (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
 )
