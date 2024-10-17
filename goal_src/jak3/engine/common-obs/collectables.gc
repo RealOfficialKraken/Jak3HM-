@@ -463,6 +463,7 @@
     )
     (((pickup-type skill))
      (talker-spawn-func (-> *talker-speech* 37) *entity-pool* (target-pos 0) (the-as region #f))
+     (collect-orb-xp! (* 7.3 notoriety-level))
      )
     )
   (let ((s5-1 (handle->process arg0)))

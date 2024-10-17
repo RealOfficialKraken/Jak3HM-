@@ -518,6 +518,7 @@
              (sound-play "timer-warn")
              (sound-play "timer-beep")
              )
+             (set! hud-timer-on? #t)
          )
         ((= (-> this values 3 target) 1)
          (sound-play "warn-beep1")

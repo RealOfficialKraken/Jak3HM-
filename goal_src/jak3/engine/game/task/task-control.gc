@@ -2956,6 +2956,7 @@
       )
     (countdown (s5-1 4)
       (send-event (handle->process (-> this hud s5-1)) 'hide-and-die)
+      (set! hud-timer-on? #f)
       )
     ((method-of-type process deactivate) this)
     (none)

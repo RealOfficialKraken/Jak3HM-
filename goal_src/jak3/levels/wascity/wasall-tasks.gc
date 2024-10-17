@@ -193,7 +193,6 @@
   :virtual #t
   :code (behavior ()
     (until #f
-      (set! in-desert-game-task? #t)
       (suspend)
       (cond
         ((= (status-of-level-and-borrows *level* 'desert #f) 'active)

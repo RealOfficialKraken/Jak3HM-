@@ -67,6 +67,7 @@
   (define in-debug? #f)
 
   (defun-extern draw-XP-bar (none))
+  (defun-extern collect-orb-xp! float none)
 
   (define turbo-held? #f)
   (define turbo-supply-float 0.0)
@@ -85,6 +86,8 @@
   (define has-dark-1 #f)
   (define has-dark-2 #f)
   (define has-dark-3 #f)
+
+  (define hud-timer-on? #f)
 
   (define noto-draw-x 0)
   (define noto-draw-y 0)

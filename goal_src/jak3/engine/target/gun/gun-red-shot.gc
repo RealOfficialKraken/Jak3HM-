@@ -1545,7 +1545,7 @@
   (let ((gp-0 (-> self gun))
         (v1-1 (-> self gun fire-point))
         )
-    (+! (-> *game-info* buzzer-total) 9.0)
+    (+! (-> *game-info* buzzer-total) 14.0)
     (set! (-> *last-player-pos* x) (-> *target* gun fire-point x))
     (set! (-> *last-player-pos* y) (+ 6553.6 (-> *target* control trans y)))
     (set! (-> *last-player-pos* z) (-> *target* gun fire-point z))
