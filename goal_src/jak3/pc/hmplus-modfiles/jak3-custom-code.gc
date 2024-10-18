@@ -3,22 +3,39 @@
 
 ;; name: jak3-custom-code.gc
 
-#|MODIFIER IDEAS
+#|IDEAS TO IMPLEMENT
 
-Good modifiers:
+Desert POI's
 ---------------------------------------------------------------
-- Jak X Vehicle Boost Tap (unlimited boost, can tap like in Jak X)
-- Fast Attacks (your attacks get a tiny bit faster after each enemy kill. Caps at a reasonable place)
-- Luck stat (jak gets a luck stat added, which works either in his favor, or not)
-- Triple Jump (oh man it's the spicy triple baby, we've always wanted this)
+- Add a battle sequence that jak happens upon with wastelanders.
+Each encounter will be a random count for enemies, with the last
+one being incredibly strong. It will then give a lot of XP and 
+potentially a weapon
+
+- Custom bosses will be scattered around the desert in specific spots.
+All of these bosses are different from neo-sat, instead they are
+recolored, rescaled, entities from Jak 3.
+
+- Make a custom boss sequence with maker towards the end, 
+called planetboss. They can be fought in the desert on foot.
+You will face one at the end of Jak 3's story, just Before
+Jak climbs up for errol fight. Jak can also fight planetboss
+by wandering the desert while over notoriety-level 75.
+They are the only creatures that drop gun-mods, which 
+are overpowered upgrades for all weapons. The Beam Reflexor
+is included in the drop pool for this.
+
+- All of these will occur while (= in-desert-game-task? #t)
 
 ---------------------------------------------------------------
-Bad modifiers:
+Random Desert Storm Occurances
 ---------------------------------------------------------------
-- All Enemy HP X6
-- Target Explode 
-- Ambush (a single enemy is picked at random, then they all get spawned around jak.)
-- More enemies, less friendlies
+- The wasteland will have a dynamic storm timer that happens on 
+occasion, and will do damage to jak's vehicle and jak if hes out
+of the vehicle.
+
+- Before the storm arrives, there's a timer that warns jak to find
+a safe space. This will not occur while (= in-desert-game-task? #t)
 
 ---------------------------------------------------------------
 

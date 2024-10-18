@@ -485,4 +485,5 @@
   "dp-bipedal-part.o"
   "dp-bipedal-shot.o"
   "dp-bipedal.o"
+  ;"planetboss.o"
  ))
