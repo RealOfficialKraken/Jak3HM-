@@ -44,17 +44,17 @@
     (else (-> en-type symbol)))
   )
 
-(define extra-offthetop 0.0)
-    (define draw-levelup-noto #f)
-    (define draw-levelup-guns #f)
-    (define lvl2i 0)
-    (define lvli 0)
-    (define *xp-gain* 0.0)
-    (define xp-draw #t)
-    (define xpi 0)
-    (define enemy-noto 0)
-    (define start-was-uprising #f)
-    (define wasi 0)
+  (define extra-offthetop 0.0)
+  (define draw-levelup-noto #f)
+  (define draw-levelup-guns #f)
+  (define lvl2i 0)
+  (define lvli 0)
+  (define *xp-gain* 0.0)
+  (define xp-draw #t)
+  (define xpi 0)
+  (define enemy-noto 0)
+  (define start-was-uprising #f)
+  (define wasi 0)
 
   (define matt-str (new 'global 'string 2048 (the-as string #f)))
   (define *pc-encoded-matt-str* (new 'global 'string 2048 (the-as string #f)))
@@ -124,6 +124,10 @@
   (define in-skill? #f)
   (define on-vehicle? #f)
 
+  (define in-tutorial? #f)
+  (define tutorial-msg 0)
+  (define tutorial-freeze 0)
+
   (define menu-slot 0)
   (define menu-type 0)
   (define menu-select 0)
@@ -171,6 +175,9 @@
   (define-extern xp-string string)
   (define-extern notoriety-level int)
   (define-extern xpi int)
+
+  (define arena-token-count 0)
+  (defun-extern spawn-gun-upgrade vector float none)
 
 ;; +++game-items
 (defenum game-items

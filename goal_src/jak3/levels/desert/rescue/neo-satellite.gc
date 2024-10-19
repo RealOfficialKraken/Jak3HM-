@@ -3234,7 +3234,7 @@
         (set! (-> thefact process) #f)
         (set! (-> thefact pickup-type) (pickup-type gun-yellow-1))
         (set! (-> thefact pickup-spawn-amount) 1.0)
-        (birth-pickup-at-point (-> self root trans) (pickup-type gun-yellow-1) 1.0 #t *entity-pool* (the-as fact-info #f))
+        (spawn-gun-upgrade (-> self root trans) 1.0)
         (let (
         (gp-3 (new 'stack-no-clear 'task-arrow-params))
         (self1 (the-as process #f))
