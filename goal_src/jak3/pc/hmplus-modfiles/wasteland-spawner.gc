@@ -232,7 +232,6 @@
                     (= spawned-desertd2-poi? #f)
                 )
                     (kill-all-sat)
-                    (set! in-satbattle? #f)
                     (set! cdr-satbattle #t)
                 )
         )
