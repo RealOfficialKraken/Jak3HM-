@@ -472,7 +472,10 @@
   "debris.o"
   "shield-sphere.o"
   "entity-debug.o" ;; added
-  "actor-def.o"
+  "squad-control-h.o"
+  "squad-control.o"
+  "was-squad-control.o"
+  "actor-def.o" ;;vvv hmplus-modfiles vvv
   "mod-save-stats.o"
   "jak3-custom-code.o"
   "xp-level.o"

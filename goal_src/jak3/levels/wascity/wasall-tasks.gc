@@ -473,7 +473,6 @@
     (suspend-for (seconds 1)
       )
     (open! (-> self node-info) 'event)
-    (set! in-desert-game-task? #t)
     (talker-spawn-func (-> *talker-speech* 83) *entity-pool* (target-pos 0) (the-as region #f))
     (sleep-code)
     )
@@ -481,6 +480,31 @@
 
 ;; WARN: Return type mismatch connection vs none.
 (defmethod set-time-limit ((this oasis-defense-intro-manager))
+  ((method-of-type task-manager set-time-limit) this)
+  (let ((t1-0 11))
+    (set-setting! 'vehicles 'set (shr t1-0 32) t1-0)
+    )
+  (none)
+  )
+
+  (deftype desertspawn-defense-intro-manager (task-manager)
+  ()
+  )
+
+
+(defstate active (desertspawn-defense-intro-manager)
+  :virtual #t
+  :code (behavior ()
+    (suspend-for (seconds 1)
+      )
+    (open! (-> self node-info) 'event)
+    (talker-spawn-func (-> *talker-speech* 83) *entity-pool* (target-pos 0) (the-as region #f))
+    (sleep-code)
+    )
+  )
+
+;; WARN: Return type mismatch connection vs none.
+(defmethod set-time-limit ((this desertspawn-defense-intro-manager))
   ((method-of-type task-manager set-time-limit) this)
   (let ((t1-0 11))
     (set-setting! 'vehicles 'set (shr t1-0 32) t1-0)

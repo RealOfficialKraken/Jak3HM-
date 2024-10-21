@@ -673,10 +673,37 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
             (set! (-> font-ctx scale) 0.325)
             (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
         )
+        (when (= tutorial-freeze 899)
+            (kill-by-name "upgrade-collectable" *entity-pool*)
+            (kill-by-name "task-arrow-custom" *default-pool*)
+        )
+        (when (= tutorial-freeze 925)
+            (let ((man-neo-sat (the manipy
+                (ppointer->process (process-spawn manipy
+                 :init
+                 manipy-init
+                 (new 'static 'vector
+                 :x (meters 2302.5278) 
+                 :y (meters 37.5870)
+                 :z (meters -492.3220)
+                 :w 1.0)
+                 #f
+                 (art-group-get-by-name *level* "skel-neo-sat" (the (pointer level) #f))
+                 #f
+                 0
+                 #f
+                 :name "manipy-tutorial1"
+                 :from *debug-dead-pool*
+                 :stack-size #x18000
+                 )))))
+                 ;(send-event man-neo-sat 'anim-mode 'loop)
+                 ;(send-event man-neo-sat 'art-joint-anim "dp-bipedal-shield-out-idle-ja")
+                 )
+        )
         (when (and (>= tutorial-freeze 925) (< tutorial-freeze 1425))
             (clear matt-str)
             (clear *pc-encoded-matt-str*)
-            (format matt-str "<COLOR_ORANGE>Minibosses are found in the desert when <COLOR_RED>no mission is active~%<COLOR_YELLOW>Most of them will not spawn until after they first appear"
+            (format matt-str "<COLOR_ORANGE>Minibosses are found in the desert when <COLOR_RED>no mission is active~%<COLOR_YELLOW>Most of them will not spawn until after they first appear~%~%For example, after the <COLOR_PINK>Satellite<COLOR_ORANGE> miniboss, you'll~%be able to find them across the desert"
             )
             (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
             (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -685,8 +712,9 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
             (set! (-> font-ctx scale) 0.325)
             (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
         )
-        (when (or (>= tutorial-freeze 1425)(and (cpad-pressed? 0 x) (>= tutorial-freeze 1000)))
+        (when (or (>= tutorial-freeze 1425)(and (cpad-pressed? 0 x) (>= tutorial-freeze 400)))
             (process-release? *target*)
+            (kill-by-name "manipy-tutorial1" *default-pool*)
             (kill-by-name "upgrade-collectable" *entity-pool*)
             (kill-by-name "task-arrow-custom" *default-pool*)
             (set! tutorial-freeze 0)
@@ -707,19 +735,115 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
         (when (= tutorial-freeze 1)
             (process-grab? *target* #f)
         )
-        (when (and (>= tutorial-freeze 119)(< tutorial-freeze 800))
+        (when (= tutorial-freeze 119)
+            (let ((marauderc (the manipy
+                (ppointer->process (process-spawn manipy
+                 :init
+                 manipy-init
+                 (new 'static 'vector
+                 :x (meters 2358.6489)
+                 :y (meters 49.1541)
+                 :z (meters -507.0516)
+                 :w 1.0)
+                 #f
+                 (art-group-get-by-name *level* "skel-marauder" (the (pointer level) #f))
+                 #f
+                 0
+                 #f
+                 :name "manipy-tutorial1"
+                 :from *debug-dead-pool*
+                 :stack-size #x18000
+                 )))))
+                 ;(send-event marauderc 'anim-mode 'loop)
+                 ;(send-event marauderc 'art-joint-anim "dp-bipedal-shield-out-idle-ja")
+                 )
+        )
+        (when (and (>= tutorial-freeze 119)(< tutorial-freeze 2700))
+            (send-event *camera* 'teleport-to-vector-start-string
+                (new 'static 'vector
+                :x (meters 2377.1108)
+                :y (meters 55.1747)
+                :z (meters -507.0074)
+                :w 1.0)
+                )
+        )
+        (when (and (>= tutorial-freeze 119)(< tutorial-freeze 900))
             (clear matt-str)
             (clear *pc-encoded-matt-str*)
-            (format matt-str "<COLOR_ORANGE>Enemies also have levels, too! As you complete missions,~%enemy levels will drastically spike up~%<COLOR_CYAN>Farming is recommended~%~%~%<COLOR_YELLOW>The more time you spend in the desert,~%the higher the enemy levels will be~%<COLOR_RED>This progresses infinitely"
+            (format matt-str "<COLOR_ORANGE>Enemies also have levels, too! As you complete missions,~%enemy levels will drastically spike up~%<COLOR_CYAN>Farming is highly recommended~%~%~%~%~%~%~%~%~%~%~%~%~%"
             )
             (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
             (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
             (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
-            (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 255 60 0.0 (font-color default) (font-flags middle shadow kerning large))))
+            (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 255 10 0.0 (font-color default) (font-flags middle shadow kerning large))))
             (set! (-> font-ctx scale) 0.325)
             (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
         )
-        (when (or (= tutorial-freeze 800)(and (cpad-pressed? 0 x) (>= tutorial-freeze 200)))
+        (when (= tutorial-freeze 900)
+            (kill-by-name "manipy-tutorial1" *default-pool*)
+        )
+        (when (= tutorial-freeze 960)
+            (let ((marauderc (the manipy
+                (ppointer->process (process-spawn manipy
+                 :init
+                 manipy-init
+                 (new 'static 'vector
+                 :x (meters 2358.6489)
+                 :y (meters 49.1541)
+                 :z (meters -507.0516)
+                 :w 1.0)
+                 #f
+                 (art-group-get-by-name *level* "skel-neo-sat" (the (pointer level) #f))
+                 #f
+                 0
+                 #f
+                 :name "manipy-tutorial1"
+                 :from *debug-dead-pool*
+                 :stack-size #x18000
+                 )))))
+                 ;(send-event marauderc 'anim-mode 'loop)
+                 ;(send-event marauderc 'art-joint-anim "dp-bipedal-shield-out-idle-ja")
+                 )
+        )
+        (when (and (>= tutorial-freeze 960)(< tutorial-freeze 1800))
+            (clear matt-str)
+            (clear *pc-encoded-matt-str*)
+            (format matt-str "<COLOR_CYAN>In the Wasteland, enemies and cars will start off with a level 2 below your <COLOR_ORANGE>Notoriety~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_CYAN>Then gradually, <COLOR_RED>enemy levels will raise up slowly, but endlessly~%<COLOR_YELLOW>Don't take too long in the Wasteland!"
+            )
+            (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+            (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+            (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+            (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 255 10 0.0 (font-color default) (font-flags middle shadow kerning large))))
+            (set! (-> font-ctx scale) 0.325)
+            (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+        )
+        (when (= tutorial-freeze 1800)
+            (kill-by-name "manipy-tutorial1" *default-pool*)
+            (kill-by-name "manipy-tutorial2" *default-pool*)
+        )
+        (when (= tutorial-freeze 1920)
+            (spawn-artifact 
+                (new 'static 'vector
+                 :x (meters 2358.6489)
+                 :y (meters 49.1541)
+                 :z (meters -507.0516)
+                 :w 1.0))
+        )
+        (when (and (>= tutorial-freeze 1920)(< tutorial-freeze 2700))
+            (clear matt-str)
+            (clear *pc-encoded-matt-str*)
+            (format matt-str "<COLOR_ORANGE>Desert Storms will happen periodically in the Wasteland, not just in missions~%This means you can also find desert artifacts during these storms~%~%Be careful not to stay for too long!~%Jak and his vehicle will start taking damage from the heavy parts of the storm"
+            )
+            (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+            (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+            (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+            (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 255 10 0.0 (font-color default) (font-flags middle shadow kerning large))))
+            (set! (-> font-ctx scale) 0.325)
+            (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+        )
+        (when (or (= tutorial-freeze 2700)(and (cpad-pressed? 0 x) (>= tutorial-freeze 400)))
+            (kill-by-name "manipy-tutorial1" *default-pool*)
+            (kill-by-name "manipy-tutorial2" *default-pool*)
             (process-release? *target*)
             (set! tutorial-freeze 0)
             (set! in-tutorial? #f)
@@ -737,6 +861,36 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
     )
         (+! tutorial-freeze 1)
         (when (= tutorial-freeze 1)
+            ;(process-grab? *target* #t)
+            (set! tutorial-freeze 0)
+            (set! in-tutorial? #f)
+        )
+        (when (= tutorial-freeze 60)
+            (let ((bipedal (the manipy
+                (ppointer->process (process-spawn manipy
+                 :init
+                 manipy-init
+                 (new 'static 'vector
+                 :x (meters 2358.6489)
+                 :y (meters 49.1541)
+                 :z (meters -507.0516)
+                 :w 1.0)
+                 #f
+                 (art-group-get-by-name *level* "skel-dp-bipedal" (the (pointer level) #f))
+                 #f
+                 0
+                 #f
+                 :name "manipy-tutorial1"
+                 :from *debug-dead-pool*
+                 :stack-size #x18000
+                 )))))
+                 ;(send-event bipedal 'anim-mode 'loop)
+                 ;(send-event bipedal 'art-joint-anim "dp-bipedal-shield-out-idle-ja")
+                 )
+        )
+        (when (and (>= tutorial-freeze 60)(< tutorial-freeze 1200))
+        )
+        (when (= tutorial-freeze 9990)
             (process-release? *target*)
             (set! tutorial-freeze 0)
             (set! in-tutorial? #f)

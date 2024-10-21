@@ -37,8 +37,10 @@
 
 (defun level-up-cars! ((arg0 int))
     (+! (-> *game-info* total-deaths) arg0)
-    (set! (-> *game-info* fuel) extra-offthetop)
-    (+! (-> *game-info* karma) (/ extra-offthetop 2))
+    (when (!= (-> *game-info* total-deaths) 1)
+        (set! (-> *game-info* fuel) extra-offthetop)
+        (+! (-> *game-info* karma) (/ extra-offthetop 2))
+    )
     (set! draw-levelup-noto #t)
     (set! noto-string "<COLOR_PINK>Vehicle<COLOR_YELLOW>")
     (set! draw-levelup-int (-> *game-info* total-deaths))
