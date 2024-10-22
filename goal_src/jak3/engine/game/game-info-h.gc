@@ -176,6 +176,9 @@
   (define-extern notoriety-level int)
   (define-extern xpi int)
 
+  (defun-extern runs-on-blackout (none))
+  (define desert-spawn-mission-oasis #f)
+
   (define arena-token-count 0)
   (defun-extern spawn-gun-upgrade vector float none)
   (defun-extern task-arrow-custom vector symbol)

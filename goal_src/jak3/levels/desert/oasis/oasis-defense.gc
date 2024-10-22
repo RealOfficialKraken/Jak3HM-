@@ -785,8 +785,14 @@
   :code sleep-code
   )
 
+;; definition for method 11 of type desoasis-hellcat
 (defmethod init-from-entity! ((this desoasis-hellcat) (arg0 entity-actor))
-  (let ((s4-0 (new 'process 'collide-shape this (collide-list-enum usually-hit-by-player))))
+  (when 
+    (and 
+      (task-node-closed? (game-task-node desert-oasis-defense-introduction))
+      (not (task-node-closed? (game-task-node desert-oasis-defense-resolution)))
+      )
+      (let ((s4-0 (new 'process 'collide-shape this (collide-list-enum usually-hit-by-player))))
     (let ((v1-2 (new 'process 'collide-shape-prim-mesh s4-0 (the-as uint 0) (the-as uint 0))))
       (set! (-> v1-2 prim-core collide-as) (collide-spec obstacle))
       (set! (-> v1-2 prim-core action) (collide-action solid))
@@ -811,4 +817,5 @@
     )
   (transform-post)
   (go (method-of-object this idle))
+      )
   )

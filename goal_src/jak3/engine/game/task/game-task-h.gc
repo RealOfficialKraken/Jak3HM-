@@ -149,7 +149,7 @@
   (city-jetboard-bbush 136)
   (desert-bbush-destroy-interceptors 137)
   (max 138)
-  (desert-spawn-task-1 139)
+  (desert-spawn-task-oasis 139)
   )
 ;; ---game-task
 
@@ -566,8 +566,9 @@
   (city-jetboard-bbush-resolution)
   (desert-bbush-destroy-interceptors-introduction)
   (desert-bbush-destroy-interceptors-resolution)
-  (desert-spawn-task-1-introduction)
-  (desert-spawn-task-1-resolution)
+  (desert-spawn-task-oasis-goto-artifact)
+  (desert-spawn-task-oasis-battle)
+  (desert-spawn-task-oasis-resolution)
   )
 ;; ---game-task-node
 
