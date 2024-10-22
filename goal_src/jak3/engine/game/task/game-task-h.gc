@@ -150,6 +150,7 @@
   (desert-bbush-destroy-interceptors 137)
   (max 138)
   (desert-spawn-task-oasis 139)
+  (desert-spawn-task-deserta 140)
   )
 ;; ---game-task
 
@@ -569,6 +570,9 @@
   (desert-spawn-task-oasis-goto-artifact)
   (desert-spawn-task-oasis-battle)
   (desert-spawn-task-oasis-resolution)
+  (desert-spawn-task-deserta-goto-artifact)
+  (desert-spawn-task-deserta-battle)
+  (desert-spawn-task-deserta-resolution)
   )
 ;; ---game-task-node
 

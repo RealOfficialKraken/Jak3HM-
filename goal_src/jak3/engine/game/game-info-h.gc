@@ -178,6 +178,7 @@
 
   (defun-extern runs-on-blackout (none))
   (define desert-spawn-mission-oasis #f)
+  (define desert-spawn-mission-deserta #f)
 
   (define arena-token-count 0)
   (defun-extern spawn-gun-upgrade vector float none)

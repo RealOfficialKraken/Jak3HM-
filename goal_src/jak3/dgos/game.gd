@@ -476,6 +476,8 @@
   "squad-control.o"
   "was-squad-control.o"
   "actor-def.o" ;;vvv hmplus-modfiles vvv
+  "desertspawn-oasis.o"
+  "desertspawn-deserta.o"
   "mod-save-stats.o"
   "jak3-custom-code.o"
   "xp-level.o"
@@ -488,6 +490,7 @@
   "dp-bipedal-part.o"
   "dp-bipedal-shot.o"
   "dp-bipedal.o"
+  "marauder.o"
   ;"desert-storm.o"
   ;"planetboss.o"
  ))

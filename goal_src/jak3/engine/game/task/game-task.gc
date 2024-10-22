@@ -1290,6 +1290,15 @@
             :play-continue "desert-ashelin"
             :kiosk-play-continue #f
             )
+            (new 'static 'game-task-info
+            :name "desert-spawn-task-deserta"
+            :pre-play-node (game-task-node desert-spawn-task-deserta-goto-artifact)
+            :kiosk-play-node (game-task-node none)
+            :pre-play-continue "desert-ashelin"
+            :play-node (game-task-node desert-spawn-task-deserta-battle)
+            :play-continue "desert-ashelin"
+            :kiosk-play-continue #f
+            )
           )
         )
   (set! (-> game-info sub-task-list)
@@ -23425,6 +23434,84 @@
             :flags (game-task-node-flag save-on-life close-task)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node desert-spawn-task-oasis-battle)
+              (game-task-node none)
+              (game-task-node none)
+              (game-task-node none)
+              )
+            :on-open #f
+            :manager #f
+            :borrow '((desert-game alias desert copy desoasis special))
+            :open? #f
+            :on-close #f
+            :reset #f
+            :suck-death-count #xa5
+            :command-index #x1f
+            :command-count #x4
+            :faction-commands '()
+            )
+            (new 'static 'game-task-node-info
+            :level 'desert
+            :task (game-task desert-spawn-task-deserta)
+            :name "desert-spawn-task-deserta-get-artifact"
+            :when-open #f
+            :flags (game-task-node-flag save-on-life)
+            :parent-node (new 'static 'array game-task-node 4
+              (game-task-node none)
+              (game-task-node none)
+              (game-task-node none)
+              (game-task-node none)
+              )
+            :on-open #f
+            :manager #f
+            :borrow '()
+            :open? #f
+            :on-close #f
+            :reset #f
+            :suck-death-count #xa5
+            :command-index #x44
+            :faction-commands '()
+            )
+            (new 'static 'game-task-node-info
+            :level 'desert
+            :task (game-task desert-spawn-task-deserta)
+            :name "desert-spawn-task-deserta-battle"
+            :when-open #f
+            :flags (game-task-node-flag save-on-life close-task)
+            :parent-node (new 'static 'array game-task-node 4
+              (game-task-node desert-spawn-task-deserta-goto-artifact)
+              (game-task-node none)
+              (game-task-node none)
+              (game-task-node none)
+              )
+            :on-open #f
+            :manager (new 'static 'task-manager-info
+              :level 'desoasis
+              :type-to-spawn 'task-manager-deserta-defense
+              :intro-scene #f
+              :resolution-scene #f
+              :resolution-scene-continue #f
+              :final-node (game-task-node desert-spawn-task-deserta-resolution)
+              :vehicle-type #x1b
+              :on-complete #f
+              :on-fail #f
+              )
+            :borrow '((desert-game alias desert copy desoasis special))
+            :open? #f
+            :on-close #f
+            :reset #f
+            :suck-death-count #xa5
+            :command-index #x1f
+            :command-count #x4
+            :faction-commands '()
+            )
+            (new 'static 'game-task-node-info
+            :level 'desert
+            :task (game-task desert-spawn-task-deserta)
+            :name "desert-spawn-task-deserta-resolution"
+            :when-open #f
+            :flags (game-task-node-flag save-on-life close-task)
+            :parent-node (new 'static 'array game-task-node 4
+              (game-task-node desert-spawn-task-deserta-battle)
               (game-task-node none)
               (game-task-node none)
               (game-task-node none)
