@@ -1294,9 +1294,9 @@
             :name "desert-spawn-task-deserta"
             :pre-play-node (game-task-node desert-spawn-task-deserta-goto-artifact)
             :kiosk-play-node (game-task-node none)
-            :pre-play-continue "desert-ashelin"
+            :pre-play-continue "desert-hf-start"
             :play-node (game-task-node desert-spawn-task-deserta-battle)
-            :play-continue "desert-ashelin"
+            :play-continue "desert-hf-start"
             :kiosk-play-continue #f
             )
           )
@@ -23374,7 +23374,7 @@
             (new 'static 'game-task-node-info
             :level 'desert
             :task (game-task desert-spawn-task-oasis)
-            :name "desert-spawn-task-oasis-get-artifact"
+            :name "desert-spawn-task-oasis-goto-artifact"
             :when-open #f
             :flags (game-task-node-flag save-on-life)
             :parent-node (new 'static 'array game-task-node 4
@@ -23452,7 +23452,7 @@
             (new 'static 'game-task-node-info
             :level 'desert
             :task (game-task desert-spawn-task-deserta)
-            :name "desert-spawn-task-deserta-get-artifact"
+            :name "desert-spawn-task-deserta-goto-artifact"
             :when-open #f
             :flags (game-task-node-flag save-on-life)
             :parent-node (new 'static 'array game-task-node 4

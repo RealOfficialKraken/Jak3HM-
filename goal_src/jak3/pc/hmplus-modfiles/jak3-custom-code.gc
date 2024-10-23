@@ -832,7 +832,7 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
         (when (and (>= tutorial-freeze 1920)(< tutorial-freeze 2700))
             (clear matt-str)
             (clear *pc-encoded-matt-str*)
-            (format matt-str "<COLOR_ORANGE>Desert Storms will happen periodically in the Wasteland, not just in missions~%This means you can also find desert artifacts during these storms~%~%Be careful not to stay for too long!~%Jak and his vehicle will start taking damage from the heavy parts of the storm"
+            (format matt-str "<COLOR_ORANGE>Desert Storms will happen periodically in the Wasteland, not just in missions~%This means you can also find desert artifacts during these storms~%~%Artifacts are worth a lot of XP that goes towards a random skill~%~%But be wary! Wastelanders patrol about the desert and especially near artifacts<COLOR_RED>This does not count for the regular artifact missions"
             )
             (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
             (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -1475,6 +1475,41 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
     (set! (-> font-ctx scale) 0.325)
     (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
 )
+
+(when 
+    (and
+        (= desert-spawn-mission-deserta #t) ;exit the task marauder mission when far away
+        (task-node-closed? (game-task-node desert-spawn-task-deserta-goto-artifact))
+        (>= (vector-vector-distance (new 'static 'vector
+                    :x (meters 2539.2421)
+                    :y (meters 23.0453)
+                    :z (meters 3332.9597)
+                    :w 1.0
+                    )
+                     (target-pos 0)) 2500000.0)
+    )
+    (task-node-open! (game-task-node desert-spawn-task-deserta-goto-artifact) #t)
+    (set! desert-spawn-mission-deserta #f)
+    )
+
+(when 
+    (and
+        (= desert-spawn-mission-oasis #t) ;exit the task marauder mission when far away
+        (task-node-closed? (game-task-node desert-spawn-task-oasis-goto-artifact))
+        (>= (vector-vector-distance (new 'static 'vector
+                    :x (meters 638.2655)
+                    :y (meters 14.8769)
+                    :z (meters 2522.8432)
+                    :w 1.0
+                    )
+                        (target-pos 0)
+                        )
+                        2500000.0
+                        )
+    )
+    (task-node-open! (game-task-node desert-spawn-task-oasis-goto-artifact) #t)
+    (set! desert-spawn-mission-oasis #f)
+    )
 
 
 (none)

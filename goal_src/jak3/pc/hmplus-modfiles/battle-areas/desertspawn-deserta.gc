@@ -50,55 +50,55 @@
                                (new 'static 'boxed-array :type array
                                  (new 'static 'boxed-array :type desertspawn-point-deserta
                                    (new 'static 'desertspawn-point-deserta
-                                     :pos (new 'static 'vector :x 1643712.1 :y 135682.05 :z 10027475.0 :w 1.0)
+                                     :pos (new 'static 'vector :x (meters 2436.6508) :y (meters 27.4559) :z (meters 3403.1044) :w 1.0)
                                      :quat (new 'static 'quaternion :x 0.0013 :y 0.52 :z 0.0005 :w 0.8541)
                                      )
                                    (new 'static 'desertspawn-point-deserta
-                                     :pos (new 'static 'vector :x 1834901.5 :y 126926.03 :z 10381510.0 :w 1.0)
+                                     :pos (new 'static 'vector :x (meters 2409.3229) :y (meters 28.65) :z (meters 3412.87) :w 1.0)
                                      :quat (new 'static 'quaternion :y 0.4936 :w 0.8696)
                                      )
                                    (new 'static 'desertspawn-point-deserta
-                                     :pos (new 'static 'vector :x 2164965.5 :y 103604.23 :z 10309546.0 :w 1.0)
+                                     :pos (new 'static 'vector :x (meters 2409.58) :y (meters 28.74) :z (meters 3385.0) :w 1.0)
                                      :quat (new 'static 'quaternion :y 0.7718 :w 0.6357)
                                      )
                                    (new 'static 'desertspawn-point-deserta
-                                     :pos (new 'static 'vector :x 2351683.5 :y 89942.836 :z 10210302.0 :w 1.0)
+                                     :pos (new 'static 'vector :x (meters 2354.27) :y (meters 34.3113) :z (meters 3433.81) :w 1.0)
                                      :quat (new 'static 'quaternion :y -0.9924 :w -0.1222)
                                      )
                                    )
                                  (new 'static 'boxed-array :type desertspawn-point-deserta
                                    (new 'static 'desertspawn-point-deserta
-                                     :pos (new 'static 'vector :x 2656992.8 :y 158144.11 :z 12118015.0 :w 1.0)
+                                     :pos (new 'static 'vector :x (meters 2714.0632) :y (meters 33.9165) :z (meters 3251.47) :w 1.0)
                                      :quat (new 'static 'quaternion :y 0.9957 :w 0.092)
                                      )
                                    (new 'static 'desertspawn-point-deserta
-                                     :pos (new 'static 'vector :x 2729601.5 :y 154424.11 :z 11455859.0 :w 1.0)
+                                     :pos (new 'static 'vector :x (meters 2688.84) :y (meters 27.7) :z (meters 3287.63) :w 1.0)
                                      :quat (new 'static 'quaternion :y -0.9626 :w 0.2709)
                                      )
                                    (new 'static 'desertspawn-point-deserta
-                                     :pos (new 'static 'vector :x 2346952.2 :y 104915.766 :z 10551702.0 :w 1.0)
+                                     :pos (new 'static 'vector :x (meters 2743.4638) :y (meters 29.0141) :z (meters 3321.97) :w 1.0)
                                      :quat (new 'static 'quaternion :y -0.7954 :w 0.6059)
                                      )
                                    (new 'static 'desertspawn-point-deserta
-                                     :pos (new 'static 'vector :x 2446049.2 :y 93183.59 :z 10450630.0 :w 1.0)
+                                     :pos (new 'static 'vector :x (meters 2710.11) :y (meters 24.5928) :z (meters 3358.8) :w 1.0)
                                      :quat (new 'static 'quaternion :x -0.0005 :y -0.999 :z 0.0014 :w -0.044)
                                      )
                                    )
                                  (new 'static 'boxed-array :type desertspawn-point-deserta
                                    (new 'static 'desertspawn-point-deserta
-                                     :pos (new 'static 'vector :x 1486110.8 :y 118251.52 :z 11689861.0 :w 1.0)
+                                     :pos (new 'static 'vector :x (meters 2752.1030) :y (meters 35.60) :z (meters 3265.8457) :w 1.0)
                                      :quat (new 'static 'quaternion :y 0.9323 :w 0.3615)
                                      )
                                    (new 'static 'desertspawn-point-deserta
-                                     :pos (new 'static 'vector :x 1744946.0 :y 140856.11 :z 10625518.0 :w 1.0)
+                                     :pos (new 'static 'vector :x (meters 2743.4638) :y (meters 29.0141) :z (meters 3321.97) :w 1.0)
                                      :quat (new 'static 'quaternion :x 0.0001 :y -0.7207 :z 0.0015 :w -0.6932)
                                      )
                                    (new 'static 'desertspawn-point-deserta
-                                     :pos (new 'static 'vector :x 2165376.5 :y 96137.625 :z 10535523.0 :w 1.0)
+                                     :pos (new 'static 'vector :x (meters 2714.0632) :y (meters 33.9165) :z (meters 3251.47) :w 1.0)
                                      :quat (new 'static 'quaternion :y -0.9339 :w -0.3572)
                                      )
                                    (new 'static 'desertspawn-point-deserta
-                                     :pos (new 'static 'vector :x 2379151.2 :y 85637.12 :z 10319897.0 :w 1.0)
+                                     :pos (new 'static 'vector :x (meters 2354.27) :y (meters 34.3113) :z (meters 3433.81) :w 1.0)
                                      :quat (new 'static 'quaternion :y -0.9317 :w -0.3631)
                                      )
                                    )
@@ -110,21 +110,21 @@
                                   (new 'static 'boxed-array :type array
                                     (new 'static 'boxed-array :type desertspawn-point-deserta
                                       (new 'static 'desertspawn-point-deserta
-                                        :pos (new 'static 'vector :x 1905749.2 :y 139053.06 :z 11196600.0 :w 1.0)
+                                        :pos (new 'static 'vector :x (meters 2714.0632) :y (meters 33.9165) :z (meters 3251.47) :w 1.0)
                                         :quat (new 'static 'quaternion :y -0.876 :w -0.4823)
                                         )
                                       (new 'static 'desertspawn-point-deserta
-                                        :pos (new 'static 'vector :x 2656209.8 :y 67824.44 :z 10573690.0 :w 1.0)
+                                        :pos (new 'static 'vector :x (meters 2436.6508) :y (meters 27.4559) :z (meters 3403.1044) :w 1.0)
                                         :quat (new 'static 'quaternion :y -0.876 :w -0.4823)
                                         )
                                       )
                                     (new 'static 'boxed-array :type desertspawn-point-deserta
                                       (new 'static 'desertspawn-point-deserta
-                                        :pos (new 'static 'vector :x 2206190.0 :y 154991.83 :z 11345007.0 :w 1.0)
+                                        :pos (new 'static 'vector :x (meters 2752.1030) :y (meters 35.60) :z (meters 3265.8457) :w 1.0)
                                         :quat (new 'static 'quaternion :y -0.9882 :w -0.153)
                                         )
                                       (new 'static 'desertspawn-point-deserta
-                                        :pos (new 'static 'vector :x 2565465.0 :y 111149.055 :z 10101822.0 :w 1.0)
+                                        :pos (new 'static 'vector :x (meters 2409.3229) :y (meters 28.65) :z (meters 3412.87) :w 1.0)
                                         :quat (new 'static 'quaternion :y -0.9882 :w -0.153)
                                         )
                                       )
@@ -256,6 +256,18 @@
                   (zero? (-> self marauder-count))
                   (zero? (-> self vehicle-count))
                   )
+                  (when (>= (vector-vector-distance (new 'static 'vector
+                    :x (meters 2539.2421)
+                    :y (meters 23.0453)
+                    :z (meters 3332.9597)
+                    :w 1.0
+                    )
+                    (target-pos 0)
+                    )
+                    2300000.0
+                    )
+      (task-node-open! (game-task-node desert-spawn-task-deserta-goto-artifact) #t)
+      )
         (when (>= (+ (current-time) (seconds -20)) (-> self veh-fx-timer))
           (dotimes (gp-4 2)
             (when (= (-> self veh-fx gp-4) #f)
