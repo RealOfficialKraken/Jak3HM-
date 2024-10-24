@@ -180,6 +180,8 @@
   (define desert-spawn-mission-oasis #f)
   (define desert-spawn-mission-deserta #f)
 
+  (define the-maker-count 0)
+
   (define arena-token-count 0)
   (defun-extern spawn-gun-upgrade vector float none)
   (defun-extern task-arrow-custom vector symbol)

@@ -45,6 +45,7 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
 (defun-extern level-up! int none)
 (defun-extern level-up-guns! int none)
 (defun-extern level-up-cars! int none)
+(defun-extern wasseem-attack-check none)
 
 (define menu-unlocked? #f)
 
@@ -1511,6 +1512,18 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
     (set! desert-spawn-mission-oasis #f)
     )
 
+    (when
+        (and
+        (task-node-closed? (game-task-node wascity-pre-game-wait))
+        (not (task-node-closed? (game-task-node wascity-pre-game-post-game)))
+        (not *scene-player*)
+        *target*
+        (= (paused?) #f)
+        (= (pause-allowed?) #t)
+        )
+            (wasseem-attack-check)
+        )
+
 
 (none)
 )
@@ -1564,6 +1577,7 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
     (kill-by-name "neo-sat" *default-pool*)
     (kill-by-name "manipy-sat" *default-pool*)
     (kill-by-name "dp-bipedal" *default-pool*)
+    (kill-by-name "marauder-c" *default-pool*)
     (task-node-open! (game-task-node desert-spawn-task-oasis-goto-artifact) #t)
     (task-node-open! (game-task-node desert-spawn-task-deserta-goto-artifact) #t)
     (set! desert-spawn-mission-oasis #f)

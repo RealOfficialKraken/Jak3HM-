@@ -491,6 +491,7 @@
   "dp-bipedal-shot.o"
   "dp-bipedal.o"
   "marauder.o"
+  "marauder-c.o"
   ;"desert-storm.o"
   ;"planetboss.o"
  ))

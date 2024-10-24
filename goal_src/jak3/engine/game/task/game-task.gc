@@ -2168,7 +2168,6 @@
             :when-open (new 'static 'boxed-array :type game-task-event
               (new 'static 'game-task-event
                 :actor (game-task-actor was-pre-game-wascityb)
-                :action (game-task-action play)
                 :tex (game-task-icon gaticon-06)
                 :scene #f
                 )
@@ -2190,7 +2189,7 @@
             :manager (new 'static 'task-manager-info
               :mask (task-manager-mask resolution-scene)
               :level 'waspgame
-              :type-to-spawn 'task-manager
+              :type-to-spawn 'task-manager-wasseem-attack
               :intro-scene #f
               :resolution-scene "wascity-pre-game-res"
               :resolution-scene-continue #f

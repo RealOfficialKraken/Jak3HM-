@@ -1,8 +1,8 @@
 ;;-*-Lisp-*-
 (in-package goal)
 
-;; name: marauder.gc
-;; name in dgo: marauder
+;; name: marauder-c.gc
+;; name in dgo: marauder-c
 ;; dgos: DESOASIS, WASSTADC, DESCHASE
 
 ;; DECOMP BEGINS
@@ -48,21 +48,15 @@
   (none)
   )
 
-(defskelgroup skel-marauder marauder-male marauder-male-lod0-jg marauder-male-idle0-ja
-              ((marauder-male-lod0-mg (meters 999999)))
-              :bounds (static-spherem 0 0 0 6)
-              :shadow marauder-male-shadow-mg
-              :origin-joint-index 3
-              )
 
 
 
 
-(define *fact-info-marauder-defaults*
+(define *fact-info-marauder-c-defaults*
   (new 'static 'fact-info-enemy-defaults :idle-distance (meters 80) :pickup-type 49)
   )
 
-(define *marauder-nav-enemy-info*
+(define *marauder-c-nav-enemy-info*
   (new 'static 'nav-enemy-info
     :use-die-falling #f
     :use-victory #t
@@ -483,9 +477,40 @@
     )
   )
 
-(set! (-> *marauder-nav-enemy-info* fact-defaults) *fact-info-marauder-defaults*)
+(set! (-> *marauder-c-nav-enemy-info* fact-defaults) *fact-info-marauder-c-defaults*)
 
-(defmethod init-jump-info! ((this marauder) (arg0 enemy-jump-info))
+  (deftype marauder-c (nav-enemy)
+  ((los                    los-control      :inline)
+   (target-pos             vector           :inline)
+   (jump-attack            symbol)
+   (jump-info              enemy-jump-info  :inline)
+   (save                   symbol)
+   (save-pos               vector           :inline)
+   (ambush?                symbol)
+   (knocked-back?          symbol)
+   (run-anim               int32)
+   (gun?                   symbol)
+   (target-last-attacker?  symbol)
+   (visible-last           time-frame)
+   (traj                   trajectory       :inline)
+   (skip-jump              symbol)
+   )
+  (:state-methods
+    attack-run
+    save
+    save-wait
+    lava-die
+    gun-shoot
+    jump-out
+    )
+  (:methods
+    (toggle-collide-spec (_type_ symbol int) none)
+    (fire-shot (_type_) none)
+    (set-multi-focus (_type_ symbol) none)
+    )
+  )
+
+(defmethod init-jump-info! ((this marauder-c) (arg0 enemy-jump-info))
   (set! (-> arg0 flags) (enemy-jump-flags ejf0))
   (set! (-> arg0 anim-speed) (rnd-float-range this 0.9 1.1))
   (set! (-> arg0 hang-time) 0)
@@ -500,7 +525,7 @@
   (none)
   )
 
-(defmethod toggle-collide-spec ((this marauder) (arg0 symbol) (arg1 int))
+(defmethod toggle-collide-spec ((this marauder-c) (arg0 symbol) (arg1 int))
   (let ((v1-1 (-> this root root-prim)))
     (dotimes (a0-1 (the-as int (-> v1-1 specific 0)))
       (let ((a3-1 (-> (the-as collide-shape-prim-group v1-1) child a0-1)))
@@ -528,7 +553,7 @@
   (none)
   )
 
-(defmethod on-dying ((this marauder))
+(defmethod on-dying ((this marauder-c))
   (if (or (logtest? (penetrate jak-dark-nuke) (-> this incoming penetrate-using))
           (and (-> this target-last-attacker?) (< (+ (current-time) (seconds -5)) (-> this visible-last)))
           )
@@ -538,7 +563,7 @@
   (none)
   )
 
-(defmethod event-handler ((this marauder) (arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
+(defmethod event-handler ((this marauder-c) (arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
   (local-vars (v0-1 object))
   (case arg2
     (('nav-mesh-moved)
@@ -620,7 +645,7 @@
     )
   )
 
-(defmethod send-attack-on-jump-or-knocked ((this marauder) (arg0 process) (arg1 event-message-block))
+(defmethod send-attack-on-jump-or-knocked ((this marauder-c) (arg0 process) (arg1 event-message-block))
   (when (!= (-> arg0 type) target)
     (let* ((s3-0 (-> arg1 param 0))
            (s2-0 arg0)
@@ -664,7 +689,7 @@
     )
   )
 
-(defmethod enemy-common-post ((this marauder))
+(defmethod enemy-common-post ((this marauder-c))
   (let ((t9-0 (method-of-type nav-enemy enemy-common-post)))
     (t9-0 this)
     )
@@ -695,19 +720,19 @@
   (none)
   )
 
-(defmethod enemy-method-123 ((this marauder))
+(defmethod enemy-method-123 ((this marauder-c))
   (= (-> this hit-points) 0.0)
   )
 
-(defmethod ragdoll-spawn! ((this marauder) (arg0 symbol) (arg1 symbol))
+(defmethod ragdoll-spawn! ((this marauder-c) (arg0 symbol) (arg1 symbol))
   ((method-of-type nav-enemy ragdoll-spawn!) this arg0 arg1)
   )
 
-(defmethod ragdoll-settled? ((this marauder))
+(defmethod ragdoll-settled? ((this marauder-c))
   ((method-of-type nav-enemy ragdoll-settled?) this)
   )
 
-(defmethod knocked-anim ((this marauder) (arg0 enemy-knocked-info))
+(defmethod knocked-anim ((this marauder-c) (arg0 enemy-knocked-info))
   (ja-channel-push! 1 0)
   (cond
     ((not (focus-test? this dead))
@@ -762,7 +787,7 @@
   #t
   )
 
-(defmethod knocked-land-anim ((this marauder) (arg0 enemy-knocked-info))
+(defmethod knocked-land-anim ((this marauder-c) (arg0 enemy-knocked-info))
   (cond
     ((not (focus-test? this dead))
      (cond
@@ -816,7 +841,7 @@
   #t
   )
 
-(defmethod jump-wind-up-anim ((this marauder) (arg0 enemy-jump-info))
+(defmethod jump-wind-up-anim ((this marauder-c) (arg0 enemy-jump-info))
   (let ((a0-1 (-> this skel root-channel 0)))
     (set! (-> a0-1 param 0) 0.0)
     (set! (-> a0-1 param 1) 1.0)
@@ -851,7 +876,7 @@
   #t
   )
 
-(defmethod jump-in-air-anim ((this marauder) (arg0 enemy-jump-info))
+(defmethod jump-in-air-anim ((this marauder-c) (arg0 enemy-jump-info))
   (let ((v1-2 (if (> (-> this skel active-channels) 0)
                   (-> this skel root-channel 0 frame-group)
                   )
@@ -897,7 +922,7 @@
   #t
   )
 
-(defmethod jump-land-anim ((this marauder) (arg0 enemy-jump-info))
+(defmethod jump-land-anim ((this marauder-c) (arg0 enemy-jump-info))
   (ja-channel-push! 1 0)
   (cond
     ((-> this jump-attack)
@@ -927,7 +952,7 @@
   #t
   )
 
-(defstate save (marauder)
+(defstate save (marauder-c)
   :virtual #t
   :event enemy-event-handler
   :enter (behavior ()
@@ -990,7 +1015,7 @@
     )
   )
 
-(defstate save-wait (marauder)
+(defstate save-wait (marauder-c)
   :virtual #t
   :event enemy-event-handler
   :enter (behavior ()
@@ -1050,7 +1075,7 @@
     )
   )
 
-(defstate hostile (marauder)
+(defstate hostile (marauder-c)
   :virtual #t
   :enter (behavior ()
     (let ((t9-0 (-> (method-of-type nav-enemy hostile) enter)))
@@ -1193,7 +1218,7 @@
     )
   )
 
-(defmethod fire-shot ((this marauder))
+(defmethod fire-shot ((this marauder-c))
   (rlet ((acc :class vf)
          (vf0 :class vf)
          (vf4 :class vf)
@@ -1266,7 +1291,7 @@
     )
   )
 
-(defstate gun-shoot (marauder)
+(defstate gun-shoot (marauder-c)
   :virtual #t
   :event enemy-event-handler
   :enter (behavior ()
@@ -1326,7 +1351,7 @@
   :post nav-enemy-chase-post
   )
 
-(defstate jump (marauder)
+(defstate jump (marauder-c)
   :virtual #t
   :enter (behavior ()
     (toggle-collide-spec self #t 1)
@@ -1346,7 +1371,7 @@
     )
   )
 
-(defstate jump-out (marauder)
+(defstate jump-out (marauder-c)
   :virtual #t
   :enter (behavior ()
     (nav-enemy-method-182 self)
@@ -1457,7 +1482,7 @@
   )
 
 ;; WARN: Return type mismatch enemy-flag vs none.
-(defmethod check-victory ((this marauder))
+(defmethod check-victory ((this marauder-c))
   (if (or (time-elapsed? (-> this hit-focus-time) (seconds 4))
           (and (handle->process (-> this focus handle))
                (not (logtest? (-> (the-as process-focusable (handle->process (-> this focus handle))) focus-status)
@@ -1471,7 +1496,7 @@
   (none)
   )
 
-(defstate idle (marauder)
+(defstate idle (marauder-c)
   :virtual #t
   :enter (behavior ()
     (format #t "idle~%")
@@ -1486,23 +1511,23 @@
     )
   )
 
-(defstate stare (marauder)
+(defstate stare (marauder-c)
   :virtual #t
   :post (behavior ()
     (enemy-common-post self)
     )
   )
 
-(defmethod relocate ((this marauder) (offset int))
+(defmethod relocate ((this marauder-c) (offset int))
   (call-parent-method this offset)
   )
 
-(defmethod penetrate->next-state ((this marauder) (arg0 process) (arg1 event-message-block) (arg2 float))
+(defmethod penetrate->next-state ((this marauder-c) (arg0 process) (arg1 event-message-block) (arg2 float))
   ((method-of-type nav-enemy penetrate->next-state) this arg0 arg1 arg2)
   )
 
 ;; WARN: Return type mismatch number vs float.
-(defmethod get-damage-from-attack ((this marauder) (arg0 object) (arg1 event-message-block))
+(defmethod get-damage-from-attack ((this marauder-c) (arg0 object) (arg1 event-message-block))
   (let ((v0-1 (the-as number (call-parent-method this arg0 arg1))))
     (if (logtest? (-> (the-as attack-info (-> arg1 param 1)) penetrate-using) (penetrate punch spin))
         (set! v0-1 #x40000000)
@@ -1511,7 +1536,7 @@
     )
   )
 
-(defmethod nav-enemy-method-164 ((this marauder))
+(defmethod nav-enemy-method-164 ((this marauder-c))
   (let ((v1-1 (-> this nav state))
         (a0-2 (-> this root trans))
         )
@@ -1523,7 +1548,7 @@
   (none)
   )
 
-(defmethod go-directed2 ((this marauder))
+(defmethod go-directed2 ((this marauder-c))
   (cond
     ((-> this ambush?)
      (set! (-> this ambush?) #f)
@@ -1538,7 +1563,7 @@
     )
   )
 
-(defstate victory (marauder)
+(defstate victory (marauder-c)
   :virtual #t
   :code (behavior ()
     (ja-channel-push! 1 (seconds 0.075))
@@ -1564,7 +1589,7 @@
     )
   )
 
-(defstate ambush (marauder)
+(defstate ambush (marauder-c)
   :virtual #t
   :code (behavior ()
     (rlet ((acc :class vf)
@@ -1708,7 +1733,7 @@
     )
   )
 
-(defstate attack-run (marauder)
+(defstate attack-run (marauder-c)
   :virtual #t
   :event enemy-event-handler
   :enter (behavior ()
@@ -1758,7 +1783,7 @@
   :post nav-enemy-chase-post
   )
 
-(defstate lava-die (marauder)
+(defstate lava-die (marauder-c)
   :virtual #t
   :code (behavior ()
     (on-dying self)
@@ -1773,7 +1798,7 @@
   :post ja-post
   )
 
-(defstate knocked (marauder)
+(defstate knocked (marauder-c)
   :virtual #t
   :enter (behavior ()
     (let ((t9-0 (-> (method-of-type nav-enemy knocked) enter)))
@@ -1820,11 +1845,11 @@
     )
   )
 
-(defmethod go-idle2 ((this marauder))
+(defmethod go-idle2 ((this marauder-c))
   (go (method-of-object this ambush))
   )
 
-(defmethod on-attack ((this marauder) (arg0 process-focusable))
+(defmethod on-attack ((this marauder-c) (arg0 process-focusable))
   (if (and (= (-> arg0 type) target) (-> this next-state) (let ((v1-4 (-> this next-state name)))
                                                             (or (= v1-4 'attack-run) (= v1-4 'jump))
                                                             )
@@ -1836,7 +1861,7 @@
   )
 
 ;; WARN: Return type mismatch int vs object.
-(defmethod init-enemy-defaults! ((this marauder) (arg0 nav-enemy-info))
+(defmethod init-enemy-defaults! ((this marauder-c) (arg0 nav-enemy-info))
   (set! (-> arg0 nav-mesh) *default-nav-mesh*)
   (let ((t9-0 (method-of-type nav-enemy init-enemy-defaults!)))
     (t9-0 this arg0)
@@ -1846,7 +1871,7 @@
   0
   )
 
-(defmethod init-enemy-collision! ((this marauder))
+(defmethod init-enemy-collision! ((this marauder-c))
   (let ((s5-0 (new 'process 'collide-shape-moving this (collide-list-enum usually-hit-by-player))))
     (set! (-> s5-0 dynam) (copy *standard-dynamics* 'process))
     (set! (-> s5-0 reaction) cshape-reaction-default)
@@ -1933,7 +1958,7 @@
   (none)
   )
 
-(defmethod set-multi-focus ((this marauder) (arg0 symbol))
+(defmethod set-multi-focus ((this marauder-c) (arg0 symbol))
   (if arg0
       (logior! (-> this enemy-flags) (enemy-flag multi-focus))
       (logclear! (-> this enemy-flags) (enemy-flag multi-focus))
@@ -1944,13 +1969,13 @@
 
 
 ;; WARN: Return type mismatch symbol vs none.
-(defmethod init-enemy! ((this marauder))
+(defmethod init-enemy! ((this marauder-c))
   (initialize-skeleton
     this
     (the-as skeleton-group (art-group-get-by-name *level* "skel-marauder" (the-as (pointer level) #f)))
     (the-as pair 0)
     )
-  (init-enemy-defaults! this *marauder-nav-enemy-info*)
+  (init-enemy-defaults! this *marauder-c-nav-enemy-info*)
   (if (logtest? (enemy-flag multi-focus) (-> this enemy-flags))
       (logior! (-> this fact enemy-options) (enemy-option multi-focus))
       )
@@ -2101,4 +2126,35 @@
   (set! (-> this jump-attack) #f)
   (set! (-> this save) #f)
   (none)
+  )
+
+  (defbehavior marauder-c-init-by-other marauder-c ((vec vector))
+  (init-enemy-collision! self)
+  (logior! (-> self mask) (process-mask actor-pause))
+  (vector-copy! (-> self root trans) vec)
+  (quaternion-identity! (-> self root quat))
+  (vector-identity! (-> self root scale))
+  (init-enemy! self)
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      (let ((nav (find-nearest-nav-mesh vec 0.0)) ;; try to find a nav mesh in the vicinity
+        ;; verts for the path
+        (cverts (new 'static 'inline-array vector 3
+                (static-vectorm 1 0 0)
+                (static-vectorm 0 1 0)
+                (static-vectorm 0 0 1)
+                )
+          )
+        )
+    ;; if a nav mesh is close by, use that, otherwise use default
+    (if nav
+      (change-to nav self)
+      (change-to *default-nav-mesh* self)
+      )
+    ;; allocate path
+    (set! (-> self path) (new 'process 'path-control self 'path 0.0 (the entity #f) #f))
+    (set! (-> self path curve cverts) cverts)
+    (set! (-> self path curve num-cverts) 3)
+    )
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (go-idle self)
   )

@@ -2995,6 +2995,9 @@
 (defmethod event-handler ((this dp-bipedal) (arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
   (case arg2
     (('hit 'hit-knocked 'hit-flinch)
+     (when (<= (-> this hit-points) 0.0)
+      (-! the-maker-count 1)
+     )
      (logclear! (-> this mask) (process-mask actor-pause))
      (logclear! (-> this focus-status) (focus-status dangerous))
      (logclear! (-> this enemy-flags) (enemy-flag use-notice-distance))

@@ -1,0 +1,114 @@
+(in-package goal)
+
+;name: wasseem-attack.gc
+
+(deftype task-manager-wasseem-attack (task-manager)
+    ((maker-count      uint8)
+     (wave             uint8)
+    )
+  (:state-methods
+  active
+  check-for-spawn
+  win
+  )
+  )
+
+
+(defstate win (task-manager-wasseem-attack) ;ripped from was-pre-game.gc's win state
+  :virtual #t
+  :code (behavior ()
+    (let* ((v1-2 (-> *game-info* sub-task-list (game-task-node wascity-pre-game-resolution)))
+           (gp-0 (if (-> v1-2 manager)
+                     (-> v1-2 manager manager)
+                     (the-as handle #f)
+                     )
+                 )
+           )
+      (send-event (handle->process gp-0) 'complete)
+      )
+    )
+  )
+
+
+  (defstate check-for-spawn (task-manager-wasseem-attack) ;spawn the dark makers around the fallen satellite
+   :virtual #t
+   :code (behavior ()
+    (let (
+            (vec1 (new 'static 'vector :x (meters 1459.8339) :y (meters 26.78) :z (meters -372.99) :w 1.0))
+            (vec3 (new 'static 'vector :x (meters 1492.99) :y (meters 26.8) :z (meters -367.22) :w 1.0))
+         )
+         (+! (-> self wave) 1)
+         (spawn-dark-maker vec1)
+         (spawn-dark-maker vec3)
+         (set! the-maker-count 2)
+        )
+    )
+  (none)
+  )
+
+(defun wasseem-attack-check ()
+    (let (
+            (vec1 (new 'static 'vector :x (meters 1459.8339) :y (meters 26.78) :z (meters -372.99) :w 1.0))
+            (vec2 (new 'static 'vector :x (meters 1466.5053) :y (meters 27.62) :z (meters -355.66) :w 1.0))
+            (vec3 (new 'static 'vector :x (meters 1492.99) :y (meters 26.8) :z (meters -367.22) :w 1.0))
+            (vec-behind1 (new 'static 'vector :x (meters 1483.83) :y (meters 28.88) :z (meters -336.54) :w 1.0))
+            (vec-behind2 (new 'static 'vector :x (meters 1477.10) :y (meters 28.31) :z (meters -338.5402) :w 1.0))
+         )
+            (when (<= the-maker-count 0)
+                (when (= (-> (the task-manager-wasseem-attack task-manager) wave) 1)
+                (spawn-dark-maker vec1)
+                (spawn-dark-maker vec3)
+                (set! the-maker-count 2)
+            )
+            (when (= (-> (the task-manager-wasseem-attack task-manager) wave) 2)
+                (spawn-dark-maker vec1)
+                (spawn-dark-maker vec2)
+                (spawn-dark-maker vec3)
+                (set! the-maker-count 2)
+            )
+            (when (= (-> (the task-manager-wasseem-attack task-manager) wave) 3)
+                (spawn-dark-maker vec1)
+                (spawn-dark-maker vec2)
+                (spawn-dark-maker vec-behind2)
+                (set! the-maker-count 3)
+            )
+            (when (= (-> (the task-manager-wasseem-attack task-manager) wave) 4)
+                (spawn-dark-maker vec1)
+                (spawn-dark-maker vec-behind1)
+                (spawn-dark-maker vec-behind2)
+                (set! the-maker-count 3)
+            )
+            (when (= (-> (the task-manager-wasseem-attack task-manager) wave) 5)
+                (spawn-dark-maker vec1)
+                (spawn-dark-maker vec2)
+                (spawn-dark-maker vec3)
+                (spawn-dark-maker vec-behind1)
+                (spawn-dark-maker vec-behind2)
+                (set! the-maker-count 5)
+            )
+            (when (= (-> (the task-manager-wasseem-attack task-manager) wave) 6)
+                (go (method-of-type task-manager-wasseem-attack win))
+                (set! (-> (the task-manager-wasseem-attack task-manager) wave) 7)
+                (set! the-maker-count 10)
+            )
+            (+! (-> (the task-manager-wasseem-attack task-manager) wave) 1)
+        )
+    )
+    (none)
+)
+
+  (defstate active (task-manager-wasseem-attack) ;sets everything up
+    :virtual #t
+    :code (behavior ()
+        (set! (-> self wave) 1)
+        (set! the-maker-count 0)
+        (print "This is where wave gets set to 1")
+        (when (and *target*
+                (task-node-closed? (game-task-node wascity-pre-game-wait))
+                )
+                (go-virtual check-for-spawn)
+            )
+        )
+    0
+    (none)
+  )
