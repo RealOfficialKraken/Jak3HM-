@@ -1511,7 +1511,7 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
     (task-node-open! (game-task-node desert-spawn-task-oasis-goto-artifact) #t)
     (set! desert-spawn-mission-oasis #f)
     )
-
+#|
     (when
         (and
         (task-node-closed? (game-task-node wascity-pre-game-wait))
@@ -1522,7 +1522,7 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
         (= (pause-allowed?) #t)
         )
             (wasseem-attack-check)
-        )
+        )|#
 
 
 (none)
@@ -1581,5 +1581,6 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
     (task-node-open! (game-task-node desert-spawn-task-oasis-goto-artifact) #t)
     (task-node-open! (game-task-node desert-spawn-task-deserta-goto-artifact) #t)
     (set! desert-spawn-mission-oasis #f)
+    (kill-all-sat)
     (none)
 )

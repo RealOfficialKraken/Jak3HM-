@@ -240,6 +240,7 @@
 )
 
 (defun kill-all-sat ()
+    (kill-by-name "manipy-sat-dead" *default-pool*)
     (kill-by-name "manipy-sat-deserta1" *default-pool*)
     (kill-by-name "manipy-sat-deserta2" *default-pool*)
     (kill-by-name "manipy-sat-desertb1" *default-pool*)
@@ -273,6 +274,21 @@
                                                       :stack-size #x18000)))))
   (send-event kleever 'anim-mode 'loop)
   (send-event kleever 'art-joint-anim "kleever-highres-idle-city-chase"))
+    (none)
+)
+
+(defun spawn-sat-dead ((vec vector))
+    (let ((sat-dead (the manipy
+                    (ppointer->process (process-spawn manipy
+                                                      :init
+                                                      manipy-init
+                                                      vec
+                                                      #f
+                                                      (art-group-get-by-name *level* "skel-was-pre-game" (the (pointer level) #f))
+                                                      #f
+                                                      0
+                                                      #f
+                                                      :name "manipy-sat-dead"))))))
     (none)
 )
 

@@ -2172,6 +2172,12 @@
                 :scene #f
                 )
               (new 'static 'game-task-event
+                :actor (game-task-actor was-pre-game-wascityb)
+                :action (game-task-action idle)
+                :tex (game-task-icon gaticon-01)
+                :scene #f
+                )
+              (new 'static 'game-task-event
                 :actor (game-task-actor minimap)
                 :action (game-task-action show)
                 :tex (game-task-icon gaticon-20)
