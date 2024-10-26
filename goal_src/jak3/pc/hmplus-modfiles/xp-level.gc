@@ -413,6 +413,7 @@
         (when ;WASCITYB
             (and
                 (= (-> (level-get-target-inside *level*) name) 'wascityb)
+                (not (task-node-open? (game-task-node wascity-pre-game-resolution)))
                 (!= enemy-noto 2)
             )
             (set! enemy-noto 2)

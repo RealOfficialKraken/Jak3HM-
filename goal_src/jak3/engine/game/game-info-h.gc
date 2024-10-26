@@ -68,6 +68,8 @@
 
   (defun-extern draw-XP-bar (none))
   (defun-extern collect-orb-xp! float none)
+  (defun-extern spawn-deserta-artifact none)
+  (defun-extern spawn-oasis-artifact none)
 
   (define turbo-held? #f)
   (define turbo-supply-float 0.0)
