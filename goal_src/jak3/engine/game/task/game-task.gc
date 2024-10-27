@@ -2285,7 +2285,7 @@
               )
             :flags (game-task-node-flag no-restart act1)
             :parent-node (new 'static 'array game-task-node 4
-              (game-task-node wascity-pre-game-resolution)
+              (game-task-node wascity-pre-game-introduction)
               (game-task-node none)
               (game-task-node none)
               (game-task-node none)
@@ -2387,7 +2387,7 @@
               )
             :flags (game-task-node-flag save-on-life act1)
             :parent-node (new 'static 'array game-task-node 4
-              (game-task-node wascity-pre-game-resolution)
+              (game-task-node none)
               (game-task-node none)
               (game-task-node none)
               (game-task-node none)
@@ -2469,7 +2469,7 @@
               )
             :flags (game-task-node-flag act1)
             :parent-node (new 'static 'array game-task-node 4
-              (game-task-node desert-turtle-training-restrict-to-turtle)
+              (game-task-node none)
               (game-task-node none)
               (game-task-node none)
               (game-task-node none)
@@ -2526,7 +2526,7 @@
             :when-open #f
             :flags (game-task-node-flag close-task act1)
             :parent-node (new 'static 'array game-task-node 4
-              (game-task-node desert-turtle-training-in-desert)
+              (game-task-node none)
               (game-task-node none)
               (game-task-node none)
               (game-task-node none)
@@ -2562,7 +2562,7 @@
               )
             :flags (game-task-node-flag auto-close save-on-life act1)
             :parent-node (new 'static 'array game-task-node 4
-              (game-task-node desert-turtle-training-resolution)
+              (game-task-node wascity-chase-resolution)
               (game-task-node none)
               (game-task-node none)
               (game-task-node none)

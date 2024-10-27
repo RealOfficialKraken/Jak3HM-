@@ -435,7 +435,7 @@
                     (artifact-type artifact-d)
                 )
             ))
-        (process-spawn was-artifact gp-0 :name "was-artifact" :from *debug-dead-pool* :stack-size #x18000)
+        (process-spawn was-artifact gp-0 :name "was-artifact" :from *default-dead-pool* :stack-size #x18000)
     )
 )
 

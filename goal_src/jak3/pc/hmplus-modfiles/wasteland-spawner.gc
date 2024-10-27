@@ -270,7 +270,7 @@
                                                       #f
                                                       :name "kleever-quest"
                                                       :from
-                                                      *debug-dead-pool*
+                                                      *default-dead-pool*
                                                       :stack-size #x18000)))))
   (send-event kleever 'anim-mode 'loop)
   (send-event kleever 'art-joint-anim "kleever-highres-idle-city-chase"))
@@ -563,10 +563,28 @@
             )
         )
 
-    (when   ;force jak out of a vehicle
+    (when   ;force jak out of a vehicle in sat-battle
             (and 
                 (focus-test? *target* pilot)
                 (= in-satbattle? #t)
+                *target*
+                (not *scene-player*)
+                (= (paused?) #f)
+                (= (pause-allowed?) #t)
+            )
+                (send-event *target* 'end-mode 'pilot)
+        )
+    (when   ;force jak out of a vehicle in desert-spawn
+            (and 
+                (focus-test? *target* pilot)
+                (or
+                    (task-node-closed? (game-task-node desert-spawn-task-deserta-goto-artifact))
+                    (task-node-closed? (game-task-node desert-spawn-task-oasis-goto-artifact))
+                )
+                (or 
+                    (= desert-spawn-mission-oasis #t)
+                    (= desert-spawn-mission-deserta #t)
+                )
                 *target*
                 (not *scene-player*)
                 (= (paused?) #f)

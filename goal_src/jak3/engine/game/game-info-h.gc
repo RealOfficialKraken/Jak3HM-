@@ -71,6 +71,8 @@
   (defun-extern spawn-deserta-artifact none)
   (defun-extern spawn-oasis-artifact none)
 
+  (define desertspawn-mcount 0)
+
   (define turbo-held? #f)
   (define turbo-supply-float 0.0)
   (define turbo-max 0.0)
