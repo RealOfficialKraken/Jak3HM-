@@ -12,6 +12,20 @@
 (define-extern *maker-num-grenades* int)
 (define-extern wascity-turret-add-radar (function vector none))
 
+(deftype dm-flyer-shot (projectile)
+  ((tail-pos           vector      :inline)
+   (hit-pos            vector      :inline)
+   (turn-quat          quaternion  :inline)
+   (minimap            connection-minimap)
+   (hit-actor?         symbol)
+   (last-hit-time      time-frame)
+   (muzzle-flash-part  sparticle-launch-control)
+   (particle-trail     sparticle-launch-control)
+   (swirl              float)
+   (swirlvel           float)
+   )
+  )
+
 ;; DECOMP BEGINS
 
 (defpart 2153
@@ -132,19 +146,7 @@
               :origin-joint-index 3
               )
 
-(deftype dm-flyer-shot (projectile)
-  ((tail-pos           vector      :inline)
-   (hit-pos            vector      :inline)
-   (turn-quat          quaternion  :inline)
-   (minimap            connection-minimap)
-   (hit-actor?         symbol)
-   (last-hit-time      time-frame)
-   (muzzle-flash-part  sparticle-launch-control)
-   (particle-trail     sparticle-launch-control)
-   (swirl              float)
-   (swirlvel           float)
-   )
-  )
+
 
 
 (defstate impact (dm-flyer-shot)

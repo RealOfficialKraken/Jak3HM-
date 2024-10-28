@@ -7,6 +7,7 @@
 (define-extern *curve-maker-entry-linear-trail* curve2d-fast)
 (define-extern *maker-entry-trail* light-trail-composition)
 
+;; +++hip-maker-mode
 (defenum hip-maker-mode
   :type uint8
   (hmm0 0)
@@ -21,12 +22,283 @@
   (hmm9 9)
   (hmm10 10)
   )
+;; ---hip-maker-mode
+
+
+;; DECOMP BEGINS
+
+
+(define *wascity-defend-speech-list* (new 'static 'inline-array talker-speech-class 33
+                                       (new 'static 'talker-speech-class :name "none")
+                                       (new 'static 'talker-speech-class
+                                         :name "dam101"
+                                         :channel (gui-channel daxter)
+                                         :speech #x1
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam103"
+                                         :channel (gui-channel daxter)
+                                         :speech #x2
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam104"
+                                         :channel (gui-channel daxter)
+                                         :speech #x3
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam106"
+                                         :channel (gui-channel daxter)
+                                         :speech #x4
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam107"
+                                         :channel (gui-channel daxter)
+                                         :speech #x5
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam108"
+                                         :channel (gui-channel daxter)
+                                         :speech #x6
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam110"
+                                         :channel (gui-channel daxter)
+                                         :speech #x7
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam111"
+                                         :channel (gui-channel daxter)
+                                         :speech #x8
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam112"
+                                         :channel (gui-channel daxter)
+                                         :speech #x9
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam113"
+                                         :channel (gui-channel daxter)
+                                         :speech #xa
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam118"
+                                         :channel (gui-channel daxter)
+                                         :speech #xb
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam119"
+                                         :channel (gui-channel daxter)
+                                         :speech #xc
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam120"
+                                         :channel (gui-channel daxter)
+                                         :speech #xd
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam122"
+                                         :channel (gui-channel daxter)
+                                         :speech #xe
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam123"
+                                         :channel (gui-channel daxter)
+                                         :speech #xf
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam124"
+                                         :channel (gui-channel daxter)
+                                         :speech #x10
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam125"
+                                         :channel (gui-channel daxter)
+                                         :speech #x11
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam126"
+                                         :channel (gui-channel daxter)
+                                         :speech #x12
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam127"
+                                         :channel (gui-channel daxter)
+                                         :speech #x13
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam128"
+                                         :channel (gui-channel daxter)
+                                         :speech #x14
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam101a"
+                                         :channel (gui-channel daxter)
+                                         :speech #x15
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam106a"
+                                         :channel (gui-channel daxter)
+                                         :speech #x16
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam107a"
+                                         :channel (gui-channel daxter)
+                                         :speech #x17
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam108a"
+                                         :channel (gui-channel daxter)
+                                         :speech #x18
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam111a"
+                                         :channel (gui-channel daxter)
+                                         :speech #x19
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam112a"
+                                         :channel (gui-channel daxter)
+                                         :speech #x1a
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam113a"
+                                         :channel (gui-channel daxter)
+                                         :speech #x1b
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam122a"
+                                         :channel (gui-channel daxter)
+                                         :speech #x1c
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam124a"
+                                         :channel (gui-channel daxter)
+                                         :speech #x1d
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam125a"
+                                         :channel (gui-channel daxter)
+                                         :speech #x1e
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam126a"
+                                         :channel (gui-channel daxter)
+                                         :speech #x1f
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       (new 'static 'talker-speech-class
+                                         :name "dam127a"
+                                         :channel (gui-channel daxter)
+                                         :speech #x20
+                                         :neg #x1
+                                         :on-close #f
+                                         :camera #f
+                                         )
+                                       )
+        )
+
+
 
 (defskelgroup skel-maker dm-robot dm-robot-lod0-jg dm-robot-idle-ja
               ((dm-robot-lod0-mg (meters 999999)))
               :bounds (static-spherem 0 45 0 160)
               :shadow dm-robot-shadow-mg
               )
+
+
+
 
 (define *maker-debris-params*
   (new 'static 'debris-static-params
@@ -312,6 +584,8 @@
    )
   )
 
+  (declare-type task-manager-wascity-defend task-manager)
+
 
 (deftype planetboss (process-focusable)
   ((parent                (pointer task-manager-wascity-defend) :override)
@@ -357,7 +631,7 @@
    (kick-your-ass-count   uint8)
    (kick-your-ass-string  uint8)
    (prim-targeted         int8)
-   (damage-info           maker-damage                           5 :inline)
+   (damage-info           planetboss-damage                           5 :inline)
    (path-idx              int16)
    (path-pt               int16)
    (path-len              int16)
@@ -408,7 +682,7 @@
                                        )
         )
 
-(defmethod planetboss-method-41 ((this maker) (arg0 vector))
+(defmethod planetboss-method-41 ((this planetboss) (arg0 vector))
   (rlet ((acc :class vf)
          (vf0 :class vf)
          (vf4 :class vf)
@@ -707,7 +981,7 @@
   )
 
 ;; WARN: disable def twice: 439. This may happen when a cond (no else) is nested inside of another conditional, but it should be rare.
-(defbehavior maker-standard-event-handler planetboss ((arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
+(defbehavior planetboss-standard-event-handler planetboss ((arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
   (local-vars (v0-0 object))
   (case arg2
     (('touched 'touch)
@@ -1088,10 +1362,10 @@
             (when #t
               (cond
                 ((and (< (-> s3-0 z) 32768.0) (< 0.0 (-> s3-0 z)) (< (-> s3-0 x) -254.0))
-                 (send-event (handle->process (-> s5-0 hud-reticle)) 'off-to-left)
+                 ;(send-event (handle->process (-> s5-0 hud-reticle)) 'off-to-left)
                  )
                 ((and (< (-> s3-0 z) 32768.0) (< 0.0 (-> s3-0 z)) (< 258.0 (-> s3-0 x)))
-                 (send-event (handle->process (-> s5-0 hud-reticle)) 'off-to-right)
+                 ;(send-event (handle->process (-> s5-0 hud-reticle)) 'off-to-right)
                  )
                 (v1-11
                   (set! (-> this reticle-on?) #t)
@@ -1154,7 +1428,7 @@
                           (vector<-cspace! s3-0 (-> this node-list data (-> this damage-info s2-1 jnt)))
                           )
                         )
-                      (if s4-0
+                      #|(if s4-0
                           (send-event
                             (handle->process (-> s5-0 hud-reticle))
                             'maker-update
@@ -1162,7 +1436,7 @@
                             (* 0.33333334 (the float (-> this damage-info s2-1 counter)))
                             (= (-> this prim-targeted) s2-1)
                             )
-                          )
+                          )|#
                       )
                     )
                   )
@@ -1181,7 +1455,7 @@
 
 (defstate standup (planetboss)
   :virtual #t
-  :event maker-standard-event-handler
+  :event planetboss-standard-event-handler
   :code (behavior ()
     (set! (-> self idle-ball-blend) 1.0)
     (ja-no-eval :group! dm-robot-standup-ja :num! (seek! max 2.0) :frame-num 0.0)
@@ -1221,7 +1495,7 @@
     (new 'stack-no-clear 'vector)
     (seconds-per-frame)
     (planetboss-method-34 self)
-    (let* ((v1-7 (-> *game-info* sub-task-list (game-task-node wascity-defend-resolution)))
+    #|(let* ((v1-7 (-> *game-info* sub-task-list (game-task-node wascity-defend-resolution)))
            (v1-10 (the-as task-manager-wascity-defend (handle->process (if (-> v1-7 manager)
                                                                            (-> v1-7 manager manager)
                                                                            (the-as handle #f)
@@ -1236,7 +1510,7 @@
           (go-virtual explode)
           )
         )
-      )
+      )|#
     (let ((a0-16 (new 'stack-no-clear 'vector)))
       (set! (-> a0-16 quad) (-> self root trans quad))
       (+! (-> a0-16 y) 143360.0)
@@ -1250,7 +1524,7 @@
 
 (defstate walking (planetboss)
   :virtual #t
-  :event maker-standard-event-handler
+  :event planetboss-standard-event-handler
   :code (behavior ()
     (ja-channel-push! 3 (seconds 0.15))
     (ja-no-eval :group! dm-robot-idle-ja :num! (loop! (-> self speed-mod)))
@@ -1285,7 +1559,7 @@
                   )
            )
       (if v1-46
-          (+! (-> (the-as task-manager-wascity-defend v1-46) miss-count) 1)
+          (none)
           )
       )
     (when (-> self minimap)
@@ -1451,7 +1725,7 @@
       )
     (+! (-> self rot-vel) (* (-> self rot-acc) (seconds-per-frame)))
     (set! (-> self rot-vel) (fmax -5461.3335 (fmin 5461.3335 (-> self rot-vel))))
-    (let* ((v1-248 (-> *game-info* sub-task-list (game-task-node wascity-defend-resolution)))
+    #|(let* ((v1-248 (-> *game-info* sub-task-list (game-task-node wascity-defend-resolution)))
            (v1-251 (the-as task-manager-wascity-defend (handle->process (if (-> v1-248 manager)
                                                                             (-> v1-248 manager manager)
                                                                             (the-as handle #f)
@@ -1466,7 +1740,7 @@
           (go-virtual explode)
           )
         )
-      )
+      )|#
     (planetboss-method-35 self)
     (when (= 0.0 (-> self hit-points))
       (if (zero? (-> self visible-explode-time))
@@ -1500,7 +1774,7 @@
 
 (defstate flying (planetboss)
   :virtual #t
-  :event maker-standard-event-handler
+  :event planetboss-standard-event-handler
   :enter (behavior ()
     (set! (-> self pacc quad) (-> self pvel quad))
     (vector-normalize! (-> self pacc) 20480.0)
@@ -1587,7 +1861,7 @@
       )
     (+! (-> self rot-vel) (* (-> self rot-acc) (seconds-per-frame)))
     (set! (-> self rot-vel) (fmax -5461.3335 (fmin 5461.3335 (-> self rot-vel))))
-    (let* ((v1-78 (-> *game-info* sub-task-list (game-task-node wascity-defend-resolution)))
+    #|(let* ((v1-78 (-> *game-info* sub-task-list (game-task-node wascity-defend-resolution)))
            (v1-81 (the-as task-manager-wascity-defend (handle->process (if (-> v1-78 manager)
                                                                            (-> v1-78 manager manager)
                                                                            (the-as handle #f)
@@ -1602,7 +1876,7 @@
           (go-virtual explode)
           )
         )
-      )
+      )|#
     (let ((a0-46 (new 'stack-no-clear 'vector)))
       (set! (-> a0-46 quad) (-> self root trans quad))
       (+! (-> a0-46 y) 143360.0)
@@ -2043,12 +2317,12 @@
 ;; WARN: Return type mismatch process vs maker.
 (defun spawn-planetboss ((arg0 process) (arg1 int) (arg2 float) (arg3 float))
   (let ((gp-0 (the-as process #f)))
-    (let ((v1-1 (process-spawn maker arg1 arg2 arg3 :name "maker" :to arg0)))
+    (let ((v1-1 (process-spawn planetboss arg1 arg2 arg3 :name "maker" :to arg0)))
       (if v1-1
           (set! gp-0 (-> v1-1 0))
           )
       )
-    (the-as maker gp-0)
+    (the-as planetboss gp-0)
     )
   )
 

@@ -13,6 +13,7 @@
   active
   check-active
   win
+  dead
   )
   )
 
@@ -21,7 +22,7 @@
   :virtual #t
   :code (behavior ()
     (suspend-for (seconds 5))
-    (let* ((v1-2 (-> *game-info* sub-task-list (game-task-node wascity-pre-game-resolution)))
+    (let* ((v1-2 (-> *game-info* sub-task-list (game-task-node wascity-pre-game-battle)))
            (gp-0 (if (-> v1-2 manager)
                      (-> v1-2 manager manager)
                      (the-as handle #f)
@@ -30,8 +31,17 @@
            )
       (send-event (handle->process gp-0) 'complete)
       (process-spawn scene-player :init scene-player-init "wascity-pre-game-res" #t "wascityb-seem" :name "scene-player")
-      (task-node-close! (game-task-node wascity-pre-game-resolution) #t)
+      (task-node-close! (game-task-node wascity-pre-game-post-game) #t)
       )
+    )
+  )
+
+  (defstate dead (task-manager-wasseem-attack)
+  :virtual #t
+  :code (behavior ()
+      (kill-all-sat)
+      (task-node-open! (game-task-node wascity-pre-game-wait) #t)
+      (suspend)
     )
   )
 
@@ -47,6 +57,14 @@
                   (vec-behind1 (new 'static 'vector :x (meters 1483.83) :y (meters 28.88) :z (meters -336.54) :w 1.0))
                   (vec-behind2 (new 'static 'vector :x (meters 1477.10) :y (meters 28.31) :z (meters -338.5402) :w 1.0))
               )
+                (when (>= (vector-vector-distance 
+                              (new 'static 'vector :x (meters 1459.8339) :y (meters 26.78) :z (meters -372.99) :w 1.0)
+                              (target-pos 0)
+                              )
+                              480000.0
+                              )
+                                (go-virtual dead)
+                              )
                   (when (or
                           (<= the-maker-count 0)
                           (not (search-process-tree *active-pool* (lambda ((p process)) (type? p dp-bipedal))))
@@ -103,9 +121,9 @@
                   )
                   (when (= (-> self wave) 8)
                     (set! (-> self wave) 0)
-                    (+! enemy-noto 1)
+                    (+! enemy-noto 4)
                   )
-                  (when (>= (-> self increment) 192)
+                  (when (>= (-> self increment) 72)
                     (go-virtual win)
                   )
               )
@@ -124,6 +142,9 @@
         (set! (-> self increment) 0)
         (set! the-maker-count 0)
         (suspend-for (seconds 0.5))
+        (task-node-close! (game-task-node wascity-pre-game-resolution) #t)
+        (set-continue! *game-info* "wascityb-game" #t)
+        (auto-save-user)
         (go-virtual check-active)
     )
     (none)

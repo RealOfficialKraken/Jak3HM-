@@ -51,7 +51,7 @@
     (+! (-> *game-info* fuel) (/ (* xp-gain enemy-noto) 2))
     (+! (-> *game-info* karma) (/ (* xp-gain enemy-noto) 4))
     (set! xp-string "Marauder Killed")
-    (set! *xp-gain* (/ (* xp-gain enemy-noto) 4))
+    (set! *xp-gain* (/ (* xp-gain enemy-noto) 2))
     (set! xp-draw #t)
     (set! xpi 0)
     (none)
@@ -413,7 +413,7 @@
         (when ;WASCITYB
             (and
                 (= (-> (level-get-target-inside *level*) name) 'wascityb)
-                (not (task-node-open? (game-task-node wascity-pre-game-resolution)))
+                (not (task-node-open? (game-task-node wascity-pre-game-battle)))
                 (!= enemy-noto 2)
             )
             (set! enemy-noto 2)
@@ -457,17 +457,14 @@
         )
         (when ;VOLCANOA
             (and
-                (= (-> (level-get-target-inside *level*) name) 'volcanoa)
-                (!= enemy-noto 8)
+                (or 
+                    (= (-> (level-get-target-inside *level*) name) 'volcanoa)
+                    (= (-> (level-get-target-inside *level*) name) 'volcanob)
+                    (= (-> (level-get-target-inside *level*) name) 'volcanox)
+                )
+                (!= enemy-noto 11)
             )
-            (set! enemy-noto 8)
-        )
-        (when ;VOLCANOB
-            (and
-                (= (-> (level-get-target-inside *level*) name) 'volcanob)
-                (!= enemy-noto 9)
-            )
-            (set! enemy-noto 9)
+            (set! enemy-noto 11)
         )
         (when ;TEMPLEA
             (and

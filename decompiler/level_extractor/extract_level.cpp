@@ -302,6 +302,9 @@ void extract_common(const ObjectFileDB& db,
   extract_single_ag("DESRACE1.DGO", "pre-artifact-d-ag", db, tex_db, tfrag_level);
   extract_single_ag("DESRACE1.DGO", "gauntlets-ag", db, tex_db, tfrag_level);
   extract_single_ag("DESRACE1.DGO", "was-artifact-ag", db, tex_db, tfrag_level);
+  extract_single_ag("WASDEFEN.DGO", "dm-robot-ag", db, tex_db, tfrag_level);
+  extract_single_ag("WASDEFEN.DGO", "dm-missle-ag", db, tex_db, tfrag_level);
+  extract_single_ag("WASDEFEN.DGO", "dm-debris-ag", db, tex_db, tfrag_level);
 
   add_all_textures_from_level(tfrag_level, "ARTSPOOL", tex_db);
   extract_art_groups_from_level(db, tex_db, {}, "ARTSPOOL", tfrag_level, art_group_data);

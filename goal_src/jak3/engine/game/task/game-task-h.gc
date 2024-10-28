@@ -176,6 +176,7 @@
   (wascity-pre-game-introduction)
   (wascity-pre-game-wait)
   (wascity-pre-game-resolution)
+  (wascity-pre-game-battle)
   (wascity-pre-game-post-game)
   (wascity-pre-game-bronze)
   (wascity-pre-game-silver)

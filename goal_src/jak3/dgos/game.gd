@@ -493,5 +493,12 @@
   "marauder.o"
   "marauder-c.o"
   ;"desert-storm.o"
-  ;"planetboss.o"
+  "maker-part.o"
+  "target-turret-shot.o"
+  "target-turret.o"
+  "wasgun-h.o"
+  "wascity-turret-shot.o"
+  "dm-flyer.o"
+  "maker-projectile.o"
+  "planetboss.o"
  ))

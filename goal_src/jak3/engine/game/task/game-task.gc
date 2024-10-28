@@ -102,9 +102,9 @@
             :name "wascity-pre-game"
             :text-name (text-id progress-missions-wascityb-game)
             :pre-play-node (game-task-node wascity-pre-game-introduction)
-            :kiosk-play-node (game-task-node wascity-pre-game-wait)
+            :kiosk-play-node (game-task-node wascity-pre-game-battle)
             :pre-play-continue "wascityb-seem"
-            :play-node (game-task-node wascity-pre-game-resolution)
+            :play-node (game-task-node wascity-pre-game-battle)
             :play-continue "wascityb-game"
             :kiosk-play-continue #f
             )
@@ -2165,8 +2165,25 @@
             :level 'wascity
             :task (game-task wascity-pre-game)
             :name "wascity-pre-game-resolution"
+            :when-open #f
+            :on-open '(task-node-close! (game-task-node wascity-pre-game-resolution))
+            :manager #f
+            :borrow '((deserte 0 waspgame copy))
+            :open? #f
+            :on-close #f
+            :reset #f
+            :suck-death-count #xa5
+            :command-index #xa
+            :command-count #x1
+            :description (text-id progress-missions-wascityb-game)
+            :faction-commands '()
+            )
+            (new 'static 'game-task-node-info
+            :level 'wascity
+            :task (game-task wascity-pre-game)
+            :name "wascity-pre-game-battle"
             :when-open (new 'static 'boxed-array :type game-task-event
-              (new 'static 'game-task-event
+                (new 'static 'game-task-event
                 :actor (game-task-actor was-pre-game-wascityb)
                 :tex (game-task-icon gaticon-06)
                 :scene #f
@@ -2184,7 +2201,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag close-task save-on-try exclusive act1)
+            :flags (game-task-node-flag close-task exclusive act1)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node wascity-pre-game-wait)
               (game-task-node none)
@@ -2199,14 +2216,14 @@
               :intro-scene #f
               :resolution-scene "wascity-pre-game-res"
               :resolution-scene-continue #f
-              :final-node (game-task-node wascity-pre-game-resolution)
+              :final-node (game-task-node wascity-pre-game-post-game)
               :vehicle-type #x1b
               :on-complete '(when (kiosk?)
                  (task-open! "wascity-gungame-introduction")
                  )
               :on-fail #f
               )
-            :borrow '((wasseem 0 waspgame display))
+            :borrow '((wasseem 0 waspgame display) (waswide 0 lbiped display))
             :open? #f
             :on-close #f
             :reset (new 'static 'task-reset-info
@@ -2216,7 +2233,7 @@
                 :fail (new 'static 'resetter-spec :continue #f :reset-mode 'try :execute #f)
                 :retry (new 'static 'resetter-spec
                   :continue "wascityb-game"
-                  :node (game-task-node wascity-pre-game-resolution)
+                  :node (game-task-node wascity-pre-game-battle)
                   :reset-mode 'try
                   :execute #f
                   )
@@ -2228,7 +2245,7 @@
                 :fail (new 'static 'resetter-spec :continue #f :reset-mode 'life :execute #f)
                 :retry (new 'static 'resetter-spec
                   :continue "wascityb-game"
-                  :node (game-task-node wascity-pre-game-resolution)
+                  :node (game-task-node wascity-pre-game-battle)
                   :reset-mode 'try
                   :execute #f
                   )
@@ -2240,7 +2257,7 @@
                 :fail (new 'static 'resetter-spec :continue "wascityb-game" :reset-mode 'life :execute #f)
                 :retry (new 'static 'resetter-spec
                   :continue "wascityb-game"
-                  :node (game-task-node wascity-pre-game-resolution)
+                  :node (game-task-node wascity-pre-game-battle)
                   :reset-mode 'try
                   :execute #f
                   )
@@ -2252,7 +2269,7 @@
                 :fail (new 'static 'resetter-spec :continue "wascityb-game" :reset-mode 'life :execute #f)
                 :retry (new 'static 'resetter-spec
                   :continue "wascityb-game"
-                  :node (game-task-node wascity-pre-game-resolution)
+                  :node (game-task-node wascity-pre-game-battle)
                   :reset-mode 'try
                   :execute #f
                   )
@@ -2387,7 +2404,7 @@
               )
             :flags (game-task-node-flag save-on-life act1)
             :parent-node (new 'static 'array game-task-node 4
-              (game-task-node none)
+              (game-task-node wascity-pre-game-resolution)
               (game-task-node none)
               (game-task-node none)
               (game-task-node none)
@@ -2469,7 +2486,7 @@
               )
             :flags (game-task-node-flag act1)
             :parent-node (new 'static 'array game-task-node 4
-              (game-task-node none)
+              (game-task-node wascity-pre-game-resolution)
               (game-task-node none)
               (game-task-node none)
               (game-task-node none)
@@ -2560,9 +2577,9 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag auto-close save-on-life act1)
+            :flags (game-task-node-flag save-on-life act1)
             :parent-node (new 'static 'array game-task-node 4
-              (game-task-node wascity-chase-resolution)
+              (game-task-node wascity-pre-game-resolution)
               (game-task-node none)
               (game-task-node none)
               (game-task-node none)
