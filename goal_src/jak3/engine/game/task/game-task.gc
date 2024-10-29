@@ -4097,7 +4097,7 @@
             :when-open (new 'static 'boxed-array :type game-task-event
               (new 'static 'game-task-event
                 :actor (game-task-actor kleever-wascityb)
-                :action (game-task-action say)
+                :action (game-task-action idle)
                 :tex (game-task-icon gaticon-02)
                 :scene "wascity-gun-intro"
                 )
@@ -4356,7 +4356,7 @@
               )
             :flags (game-task-node-flag save-on-life act1)
             :parent-node (new 'static 'array game-task-node 4
-              (game-task-node wascity-gungame-resolution)
+              (game-task-node desert-rescue-hold-doors)
               (game-task-node none)
               (game-task-node none)
               (game-task-node none)

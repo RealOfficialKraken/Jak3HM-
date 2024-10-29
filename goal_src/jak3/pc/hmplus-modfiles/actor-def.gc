@@ -216,6 +216,9 @@
           (when (= desert-spawn-mission-deserta #t)
             (task-node-close! (game-task-node desert-spawn-task-deserta-goto-artifact) #t)
           )
+          #|(when (= desert-spawn-mission-brute #t)
+            (task-node-close! (game-task-node desert-spawn-task-deserta-goto-artifact) #t)
+          )|#
           (go (method-of-object this die))
           )
         )

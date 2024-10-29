@@ -11,6 +11,7 @@
   "ash-states.o"
   "marauder.o"
   "oasis-defense.o"
+  "desert-fight-brute.o"
   "ash-oasis-course.o"
   "tpage-1603.go"
   "tpage-2114.go"

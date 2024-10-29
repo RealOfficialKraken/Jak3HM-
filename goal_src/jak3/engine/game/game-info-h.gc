@@ -183,6 +183,7 @@
   (defun-extern runs-on-blackout (none))
   (define desert-spawn-mission-oasis #f)
   (define desert-spawn-mission-deserta #f)
+  (define desert-spawn-mission-brute #f)
 
   (define the-maker-count 0)
 
