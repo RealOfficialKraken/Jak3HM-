@@ -2633,7 +2633,7 @@
         )
       (add-setting! 'music 'waspgame 0.0 0)
       (set-setting! 'entity-name (res-lump-struct (-> self entity) 'camera-name structure) 0.0 0)
-      ;(set-setting! 'airlock #f 0.0 0)
+      (set-setting! 'airlock #f 0.0 0)
       (set-setting! 'minimap 'clear 0.0 (minimap-flag minimap))
       (case (-> self task actor)
         (((game-task-actor was-pre-game-wascityb))

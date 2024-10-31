@@ -16,7 +16,6 @@
 (define-extern *highscore-info-array* (array highscore-info))
 (define-extern *user* symbol)
 
-
 ;; DECOMP BEGINS
 
 (defmethod debug-draw ((this border-plane))
