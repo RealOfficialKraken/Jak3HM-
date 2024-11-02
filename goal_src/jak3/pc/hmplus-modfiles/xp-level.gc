@@ -16,12 +16,160 @@
     (define draw-levelup-int 0)
     (define xp-bar-spawned? #f)
 
+(defun levelup-reset-color ()
+    (set! (-> *part-id-table* 1701 init-specs 4 initial-valuef) 160.0) ;r 1
+    (set! (-> *part-id-table* 1701 init-specs 5 initial-valuef) 0.0) ;g 1
+    (set! (-> *part-id-table* 1701 init-specs 6 initial-valuef) 255.0) ;b 1
+    (set! (-> *part-id-table* 1701 init-specs 8 initial-valuef) 64.0) ;a
+;
+    (set! (-> *part-id-table* 1702 init-specs 5 initial-valuef) 160.0) ;r 2
+    (set! (-> *part-id-table* 1702 init-specs 6 initial-valuef) 30.0) ;g 2
+    (set! (-> *part-id-table* 1702 init-specs 7 initial-valuef) 255.0) ;b 2
+    (set! (-> *part-id-table* 1702 init-specs 8 initial-valuef) 128.0) ;a
+;
+    (set! (-> *part-id-table* 1703 init-specs 5 initial-valuef) 80.0) ;r 3
+    (set! (-> *part-id-table* 1703 init-specs 6 initial-valuef) 40.0) ;g 3
+    (set! (-> *part-id-table* 1703 init-specs 7 initial-valuef) 128.0) ;b 3
+    (set! (-> *part-id-table* 1703 init-specs 8 initial-valuef) 128.0) ;a
+;
+    (set! (-> *part-id-table* 1704 init-specs 5 initial-valuef) 160.0) ;r 4
+    (set! (-> *part-id-table* 1704 init-specs 6 initial-valuef) 30.0) ;g 4 
+    (set! (-> *part-id-table* 1704 init-specs 7 initial-valuef) 128.0) ;b 4
+    (set! (-> *part-id-table* 1704 init-specs 8 initial-valuef) 128.0) ;a
+;
+    (set! (-> *part-id-table* 1705 init-specs 8 initial-valuef) 128.0) ;r 5
+    (set! (-> *part-id-table* 1705 init-specs 9 initial-valuef) 128.0) ;g 5
+    (set! (-> *part-id-table* 1705 init-specs 10 initial-valuef) 128.0) ;b 5
+    (set! (-> *part-id-table* 1705 init-specs 11 initial-valuef) 128.0) ;a
+;
+    (set! (-> *part-id-table* 1706 init-specs 7 initial-valuef) 128.0) ;r 6
+    (set! (-> *part-id-table* 1706 init-specs 8 initial-valuef) 32.0) ;g 6
+    (set! (-> *part-id-table* 1706 init-specs 9 initial-valuef) 255.0) ;b 6
+    (set! (-> *part-id-table* 1706 init-specs 10 initial-valuef) 120.0) ;a
+;
+    (set! (-> *part-id-table* 1707 init-specs 6 initial-valuef) 255.0) ;r 7
+    (set! (-> *part-id-table* 1707 init-specs 7 initial-valuef) 255.0) ;g 7
+    (set! (-> *part-id-table* 1707 init-specs 8 initial-valuef) 255.0) ;b 7
+    (set! (-> *part-id-table* 1707 init-specs 9 initial-valuef) 255.0) ;a
+;
+    ;(set! (-> *launch-matrix* trans quad) (-> (target-pos 0) quad))
+    ;(part-tracker-spawn part-tracker :to *entity-pool* :group (-> *part-group-id-table* 426))
+    (none)
+)
+
+(defpartgroup group-neo-satellite-explode
+  :id 999999
+  :flags (sp0 sp4)
+  :bounds (static-bspherem 0 0 0 20)
+  :parts ((sp-item 1701 :flags (sp3) :period (seconds 30) :length (seconds 0.017))
+    (sp-item 1702 :flags (sp3) :period (seconds 30) :length (seconds 0.017))
+    (sp-item 1703 :flags (sp3) :period (seconds 30) :length (seconds 0.017))
+    (sp-item 1704 :period (seconds 30) :length (seconds 0.167))
+    ;(sp-item 1705 :period (seconds 30) :length (seconds 0.335))
+    (sp-item 1706 :period (seconds 30) :length (seconds 0.667) :offset 300)
+    (sp-item 1707 :period (seconds 30) :length (seconds 0.117))
+    )
+  )
+
+(defun levelup-glow-yellow ()
+    (set! (-> *part-id-table* 1701 init-specs 5 initial-valuef) 255.0) ;r
+    (set! (-> *part-id-table* 1701 init-specs 6 initial-valuef) 255.0) ;g
+    (set! (-> *part-id-table* 1701 init-specs 7 initial-valuef) 0.0) ;b
+    (set! (-> *part-id-table* 1701 init-specs 8 initial-valuef) (the float notoriety-level)) ;a
+;
+    (set! (-> *part-id-table* 1702 init-specs 5 initial-valuef) 255.0) ;r
+    (set! (-> *part-id-table* 1702 init-specs 6 initial-valuef) 255.0) ;g
+    (set! (-> *part-id-table* 1702 init-specs 7 initial-valuef) 0.0) ;b
+    (set! (-> *part-id-table* 1702 init-specs 8 initial-valuef) (the float notoriety-level)) ;a
+;
+    (set! (-> *part-id-table* 1703 init-specs 5 initial-valuef) 255.0) ;r
+    (set! (-> *part-id-table* 1703 init-specs 6 initial-valuef) 255.0) ;g
+    (set! (-> *part-id-table* 1703 init-specs 7 initial-valuef) 0.0) ;b
+    (set! (-> *part-id-table* 1703 init-specs 8 initial-valuef) (the float notoriety-level)) ;a
+;
+    (set! (-> *part-id-table* 1704 init-specs 5 initial-valuef) 255.0) ;r
+    (set! (-> *part-id-table* 1704 init-specs 6 initial-valuef) 255.0) ;g
+    (set! (-> *part-id-table* 1704 init-specs 7 initial-valuef) 0.0) ;b
+    (set! (-> *part-id-table* 1704 init-specs 8 initial-valuef) (the float notoriety-level)) ;a
+;
+    (set! (-> *part-id-table* 1705 init-specs 8 initial-valuef) 255.0) ;r
+    (set! (-> *part-id-table* 1705 init-specs 9 initial-valuef) 255.0) ;g
+    (set! (-> *part-id-table* 1705 init-specs 10 initial-valuef) 0.0) ;b
+    (set! (-> *part-id-table* 1705 init-specs 11 initial-valuef) (the float notoriety-level)) ;a
+;
+    (set! (-> *part-id-table* 1706 init-specs 7 initial-valuef) 255.0) ;r
+    (set! (-> *part-id-table* 1706 init-specs 8 initial-valuef) 255.0) ;g
+    (set! (-> *part-id-table* 1706 init-specs 9 initial-valuef) 0.0) ;b
+    (set! (-> *part-id-table* 1706 init-specs 10 initial-valuef) (the float notoriety-level)) ;a
+;
+    (set! (-> *part-id-table* 1707 init-specs 6 initial-valuef) 255.0) ;r
+    (set! (-> *part-id-table* 1707 init-specs 7 initial-valuef) 255.0) ;g
+    (set! (-> *part-id-table* 1707 init-specs 8 initial-valuef) 0.0) ;b
+    
+;
+    (set! (-> *launch-matrix* trans quad) (-> (target-pos 0) quad))
+    (part-tracker-spawn part-tracker :to *entity-pool* :group (-> *part-group-id-table* 999999))
+    (set! kill-eco-delay #t)
+    (set! killeci 0)
+    (none)
+)
+
+(defun levelup-glow-red ()
+    (set! (-> *part-id-table* 1701 init-specs 5 initial-valuef) 255.0) ;r
+    (set! (-> *part-id-table* 1701 init-specs 6 initial-valuef) 0.0) ;g
+    (set! (-> *part-id-table* 1701 init-specs 7 initial-valuef) 0.0) ;b
+    (set! (-> *part-id-table* 1701 init-specs 8 initial-valuef) (* (the float guns-level) 8.0)) ;a
+;
+    (set! (-> *part-id-table* 1702 init-specs 5 initial-valuef) 255.0) ;r
+    (set! (-> *part-id-table* 1702 init-specs 6 initial-valuef) 0.0) ;g
+    (set! (-> *part-id-table* 1702 init-specs 7 initial-valuef) 0.0) ;b
+    (set! (-> *part-id-table* 1702 init-specs 8 initial-valuef) (* (the float guns-level) 8.0)) ;a
+;
+    (set! (-> *part-id-table* 1703 init-specs 5 initial-valuef) 255.0) ;r
+    (set! (-> *part-id-table* 1703 init-specs 6 initial-valuef) 0.0) ;g
+    (set! (-> *part-id-table* 1703 init-specs 7 initial-valuef) 0.0) ;b
+    (set! (-> *part-id-table* 1703 init-specs 8 initial-valuef) (* (the float guns-level) 8.0)) ;a
+;
+    (set! (-> *part-id-table* 1704 init-specs 5 initial-valuef) 255.0) ;r
+    (set! (-> *part-id-table* 1704 init-specs 6 initial-valuef) 0.0) ;g
+    (set! (-> *part-id-table* 1704 init-specs 7 initial-valuef) 0.0) ;b
+    (set! (-> *part-id-table* 1704 init-specs 8 initial-valuef) (* (the float guns-level) 8.0)) ;a
+;
+    (set! (-> *part-id-table* 1705 init-specs 8 initial-valuef) 255.0) ;r
+    (set! (-> *part-id-table* 1705 init-specs 9 initial-valuef) 0.0) ;g
+    (set! (-> *part-id-table* 1705 init-specs 10 initial-valuef) 0.0) ;b
+    (set! (-> *part-id-table* 1705 init-specs 11 initial-valuef) (* (the float guns-level) 8.0)) ;a
+;
+    (set! (-> *part-id-table* 1706 init-specs 7 initial-valuef) 255.0) ;r
+    (set! (-> *part-id-table* 1706 init-specs 8 initial-valuef) 0.0) ;g
+    (set! (-> *part-id-table* 1706 init-specs 9 initial-valuef) 0.0) ;b
+    (set! (-> *part-id-table* 1706 init-specs 10 initial-valuef) (* (the float guns-level) 8.0)) ;a
+;
+    (set! (-> *part-id-table* 1707 init-specs 6 initial-valuef) 255.0) ;r
+    (set! (-> *part-id-table* 1707 init-specs 7 initial-valuef) 0.0) ;g
+    (set! (-> *part-id-table* 1707 init-specs 8 initial-valuef) 0.0) ;b    
+;
+    (set! (-> *launch-matrix* trans quad) (-> (target-pos 0) quad))
+    (part-tracker-spawn part-tracker :to *entity-pool* :group (-> *part-group-id-table* 999999))
+    (set! kill-eco-delay #t)
+    (set! killeci 0)
+    (none)
+)
+
+(defun levelup-glow-dark ()
+    (levelup-reset-color)
+    (set! (-> *launch-matrix* trans quad) (-> (target-pos 0) quad))
+    (part-tracker-spawn part-tracker :to *entity-pool* :group (-> *part-group-id-table* 999999))
+    (none)
+)
+
 (defun level-up! ((arg0 int))
     (+! (-> *game-info* total-trys) arg0)
     (set! (-> *game-info* karma) extra-offthetop)
     (set! draw-levelup-noto #t)
     (set! noto-string "<COLOR_ORANGE>Notoriety<COLOR_YELLOW>")
     (set! draw-levelup-int (-> *game-info* total-trys))
+    (levelup-glow-yellow)
     (none)
 )
 
@@ -32,6 +180,7 @@
     (set! draw-levelup-noto #t)
     (set! noto-string "<COLOR_RED>Guns<COLOR_YELLOW>")
     (set! draw-levelup-int (-> *game-info* auto-save-count))
+    (levelup-glow-red)
     (none)
 )
 
@@ -44,6 +193,7 @@
     (set! draw-levelup-noto #t)
     (set! noto-string "<COLOR_PINK>Vehicle<COLOR_YELLOW>")
     (set! draw-levelup-int (-> *game-info* total-deaths))
+    (levelup-glow-dark)
     (none)
 )
 
@@ -227,6 +377,15 @@
   )
 
 (defun update-xp! ()
+
+    (when (= kill-eco-delay #t)
+        (+! killeci 1)
+        (when (= killeci 777)
+            (levelup-reset-color)
+            (set! killeci 0)
+            (set! kill-eco-delay #f)
+        )
+    )
 
     (when 
         (!= notoriety-level (-> *game-info* total-trys))

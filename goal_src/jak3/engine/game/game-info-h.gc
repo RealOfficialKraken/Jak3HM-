@@ -185,6 +185,8 @@
   (define desert-spawn-mission-deserta #f)
   (define desert-spawn-mission-brute #f)
 
+  (define in-main-menu? #f)
+
   (define the-maker-count 0)
 
   (define arena-token-count 0)

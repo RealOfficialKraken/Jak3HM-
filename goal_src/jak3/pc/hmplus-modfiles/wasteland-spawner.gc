@@ -610,7 +610,7 @@
             (let ( 
                 (rng-percent (rand-vu-percent? 0.137)) ;actual is 0.00137
                 (bigsphere-rad 837000.0)
-                (biggersphere-rad 1337000.0)
+                (biggersphere-rad 2337000.0)
                 (noticesphere-rad 137000.0)
                 )
                     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
