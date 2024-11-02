@@ -3243,6 +3243,7 @@
                 (set! spawned-desertd2-poi? #f)
                 (set! in-satbattle? #f)
                 (set! cdr-satbattle #t)
+                (levelup-reset-color)
                 (set! hand
                       (process->handle
                         (-> (cond

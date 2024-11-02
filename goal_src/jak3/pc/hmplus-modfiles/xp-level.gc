@@ -464,28 +464,28 @@
                     (when (and  
                                 (< enemy-noto (+ notoriety-level 3))
                                 (> enemy-noto (- notoriety-level 3))
-                                (not (string= color-string "<COLOR_YELLOW>"))
+                                (not (string= color-string "<COLOR_YELLOW>Lv. "))
                             )
-                                (set! color-string "<COLOR_YELLOW>")
+                                (set! color-string "<COLOR_YELLOW>Lv. ")
                             )
                             (when (and  
                                 (>= enemy-noto (+ notoriety-level 3))
-                                (not (string= color-string "<COLOR_RED>"))
+                                (not (string= color-string "<COLOR_RED>Lv. "))
                             )
-                                (set! color-string "<COLOR_RED>")
+                                (set! color-string "<COLOR_RED>Lv. ")
                             )
                             (when (and  
                                 (< enemy-noto (- notoriety-level 3))
                                 (> enemy-noto (- notoriety-level 7))
-                                (not (string= color-string "<COLOR_GREEN>"))
+                                (not (string= color-string "<COLOR_GREEN>Lv. "))
                             )
-                                (set! color-string "<COLOR_GREEN>")
+                                (set! color-string "<COLOR_GREEN>Lv. ")
                             )
                             (when (and  
                                 (< enemy-noto (- notoriety-level 7))
-                                (not (string= color-string "<COLOR_BROWN>"))
+                                (not (string= color-string "<COLOR_TRANSPARENT>Lv. "))
                             )
-                                (set! color-string "<COLOR_TRANSPARENT>")
+                                (set! color-string "<COLOR_TRANSPARENT>Lv. ")
                             )
                 (when 
                 (and
@@ -504,7 +504,7 @@
                     )
                     (clear matt-str)
                     (clear *pc-encoded-matt-str*)
-                    (format matt-str "~s~%~%<COLOR_WHITE>Lv. ~s~d"
+                    (format matt-str "~s~%~%<COLOR_WHITE>~s~d"
                     enemy-string
                     color-string
                     enemy-noto
