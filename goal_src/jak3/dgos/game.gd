@@ -501,4 +501,5 @@
   "dm-flyer.o"
   "maker-projectile.o"
   "planetboss.o"
+  "brute-dagger.o"
  ))

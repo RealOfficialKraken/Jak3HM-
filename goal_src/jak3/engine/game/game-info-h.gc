@@ -191,6 +191,9 @@
   (defun-extern spawn-gun-upgrade vector float none)
   (defun-extern task-arrow-custom vector symbol)
 
+  (define kill-eco-delay #f)
+  (define killeci 0)
+
 
 ;; +++game-items
 (defenum game-items

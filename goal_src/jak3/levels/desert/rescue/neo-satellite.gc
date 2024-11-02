@@ -3489,7 +3489,7 @@
   (let ((s5-0 (new 'stack-no-clear 'neo-sat-init-params)))
     (set! (-> s5-0 pos quad) (-> arg0 quad))
     (quaternion-copy! (-> s5-0 quat) arg1)
-    (process-spawn neo-sat s5-0 :name "neo-sat" :to arg2 :stack-size #x14000)
+    (process-spawn neo-sat s5-0 :name "Damaged Satellite" :to arg2 :stack-size #x14000)
     )
   )
 
@@ -4221,7 +4221,7 @@
         )
             (set! (-> satp pos quad) (-> vec quad))
             (quaternion-identity! (-> satp quat))
-            (process-spawn neo-sat satp :name "neo-sat" :stack-size #x14000)
+            (process-spawn neo-sat satp :name "Fallen Satellite" :stack-size #x14000)
         )
         (none)
 )

@@ -1913,7 +1913,7 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
 )
 
 (defun runs-on-blackout ()
-    (kill-by-name "neo-sat" *default-pool*)
+    (kill-by-name "Fallen Satellite" *default-pool*)
     (kill-by-name "manipy-sat" *default-pool*)
     (kill-by-name "dp-bipedal" *default-pool*)
     (kill-by-name "marauder-c" *default-pool*)

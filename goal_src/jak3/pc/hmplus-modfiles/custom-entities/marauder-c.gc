@@ -788,7 +788,7 @@
   )
 
 (defmethod knocked-land-anim ((this marauder-c) (arg0 enemy-knocked-info))
-  (cond
+  #|(cond
     ((not (focus-test? this dead))
      (cond
        ((-> this knocked-back?)
@@ -837,7 +837,7 @@
         (joint-control-channel-group! v1-18 (the-as art-joint-anim (-> this draw art-group data 27)) num-func-seek!)
         )
       )
-    )
+    )|#
   #t
   )
 
@@ -1815,7 +1815,8 @@
     )
   :post (behavior ()
     (let ((gp-0 (-> self root)))
-      (cond
+      (accelerate-fall! self (-> gp-0 transv))
+      #|(cond
         ((focus-test? self under-water)
          (accelerate-fall! self (-> gp-0 transv))
          )
@@ -1830,7 +1831,7 @@
             (vector-v++! (-> gp-0 transv) (compute-acc-due-to-gravity gp-0 a1-2 (-> self enemy-info slip-factor)))
             )
           )
-        )
+        )|#
       (let ((a2-2 (new 'stack-no-clear 'collide-query)))
         (set! (-> a2-2 collide-with) (-> gp-0 root-prim prim-core collide-with))
         (set! (-> a2-2 ignore-process0) self)
