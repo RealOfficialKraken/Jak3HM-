@@ -598,6 +598,7 @@
         (and 
         (= in-desert-game-task? #f)
         (= desert-spawn-mission-brute #f)
+        (= cdr-satbattle #f)
         (task-node-closed? (game-task-node desert-brute-killed-introduction))
             (or
                 (and
@@ -624,6 +625,8 @@
         (kill-by-name "Brute Dagger" *default-pool*)
         (spawn-brute-artifact)
         (set! in-satbattle? #f)
+        (set! cdr-satbattle #t)
+        (set! cdr-i (rand-vu-int-range 8000 16000))
             )
     #|(when 
         (and 
