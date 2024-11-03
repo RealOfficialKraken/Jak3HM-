@@ -3,8 +3,8 @@
 ;name: brute-dagger.gc
 
 (deftype brute-boss (marauder-c)
-    ((spawn-pos         vector)
-     (boss-hp           float) 
+    ((spawn-pos                   vector)
+     (boss-hp                     float)
     )
 )
 
@@ -38,8 +38,8 @@
         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     (set! (-> *launch-matrix* trans quad) (-> self root trans quad))
     (part-tracker-spawn part-tracker :to *entity-pool* :group (-> *part-group-id-table* 426))
-    (set! (-> self hit-points) 5000.0)
-    (set! (-> self enemy-info default-hit-points) (+ (-> self enemy-info default-hit-points) 5000.0))
+    (set! (-> self hit-points) 3400.0)
+    (set! (-> self enemy-info default-hit-points) 3400.0)
     (set-vector! (-> self draw color-mult) 1.0 0.0 0.0 1.0)
     (go-idle self)
 )
@@ -49,4 +49,5 @@
         vec 
         :name "Brute Dagger"
         *default-pool*)
+    (none)
 )

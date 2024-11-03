@@ -151,6 +151,7 @@
   (max 138)
   (desert-spawn-task-oasis 139)
   (desert-spawn-task-deserta 140)
+  (desert-brute-killed 141)
   )
 ;; ---game-task
 
@@ -574,6 +575,8 @@
   (desert-spawn-task-deserta-goto-artifact)
   (desert-spawn-task-deserta-battle)
   (desert-spawn-task-deserta-resolution)
+  (desert-brute-killed-introduction)
+  (desert-brute-killed-resolution)
   )
 ;; ---game-task-node
 

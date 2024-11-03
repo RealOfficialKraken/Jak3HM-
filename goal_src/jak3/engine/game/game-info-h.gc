@@ -145,6 +145,9 @@
   (define log-sec 0)
   (define log-id 0)
 
+  (define *spawn-vec* (new-stack-vector0))
+  (defun-extern boss-brute! vector none)
+
   (defun-extern give-random-weapon (none))
   (defun-extern mod-killed? float none)
   (define in-satbattle? #f)

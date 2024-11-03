@@ -574,7 +574,7 @@
 (defun give-random-weapon ()
     (let (
           (rnd 0)
-          (item-pool (+ 1 (the int (/ notoriety-level 6))))
+          (item-pool (+ 1 (the int (/ enemy-noto 8))))
         )
         (set! rnd (rand-vu-int-range 1 item-pool))
         (when (> rnd 10)

@@ -4,7 +4,8 @@
 ;name: wasteland-spawner.gc
 
 
-;(declare-type neo-sat nav-enemy)
+(declare-type marauder-c process-drawable)
+(declare-type was-artifact process-drawable)
 
 (defskelgroup skel-neo-sat neo-satellite neo-satellite-lod0-jg neo-satellite-idle-ja
               ((neo-satellite-lod0-mg (meters 999999)))
@@ -63,7 +64,7 @@
             (desertb1 (new 'static 'vector :x (meters 3154.2802) :y (meters 19.5781) :z (meters 541.2550) :w 1.0))
             (desertb2 (new 'static 'vector :x (meters 3732.4335) :y (meters 22.4331) :z (meters 824.4011) :w 1.0))
             (desertd1 (new 'static 'vector :x (meters 2292.9907) :y (meters 32.7233) :z (meters 1500.0242) :w 1.0))
-            (desertd2 (new 'static 'vector :x (meters 3940.3449) :y (meters 52.2336) :z (meters 2400.6291) :w 1.0))
+            (desertd2 (new 'static 'vector :x (meters 348.6051) :y (meters 29.4197) :z (meters 2832.0312) :w 1.0))
             (deserta1 (new 'static 'vector :x (meters 1317.8349) :y (meters 36.3553) :z (meters 283.1715) :w 1.0))
             (deserta2 (new 'static 'vector :x (meters 1657.2156) :y (meters 33.8630) :z (meters 386.2038) :w 1.0))
             (desertc1 (new 'static 'vector :x (meters 280.2767) :y (meters 108.8450) :z (meters 1983.6145) :w 1.0))
@@ -120,7 +121,7 @@
             (desertb1 (new 'static 'vector :x (meters 3154.2802) :y (meters 19.5781) :z (meters 541.2550) :w 1.0))
             (desertb2 (new 'static 'vector :x (meters 3732.4335) :y (meters 22.4331) :z (meters 824.4011) :w 1.0))
             (desertd1 (new 'static 'vector :x (meters 2292.9907) :y (meters 32.7233) :z (meters 1500.0242) :w 1.0))
-            (desertd2 (new 'static 'vector :x (meters 3940.3449) :y (meters 52.2336) :z (meters 2400.6291) :w 1.0))
+            (desertd2 (new 'static 'vector :x (meters 348.6051) :y (meters 29.4197) :z (meters 2832.0312) :w 1.0))
             (deserta1 (new 'static 'vector :x (meters 1317.8349) :y (meters 36.3553) :z (meters 283.1715) :w 1.0))
             (deserta2 (new 'static 'vector :x (meters 1657.2156) :y (meters 33.8630) :z (meters 386.2038) :w 1.0))
             (desertc1 (new 'static 'vector :x (meters 280.2767) :y (meters 108.8450) :z (meters 1983.6145) :w 1.0))
@@ -557,7 +558,7 @@
             (= (pause-allowed?) #t)
         )
             (+! cdr-i 1)
-            (when (= cdr-i 6000)
+            (when (= cdr-i 18000)
                 (set! cdr-i 0)
                 (set! cdr-satbattle #f)
             )
@@ -592,6 +593,59 @@
             )
                 (send-event *target* 'end-mode 'pilot)
         )
+
+    (when 
+        (and 
+        (= in-desert-game-task? #f)
+        (= desert-spawn-mission-brute #f)
+        (task-node-closed? (game-task-node desert-brute-killed-introduction))
+            (or
+                (and
+                    (> (vector-vector-distance (target-pos 0) (new 'static 'vector
+                    :x (meters 825.8018)
+                    :y (meters 89.0678)
+                    :z (meters 3340.8896)
+                    :w 1.0
+                    )) 340000.0)
+                    (< (vector-vector-distance (target-pos 0) (new 'static 'vector
+                    :x (meters 825.8018)
+                    :y (meters 89.0678)
+                    :z (meters 3340.8896)
+                    :w 1.0
+                    )) 2440000.0)
+                )
+                (not (search-process-tree *active-pool* (lambda ((p process)) (type? p marauder-c))))
+            )
+            *target*
+            (not *scene-player*)
+            (= (paused?) #f)
+            (= (pause-allowed?) #t)
+        )
+        (kill-by-name "Brute Dagger" *default-pool*)
+        (spawn-brute-artifact)
+        (set! in-satbattle? #f)
+            )
+    #|(when 
+        (and 
+        (= in-desert-game-task? #f)
+            (or
+                (= desert-spawn-mission-brute #t)
+                (task-node-closed? (game-task-node desert-brute-killed-resolution))
+            )
+            (< (vector-vector-distance (target-pos 0) (new 'static 'vector
+                    :x (meters 825.8018)
+                    :y (meters 89.0678)
+                    :z (meters 3340.8896)
+                    :w 1.0
+                    )) 580000.0)
+            (focus-test? *target* pilot)
+            *target*
+            (not *scene-player*)
+            (= (paused?) #f)
+            (= (pause-allowed?) #t)
+        )
+            (send-event *target* 'end-mode 'pilot)
+    )|#
     (when ;look for spawn params while in desert
         (and
             *target*
@@ -743,7 +797,7 @@
                     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                     ;(set-vector! (-> *target* control trans) (meters 3940.3449) (meters 52.2336) (meters 2400.6291) 1.0)
                     ;;;;;;;;;;;;;;;;;;;;DESERTD2;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                    (let ((desert-spawn (new 'static 'vector :x (meters 3940.3449) :y (meters 52.2336) :z (meters 2400.6291) :w 1.0)))
+                    (let ((desert-spawn (new 'static 'vector :x (meters 348.6051) :y (meters 29.4197) :z (meters 2832.0312) :w 1.0)))
                         (when 
                             (and
                                 (= spawned-desertd2-poi? #t)
@@ -775,8 +829,8 @@
                                 (kill-by-name "task-arrow-satellite" *default-pool*)
                                 (spawn-roaming-satellite desert-spawn)
                                 (set! in-satbattle? #t)
-                                (when (< enemy-noto 18)
-                                    (set! enemy-noto (rand-vu-int-range 10 18))
+                                (when (< enemy-noto 29)
+                                    (set! enemy-noto (rand-vu-int-range 19 29))
                                 )
                                 (set! cdr-satbattle #t)
 

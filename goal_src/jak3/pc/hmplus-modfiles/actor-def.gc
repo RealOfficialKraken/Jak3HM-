@@ -216,9 +216,11 @@
           (when (= desert-spawn-mission-deserta #t)
             (task-node-close! (game-task-node desert-spawn-task-deserta-goto-artifact) #t)
           )
-          #|(when (= desert-spawn-mission-brute #t)
-            (task-node-close! (game-task-node desert-spawn-task-deserta-goto-artifact) #t)
-          )|#
+          (when (= desert-spawn-mission-brute #t)
+            (boss-brute! (-> this root trans))
+            (set! in-satbattle? #t)
+            (set! desert-spawn-mission-brute #f)
+          )
           (go (method-of-object this die))
           )
         )
@@ -278,8 +280,7 @@
         )
       (quaternion-identity! (-> gp-0 quat))
       (set! (-> gp-0 flags) (task-arrow-flags))
-      (set! (-> gp-0 map-icon) (the-as uint 13))
-      (task-arrow-spawn gp-0 self)
+      (add-icon! *minimap* self (the-as uint 13) (the-as int #f) (the-as vector #t) 0)
       )
     (until #f
       (ja-no-eval :group! (ja-group) :num! (seek!) :frame-num 0.0)
@@ -360,6 +361,7 @@
     )
   0
   (set! (-> self root trans quad) (-> arg0 pos quad))
+  (set! *spawn-vec* (-> self root trans))
   (quaternion-identity! (-> self root quat))
   (set-vector! (-> self root scale) 3.0 3.0 3.0 1.0)
   (find-ground self)
