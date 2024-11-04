@@ -228,7 +228,9 @@
 
 (defun progress-intro-start ()
   (set! (-> *game-info* mode) 'play)
-  (initialize! *game-info* 'game (the-as game-save #f) "intro-start" (the-as resetter-spec #f))
+  (initialize! *game-info* 'game (the-as game-save #f) "desert-gd-start" (the-as resetter-spec #f))
+  (set! weather-dark-mode #t)
+  (set! in-pre-tutorial? #t)
   (set-master-mode 'game)
   0
   )
@@ -2837,14 +2839,14 @@
                  (cond
                    ((pair? s3-1)
                     (start 'play (get-continue-by-name *game-info* s4-2))
-                    (process-spawn
+                    #|(process-spawn
                       scene-player
                       :init scene-player-init
                       (-> (the-as pair (-> (the-as pair s3-1) cdr)) car)
                       #t
                       s4-2
                       :name "scene-player"
-                      )
+                      )|#
                     )
                    (else
                      (send-event (handle->process (-> *game-info* controller 0)) 'control-spec (get-play-list-idx s5-1))

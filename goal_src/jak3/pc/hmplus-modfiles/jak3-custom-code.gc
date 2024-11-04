@@ -1558,7 +1558,7 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
     (when
         (and
             (task-node-open? (game-task-node wascity-gungame-introduction))
-            (task-node-open? (game-task-node desert-brute-killed-resolution))
+            (task-node-open? (game-task-node desert-brute-killed-introduction))
             (<= (vector-vector-distance 
                     (new 'static 'vector
                     :x (meters 1594.60)
@@ -1609,7 +1609,10 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
             (and
             (= in-dialogue? #t)
             )
-            (when (= log-id 1)
+            (when (or 
+                    (= log-id 1)
+                    (= log-id 2)
+                    )
                 (send-event *camera* 
                             'teleport-to-vector-start-string 
                             (new 'static 'vector 
@@ -1772,6 +1775,24 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
                     (set! di-s4 "")
                 )
                 (when (= log-sec 11)
+                    (set! di-s "That guy you fought off actually ain't dead,")
+                    (set! di-s2 "Damas thinks they go up to the star in space") 
+                    (set! di-s3 "")
+                    (set! di-s4 "")
+                )
+                (when (= log-sec 12)
+                    (set! di-s "They come back after a short time")
+                    (set! di-s2 "Same place, same arsenal") 
+                    (set! di-s3 "")
+                    (set! di-s4 "")
+                )
+                (when (= log-sec 13)
+                    (set! di-s "If ye ask me, Damas will believe anything")
+                    (set! di-s2 "Now get out, chum. I'm gonna try to beat me own score") 
+                    (set! di-s3 "")
+                    (set! di-s4 "")
+                )
+                (when (= log-sec 14)
                     (set! in-dialogue? #f)
                     (camera-unlocked)
                     (set! log-id 0)
@@ -1782,6 +1803,7 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
                     (meters -408.5743) 
                     1.0)
                     (process-spawn hud-map :init hud-init-by-other :name "hud-map" :to *target*)
+                    (task-node-close! (game-task-node wascity-gungame-resolution) #t)
                 )
             )
 
@@ -1825,7 +1847,7 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
                             :y (meters 23.9904) 
                             :z (meters -408.8620))
                             )
-                (set! di-s "Aye, now this ain't easy")
+                (set! di-s "Aye, you guys actually got him?... Now that ain't easy")
                 (set! di-s2 "Maybe ye do got some talent after all") 
                 (set! di-s3 "")
                 (set! di-s4 "")
@@ -1976,12 +1998,96 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
             (wasseem-attack-check)
         )|#
 
+    (when 
+        (and
+            (= (paused?) #f)
+            (= (pause-allowed?) #t)
+            *target*
+            (not *scene-player*)
+            (= weather-dark-mode #t)
+            (= (-> *time-of-day-context* overide-enable) #f)
+        )
+            (send-event (ppointer->process *time-of-day*) 'change 'hour 19)
+            (set! (-> *time-of-day-context* mode) (the-as time-of-day-palette-id 5))
+            (send-event (ppointer->process *time-of-day*) 'change 'ratio 0.0)
+            (set! (-> *time-of-day-context* overide-enable) #t)
+            (set! (-> *mood-control* overide-weather-flag) #t)
+            (set! (-> *overide-mood-fog-table*
+                                   data
+                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                                   fog-color
+                                   x
+                                   )
+                               255.0
+                               )
+            (set! (-> *overide-mood-fog-table*
+                                   data
+                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                                   fog-color
+                                   y
+                                   )
+                               0.0
+                               )
+            (set! (-> *overide-mood-fog-table*
+                                   data
+                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                                   fog-color
+                                   z
+                                   )
+                               255.0
+                               )
+            ;(spawn-riftring-doors)
+        )
+
+        (when 
+        (and
+            (= (paused?) #f)
+            (= (pause-allowed?) #t)
+            *target*
+            (not *scene-player*)
+            (= weather-dark-mode #f)
+            (= (-> *time-of-day-context* overide-enable) #t)
+        )
+            (set! (-> *time-of-day-context* overide-enable) #f)
+            (set! (-> *mood-control* overide-weather-flag) #f)
+            (send-event (ppointer->process *time-of-day*) 'change 'ratio 1.0)
+            (send-event (ppointer->process *time-of-day*) 'change 'hour 0)
+        )
+
+        (when 
+        (and
+            (= (paused?) #f)
+            (= (pause-allowed?) #t)
+            *target*
+            (not *scene-player*)
+            (= weather-dark-mode #t)
+            (= in-pre-tutorial? #t)
+            (!= (-> (level-get-target-inside *level*) name) 'desert)
+            (= (-> (level-get-target-inside *level*) name) 'wasdoors)
+        )
+            (intro-play)
+            (set! weather-dark-mode #f)
+            (set! in-pre-tutorial? #f)
+        )
+
 
 (none)
 )
 
 (defun spawn-gun-upgrade ((vec vector) (amount float))
     (birth-pickup-at-point vec (pickup-type gun-yellow-1) amount #t *entity-pool* (the-as fact-info #f))
+    (none)
+)
+
+(defun spawn-riftring-doors ()
+    (let ((pos (new 'static 'vector 
+    :x (meters 2311.1208)
+    :y (meters 29.7124)
+    :z (meters 384.8298)
+    :w 1.0))
+    )
+    ;(process-spawn rift-ring-ingame pos :name "rift-ring-in-game")
+    )
     (none)
 )
 
