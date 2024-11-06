@@ -476,6 +476,7 @@
     (init-skel-and-collide! (_type_) none)
     (init-defaults! (_type_) none)
     (eval-on-notice (_type_) continue-point)
+    (setup-fields (_type_) none)
     )
   )
 
@@ -493,6 +494,13 @@
         (set! (-> this on-activate) (the-as pair (car (cdr s5-0))))
         (set! (-> this wait-for) (the-as pair (car (cdr (cdr s5-0)))))
         (set! (-> this on-close) (the-as pair (car (cdr (cdr (cdr s5-0))))))
+        (when (string= (-> this name) "worldgate-dark")
+          ;(logior! (-> this draw status) (draw-control-status no-draw)) ;; hide so it looks like rift-ring is warp
+          (set! (-> this continue) (get-continue-by-name *game-info* "waspala-intro-training"))
+          (set! (-> this on-activate) '())
+          (set! (-> this wait-for) '())
+          (set! (-> this on-close) '())  
+        )
         )
       (else
         (set! (-> this continue) #f)

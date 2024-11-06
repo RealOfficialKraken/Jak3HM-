@@ -65,27 +65,14 @@
 
   "actors": [
     {
-      "trans": [-15.2818, 15.2461, 17.136], // translation
-      "etype": "crate", // actor type
-      "game_task": "(game-task none)", // associated game task (for powercells, etc)
+      "trans": [2254.46, 30.70, 149.23],
+      "etype": "warp-gate",
+      "game_task": "(game-task none)",
       "kill_mask": 0,
-      "quat": [0, 0, 0, 1], // quaternion
-      "bsphere": [-15.2818, 15.2461, 17.136, 10], // bounding sphere
+      "quat": [0, 0.5219, 0, 0.8529],
+      "bsphere": [2254.46, 30.70, 149.23, 10.0],
       "lump": {
-        "name": "test-crate",
-        "eco-info": ["eco-info", "(pickup-type gem)", 1]
-      }
-    },
-
-    {
-      "trans": [-5.463, 17.4553, 1.6169], // translation
-      "etype": "eco-yellow", // actor type
-      "game_task": "(game-task none)", // associated game task (for powercells, etc)
-      "kill_mask": 0,
-      "quat": [0, 0, 0, 1], // quaternion
-      "bsphere": [-5.463, 17.4553, 1.6169, 10], // bounding sphere
-      "lump": {
-        "name": "test-eco"
+        "name": "worldgate-dark"
       }
     }
   ]
