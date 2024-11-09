@@ -2,6 +2,8 @@
 
 ;name: desert-storm.gc
 
+;depracated until further notice
+#|
 (deftype desert-storm (basic)
     ((storm-chance          uint32)
      (storm-timer           time-frame)
@@ -33,7 +35,7 @@
     (none)
 )
 
-#|
+
 (defun check-for-incoming-storm ()
     (if 
         (and

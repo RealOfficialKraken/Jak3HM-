@@ -115,6 +115,7 @@
                         )
                     )
                   (set-cloud-and-fog-interp! *mood-control* 0.0 0.5 0.0 0.0)
+                  (set! weather-dark-mode #t)
                   (none)
                   )
                )

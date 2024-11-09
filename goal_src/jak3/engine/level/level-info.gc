@@ -10063,12 +10063,51 @@
                        :vis-nick 'wasdoors
                        :vehicle-type #x1b
                        :want-count 5
-                       :want (new 'static 'inline-array level-buffer-state-small 5
+                       :want (new 'static 'inline-array level-buffer-state-small 4
                          (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
                          (new 'static 'level-buffer-state-small :name 'waswide :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'wasdoors :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'wascitya :display? 'display)
-                         (new 'static 'level-buffer-state-small :name 'test-zone :display? 'display)
+                         )
+                       :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
+                       )
+                      (new 'static 'continue-point
+                       :name "wasdoors-warp-overworld"
+                       :level 'wasdoors
+                       :flags (continue-flags warp-gate)
+                       :trans (new 'static 'vector :x (meters 2254.46)  :y (meters 30.70)  :z (meters 149.23) :w 1.0)
+                       :camera-trans (new 'static 'vector :x (meters 2258.5446) :y (meters 35.8559) :z (meters 163.9900) :w 1.0)
+                       :quat (new 'static 'vector4h :data (new 'static 'array int16 4 0 #xc46 0 #x7f64))
+                       :camera-rot (new 'static 'array int16 9 32760 0 -632 121 32124 6441 619 6445 32118)
+                       :on-goto #f
+                       :vis-nick 'wasdoors
+                       :vehicle-type #x1b
+                       :want-count 4
+                       :want (new 'static 'inline-array level-buffer-state-small 4
+                         (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
+                         (new 'static 'level-buffer-state-small :name 'waswide :display? 'display)
+                         (new 'static 'level-buffer-state-small :name 'wasdoors :display? 'display)
+                         (new 'static 'level-buffer-state-small :name 'wascitya :display? 'display)
+                         )
+                       :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
+                       )
+                       (new 'static 'continue-point
+                       :name "wasdoors-warp-dark"
+                       :level 'wasdoors
+                       :flags (continue-flags warp-gate)
+                       :trans (new 'static 'vector :x (meters 2384.7390)  :y (meters 36.5538)  :z (meters 537.5184) :w 1.0)
+                       :camera-trans (new 'static 'vector :x (meters 2378.7707) :y (meters 41.6999) :z (meters 526.5350) :w 1.0)
+                       :quat (new 'static 'vector4h :data (new 'static 'array int16 4 0 #xc46 0 #x7f64))
+                       :camera-rot (new 'static 'array int16 9 32760 0 -632 121 32124 6441 619 6445 32118)
+                       :on-goto #f
+                       :vis-nick 'wasdoors
+                       :vehicle-type #x1b
+                       :want-count 4
+                       :want (new 'static 'inline-array level-buffer-state-small 4
+                         (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
+                         (new 'static 'level-buffer-state-small :name 'desertb :display? 'display)
+                         (new 'static 'level-buffer-state-small :name 'wasdoors :display? 'display)
+                         (new 'static 'level-buffer-state-small :name 'desert-game :display? 'display)
                          )
                        :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
                        )
@@ -10082,13 +10121,12 @@
                        :on-goto #f
                        :vis-nick 'wasdoors
                        :vehicle-type #x1b
-                       :want-count 5
-                       :want (new 'static 'inline-array level-buffer-state-small 5
+                       :want-count 4
+                       :want (new 'static 'inline-array level-buffer-state-small 4
                          (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
                          (new 'static 'level-buffer-state-small :name 'wasdoors :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desert-game :display? #f)
                          (new 'static 'level-buffer-state-small :name 'desertb :display? 'display)
-                         (new 'static 'level-buffer-state-small :name 'test-zone :display? 'display)
                          )
                        :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
                        )
@@ -10103,13 +10141,12 @@
                        :on-goto #f
                        :vis-nick 'wasdoors
                        :vehicle-type #x1c
-                       :want-count 5
-                       :want (new 'static 'inline-array level-buffer-state-small 5
+                       :want-count 4
+                       :want (new 'static 'inline-array level-buffer-state-small 4
                          (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
                          (new 'static 'level-buffer-state-small :name 'wasdoors :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desert-game :display? #f)
                          (new 'static 'level-buffer-state-small :name 'desertb :display? 'display)
-                         (new 'static 'level-buffer-state-small :name 'test-zone :display? 'display)
                          )
                        :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
                        )
@@ -10124,13 +10161,12 @@
                        :on-goto #f
                        :vis-nick 'wasdoors
                        :vehicle-type #xc
-                       :want-count 5
-                       :want (new 'static 'inline-array level-buffer-state-small 5
+                       :want-count 4
+                       :want (new 'static 'inline-array level-buffer-state-small 4
                          (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
                          (new 'static 'level-buffer-state-small :name 'wasdoors :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desert-game :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desertb :display? #f)
-                         (new 'static 'level-buffer-state-small :name 'test-zone :display? 'display)
                          )
                        :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
                        )
@@ -10145,13 +10181,12 @@
                        :on-goto #f
                        :vis-nick 'wasdoors
                        :vehicle-type #xd
-                       :want-count 5
-                       :want (new 'static 'inline-array level-buffer-state-small 5
+                       :want-count 4
+                       :want (new 'static 'inline-array level-buffer-state-small 4
                          (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
                          (new 'static 'level-buffer-state-small :name 'wasdoors :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desert-game :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desertb :display? #f)
-                         (new 'static 'level-buffer-state-small :name 'test-zone :display? 'display)
                          )
                        :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
                        )
@@ -10166,13 +10201,12 @@
                        :on-goto #f
                        :vis-nick 'wasdoors
                        :vehicle-type #xe
-                       :want-count 5
-                       :want (new 'static 'inline-array level-buffer-state-small 5
+                       :want-count 4
+                       :want (new 'static 'inline-array level-buffer-state-small 4
                          (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
                          (new 'static 'level-buffer-state-small :name 'wasdoors :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desert-game :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desertb :display? #f)
-                         (new 'static 'level-buffer-state-small :name 'test-zone :display? 'display)
                          )
                        :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
                        )
@@ -10187,13 +10221,12 @@
                        :on-goto #f
                        :vis-nick 'wasdoors
                        :vehicle-type #xf
-                       :want-count 5
-                       :want (new 'static 'inline-array level-buffer-state-small 5
+                       :want-count 4
+                       :want (new 'static 'inline-array level-buffer-state-small 4
                          (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
                          (new 'static 'level-buffer-state-small :name 'wasdoors :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desert-game :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desertb :display? #f)
-                         (new 'static 'level-buffer-state-small :name 'test-zone :display? 'display)
                          )
                        :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
                        )
@@ -10208,13 +10241,12 @@
                        :on-goto #f
                        :vis-nick 'wasdoors
                        :vehicle-type #xc
-                       :want-count 5
-                       :want (new 'static 'inline-array level-buffer-state-small 5
+                       :want-count 4
+                       :want (new 'static 'inline-array level-buffer-state-small 4
                          (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
                          (new 'static 'level-buffer-state-small :name 'wasdoors :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desert-game :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desertb :display? #f)
-                         (new 'static 'level-buffer-state-small :name 'test-zone :display? 'display)
                          )
                        :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
                        )
@@ -10229,13 +10261,12 @@
                        :on-goto #f
                        :vis-nick 'wasdoors
                        :vehicle-type #xc
-                       :want-count 5
-                       :want (new 'static 'inline-array level-buffer-state-small 5
+                       :want-count 4
+                       :want (new 'static 'inline-array level-buffer-state-small 4
                          (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
                          (new 'static 'level-buffer-state-small :name 'wasdoors :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desert-game :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desertb :display? #f)
-                         (new 'static 'level-buffer-state-small :name 'test-zone :display? 'display)
                          )
                        :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
                        )
@@ -10250,13 +10281,12 @@
                        :on-goto #f
                        :vis-nick 'wasdoors
                        :vehicle-type #x1b
-                       :want-count 5
-                       :want (new 'static 'inline-array level-buffer-state-small 5
+                       :want-count 4
+                       :want (new 'static 'inline-array level-buffer-state-small 4
                          (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
                          (new 'static 'level-buffer-state-small :name 'wasdoors :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desert-game :display? #f)
                          (new 'static 'level-buffer-state-small :name 'desertb :display? #f)
-                         (new 'static 'level-buffer-state-small :name 'test-zone :display? 'display)
                          )
                        :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
                        )
@@ -10271,13 +10301,12 @@
                        :on-goto #f
                        :vis-nick 'wasdoors
                        :vehicle-type #x1b
-                       :want-count 5
-                       :want (new 'static 'inline-array level-buffer-state-small 5
+                       :want-count 4
+                       :want (new 'static 'inline-array level-buffer-state-small 4
                          (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
                          (new 'static 'level-buffer-state-small :name 'wasdoors :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desert-game :display? #f)
                          (new 'static 'level-buffer-state-small :name 'desertb :display? 'display)
-                         (new 'static 'level-buffer-state-small :name 'test-zone :display? 'display)
                          )
                        :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
                        )
@@ -10292,13 +10321,12 @@
                        :on-goto #f
                        :vis-nick 'wasdoors
                        :vehicle-type #x1b
-                       :want-count 5
-                       :want (new 'static 'inline-array level-buffer-state-small 5
+                       :want-count 4
+                       :want (new 'static 'inline-array level-buffer-state-small 4
                          (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
                          (new 'static 'level-buffer-state-small :name 'wasdoors :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desert-game :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desertb :display? #f)
-                         (new 'static 'level-buffer-state-small :name 'test-zone :display? 'display)
                          )
                        :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
                        )
@@ -10313,13 +10341,12 @@
                        :on-goto #f
                        :vis-nick 'wasdoors
                        :vehicle-type #x1b
-                       :want-count 5
-                       :want (new 'static 'inline-array level-buffer-state-small 5
+                       :want-count 4
+                       :want (new 'static 'inline-array level-buffer-state-small 4
                          (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
                          (new 'static 'level-buffer-state-small :name 'wasdoors :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desert-game :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desertb :display? #f)
-                         (new 'static 'level-buffer-state-small :name 'test-zone :display? 'display)
                          )
                        :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
                        )
@@ -10334,13 +10361,12 @@
                        :on-goto #f
                        :vis-nick 'wasdoors
                        :vehicle-type #x1b
-                       :want-count 5
-                       :want (new 'static 'inline-array level-buffer-state-small 5
+                       :want-count 4
+                       :want (new 'static 'inline-array level-buffer-state-small 4
                          (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
                          (new 'static 'level-buffer-state-small :name 'wasdoors :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desert-game :display? 'display)
                          (new 'static 'level-buffer-state-small :name 'desertb :display? #f)
-                         (new 'static 'level-buffer-state-small :name 'test-zone :display? 'display)
                          )
                        :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
                        )
@@ -20687,7 +20713,7 @@
     :master-level #f
     :packages '()
     :run-packages '("common")
-    :memory-mode (level-memory-mode large)
+    :memory-mode (level-memory-mode micro)
     :music-bank #f
     :extra-sound-bank #f
     :mood-func 'update-mood-default
@@ -20699,23 +20725,26 @@
     :base-task-mask (task-mask task0)
     :bigmap-id (bigmap-id none)
     :continues '((new 'static 'continue-point
-        :name "test-zone-start"
-        :level 'test-zone
-        :trans (static-vectorm 0 10 10)
-        :camera-trans (static-vectorm 0 1 0)
-        :quat (new 'static 'vector4h :data (new 'static 'array int16 4 0 #x7f9f 0 -2460))
-        :camera-rot (new 'static 'array int16 9 -32717 0 -1749 #xd1 #x7f0c -3954 #x6c8 -3958 -32478)
-        :on-goto #f
-        :vis-nick 'tsz
-        :vehicle-type #x1b
-        :want-count 3
-        :want (new 'static 'inline-array level-buffer-state-small 3
-          (new 'static 'level-buffer-state-small :name 'wasall :display? 'display)
-          (new 'static 'level-buffer-state-small :name 'waswide :display? 'display)
-          (new 'static 'level-buffer-state-small :name 'test-zone :display? 'display)
-          )
-        :want-sound (new 'static 'array symbol 3 #f #f #f)
-        )
+                       :name "test-zone-start"
+                       :level 'wasdoors
+                       :flags (continue-flags no-auto warp-gate)
+                       :trans (new 'static 'vector :x (meters 2254.46) :y (meters 30.70) :z (meters 149.23) :w 1.0)
+                       :camera-trans (new 'static 'vector :x 9281600.0 :y 149347.94 :z 632856.2 :w 1.0)
+                       :quat (new 'static 'vector4h :data (new 'static 'array int16 4 0 #xc46 0 #x7f64))
+                       :camera-rot (new 'static 'array int16 9 #x7fd7 0 -1595 #xbe #x7f0c #xf6c #x62e -3954 #x7ee8)
+                       :on-goto #f
+                       :vis-nick 'wasdoors
+                       :vehicle-type #x1b
+                       :want-count 5
+                       :want (new 'static 'inline-array level-buffer-state-small 5
+                         (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
+                         (new 'static 'level-buffer-state-small :name 'waswide :display? 'display)
+                         (new 'static 'level-buffer-state-small :name 'wasdoors :display? 'display)
+                         (new 'static 'level-buffer-state-small :name 'wascitya :display? 'display)
+                         (new 'static 'level-buffer-state-small :name 'test-zone :display? 'display)
+                         )
+                       :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
+                       )
       )
     :callback-list '()
     :borrow #f

@@ -228,9 +228,13 @@
 
 (defun progress-intro-start ()
   (set! (-> *game-info* mode) 'play)
-  (initialize! *game-info* 'game (the-as game-save #f) "desert-gd-start" (the-as resetter-spec #f))
+  (initialize! *game-info* 'game (the-as game-save #f) "desert-bd-start" (the-as resetter-spec #f))
   (set! weather-dark-mode #t)
   (set! in-pre-tutorial? #t)
+  (let ((vec (new 'static 'vector :x (meters 2387.7595) :y (meters 36.5880) :z (meters 539.4780) :w 1.0)))
+    (spawn-warp-gate vec "warp-gate-intro" 45)
+    (task-arrow-custom vec #t)
+  )
   (set-master-mode 'game)
   0
   )
@@ -744,6 +748,7 @@
          (auto-save-command 'create-file 0 0 this #f)
          )
         (('loading)
+         (set! weather-dark-mode #f)
          (set! (-> v1-7 last-slot-saved) a2-1)
          (auto-save-command 'restore 0 a2-1 this #f)
          (set! (-> (the-as menu-missions-option (-> *missions-options* options 0)) current-index) 0.0)

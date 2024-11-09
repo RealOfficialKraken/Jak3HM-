@@ -145,9 +145,15 @@
   (define log-sec 0)
   (define log-id 0)
 
+  ;; test-level stuff
+  (define test-level-loaded? #f)
+
+  (define warp-room-spawned? #f)
+  (define warp-room-tutorial? #f)
+
   (define *spawn-vec* (new-stack-vector0))
   (defun-extern boss-brute! vector none)
-  (define weather-dark-mode #t)
+  (define weather-dark-mode #f)
   (define in-pre-tutorial? #f)
 
   (defun-extern give-random-weapon (none))
@@ -196,10 +202,16 @@
 
   (define arena-token-count 0)
   (defun-extern spawn-gun-upgrade vector float none)
-  (defun-extern task-arrow-custom vector symbol)
+  (defun-extern task-arrow-custom vector symbol none)
 
   (define kill-eco-delay #f)
   (define killeci 0)
+
+  (define global-degree 0)
+  (defun-extern spawn-warp-gate vector string int none)
+  (declare-type warp-gate process-drawable)
+  (define *warp-gate-dark* (the-as entity warp-gate))
+  (define test-level-loaded-dark? #f)
 
 
 ;; +++game-items
