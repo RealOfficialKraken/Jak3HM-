@@ -1007,6 +1007,7 @@
 (defun intro-play ()
   (set! (-> *setting-control* user-default border-mode) #t)
   (set! (-> *level* play?) (-> *setting-control* user-default border-mode))
+  (set! in-pre-tutorial? #f)
   (process-spawn
     scene-player
     :init scene-player-init

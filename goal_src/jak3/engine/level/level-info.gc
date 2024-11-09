@@ -10062,26 +10062,6 @@
                        :on-goto #f
                        :vis-nick 'wasdoors
                        :vehicle-type #x1b
-                       :want-count 5
-                       :want (new 'static 'inline-array level-buffer-state-small 4
-                         (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
-                         (new 'static 'level-buffer-state-small :name 'waswide :display? 'display)
-                         (new 'static 'level-buffer-state-small :name 'wasdoors :display? 'display)
-                         (new 'static 'level-buffer-state-small :name 'wascitya :display? 'display)
-                         )
-                       :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
-                       )
-                      (new 'static 'continue-point
-                       :name "wasdoors-warp-overworld"
-                       :level 'wasdoors
-                       :flags (continue-flags warp-gate)
-                       :trans (new 'static 'vector :x (meters 2254.46)  :y (meters 30.70)  :z (meters 149.23) :w 1.0)
-                       :camera-trans (new 'static 'vector :x (meters 2258.5446) :y (meters 35.8559) :z (meters 163.9900) :w 1.0)
-                       :quat (new 'static 'vector4h :data (new 'static 'array int16 4 0 #xc46 0 #x7f64))
-                       :camera-rot (new 'static 'array int16 9 32760 0 -632 121 32124 6441 619 6445 32118)
-                       :on-goto #f
-                       :vis-nick 'wasdoors
-                       :vehicle-type #x1b
                        :want-count 4
                        :want (new 'static 'inline-array level-buffer-state-small 4
                          (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
@@ -12636,6 +12616,26 @@
                      :camera-trans (new 'static 'vector :x 9272728.0 :y 147014.05 :z 1009150.4 :w 1.0)
                      :quat (new 'static 'vector4h :data (new 'static 'array int16 4 -36 #x5dfc 22 #x56de))
                      :camera-rot (new 'static 'array int16 9 #x796a 0 -10364 #x4b5 #x7f20 #xe21 #x2834 -3810 #x7899)
+                     :on-goto #f
+                     :vis-nick 'desert
+                     :vehicle-type #x1c
+                     :want-count 4
+                     :want (new 'static 'inline-array level-buffer-state-small 4
+                       (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
+                       (new 'static 'level-buffer-state-small :name 'desert-game :display? 'display)
+                       (new 'static 'level-buffer-state-small :name 'wasdoors :display? 'display)
+                       (new 'static 'level-buffer-state-small :name 'desertb :display? 'display)
+                       )
+                     :want-sound (new 'static 'array symbol 3 'wasall1 'desert1 'desert2)
+                     )
+                      (new 'static 'continue-point
+                     :name "desert-warp-overworld"
+                     :level 'desert
+                     :flags (continue-flags no-auto race)
+                     :trans (new 'static 'vector :x (meters 2254.46)  :y (meters 30.70)  :z (meters 149.23) :w 1.0)
+                     :camera-trans (new 'static 'vector :x (meters 2258.5446) :y (meters 35.8559) :z (meters 163.9900) :w 1.0)
+                     :quat (new 'static 'vector4h :data (new 'static 'array int16 4 0 #xc46 0 #x7f64))
+                     :camera-rot (new 'static 'array int16 9 32760 0 -632 121 32124 6441 619 6445 32118)
                      :on-goto #f
                      :vis-nick 'desert
                      :vehicle-type #x1c
