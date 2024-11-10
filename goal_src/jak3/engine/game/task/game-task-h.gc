@@ -163,6 +163,7 @@
   (city-start-introduction)
   (city-start-resolution)
   (desert-interceptors-attack)
+  (desert-interceptors-attack-exclude)
   (desert-vehicle-training-1-introduction)
   (desert-vehicle-training-2-introduction)
   (arena-training-1-introduction)
@@ -1097,6 +1098,7 @@
   (gaticon-197)
   (gaticon-198)
   (gaticon-199)
+  (none)
   )
 ;; ---game-task-icon
 

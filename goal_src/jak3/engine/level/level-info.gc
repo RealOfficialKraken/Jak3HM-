@@ -10072,13 +10072,13 @@
                        :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
                        )
                        (new 'static 'continue-point
-                       :name "wasdoors-warp-dark"
+                       :name "wasdoors-warp-overworld"
                        :level 'wasdoors
-                       :flags (continue-flags warp-gate)
-                       :trans (new 'static 'vector :x (meters 2384.7390)  :y (meters 36.5538)  :z (meters 537.5184) :w 1.0)
-                       :camera-trans (new 'static 'vector :x (meters 2378.7707) :y (meters 41.6999) :z (meters 526.5350) :w 1.0)
+                       :flags (continue-flags no-auto warp-gate)
+                       :trans (new 'static 'vector :x (meters 2255.1242)  :y (meters 30.6497)  :z (meters 155.6433) :w 1.0)
+                       :camera-trans (new 'static 'vector :x (meters 2255.5307) :y (meters 30.6592) :z (meters 155.0451) :w 1.0)
                        :quat (new 'static 'vector4h :data (new 'static 'array int16 4 0 #xc46 0 #x7f64))
-                       :camera-rot (new 'static 'array int16 9 32760 0 -632 121 32124 6441 619 6445 32118)
+                       :camera-rot (new 'static 'array int16 9 #x7fd7 0 -1595 #xbe #x7f0c #xf6c #x62e -3954 #x7ee8)
                        :on-goto #f
                        :vis-nick 'wasdoors
                        :vehicle-type #x1b
@@ -12629,13 +12629,13 @@
                      :want-sound (new 'static 'array symbol 3 'wasall1 'desert1 'desert2)
                      )
                       (new 'static 'continue-point
-                     :name "desert-warp-overworld"
+                     :name "desert-warp-dark"
                      :level 'desert
-                     :flags (continue-flags no-auto race)
-                     :trans (new 'static 'vector :x (meters 2254.46)  :y (meters 30.70)  :z (meters 149.23) :w 1.0)
-                     :camera-trans (new 'static 'vector :x (meters 2258.5446) :y (meters 35.8559) :z (meters 163.9900) :w 1.0)
+                     :flags (continue-flags no-auto warp-gate)
+                     :trans (new 'static 'vector :x (meters 2384.7390)  :y (meters 36.5538)  :z (meters 537.5184) :w 1.0)
+                     :camera-trans (new 'static 'vector :x (meters 2383.6655) :y (meters 40.5380) :z (meters 520.4531) :w 1.0)
                      :quat (new 'static 'vector4h :data (new 'static 'array int16 4 0 #xc46 0 #x7f64))
-                     :camera-rot (new 'static 'array int16 9 32760 0 -632 121 32124 6441 619 6445 32118)
+                     :camera-rot (new 'static 'array int16 9 #x796a 0 -10364 #x4b5 #x7f20 #xe21 #x2834 -3810 #x7899)
                      :on-goto #f
                      :vis-nick 'desert
                      :vehicle-type #x1c

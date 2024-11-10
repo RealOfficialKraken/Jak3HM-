@@ -50,6 +50,12 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
 
 (define menu-unlocked? #f)
 
+(defun km-current-continue ((arg0 string) (arg1 debug-menu-msg))
+  (if (= arg1 (debug-menu-msg press))
+      (start 'play (get-continue-by-name *game-info* arg0))
+      )
+  (string= (-> (get-current-continue-forced *game-info*) name) arg0)
+  )
 
 (defun camera-locked ((draw? symbol) (cameye? symbol) (grab? symbol))
   (send-event *target* 'draw draw?)
@@ -203,7 +209,7 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
 
     
 
-(when ;dark gate spawn
+(when ;wasdoors gate spawn
     (and
         (= (pause-allowed?) #t)
         *target*
@@ -217,7 +223,7 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
     (set! test-level-loaded? #t)
 )
 
-(when ;dark gate despawn
+(when ;wasdoors gate despawn
     (and
         (= (pause-allowed?) #t)
         *target*
@@ -232,13 +238,14 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
     (kill-by-name "warp-gate-dark" *default-pool*)
 )
 
-(when ;overworld gate spawn
+(when ;desert gate spawn
     (and
         (= (pause-allowed?) #t)
         *target*
         (= test-level-loaded-dark? #f)
         (= weather-dark-mode #t)
-        (= (-> (level-get-target-inside *level*) name) 'wasdoors)
+        (= in-pre-tutorial? #f)
+        (= (-> (level-get-target-inside *level*) name) 'desert)
     )
         (let ((dark-v (new 'static 'vector  :x (meters 2384.7390)  :y (meters 36.5538)  :z (meters 537.5184)  :w 1.0)))
             (spawn-warp-gate-dark dark-v "warp-gate-overworld" 90)
@@ -247,12 +254,12 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
 )
 
 (when 
-    (and ;overworld gate despawn
+    (and ;desert gate despawn
         (= (pause-allowed?) #t)
         *target*
         (or
             (= weather-dark-mode #f)
-            (!= (-> (level-get-target-inside *level*) name) 'wasdoors)
+            (!= (-> (level-get-target-inside *level*) name) 'desert)
         )
         (= test-level-loaded-dark? #t)
     )
@@ -306,6 +313,7 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
     (let ((vec (new 'static 'vector :x (meters 2387.7595) :y (meters 36.5880) :z (meters 539.4780) :w 1.0)))
     (when (>= (vector-vector-distance (target-pos 0) vec) 8200000.0)
         (intro-play)
+        (kill-by-name "warp-gate-intro" *default-pool*)
         (set! weather-dark-mode #f)
     )
   )
@@ -2298,6 +2306,24 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
     (none)
 )
 
+(defun toggle-dark-mode ()
+    (cond 
+      ((= weather-dark-mode #t)
+        (task-node-open! (game-task-node desert-interceptors-attack) #t)
+        (kill-by-name "dust-storm-randomizer" *default-pool*)
+        (reset-actors 'life)
+        (set! weather-dark-mode #f)
+      )
+      ((= weather-dark-mode #f)
+        (reset-actors 'life)
+        (spawn-dust-storm)
+        (set! weather-dark-mode #t)
+        (task-node-close! (game-task-node desert-interceptors-attack) #f)
+      )
+    )
+    (none)
+  )
+
 (defun runs-on-blackout ()
     (kill-by-name "Fallen Satellite" *default-pool*)
     (kill-by-name "manipy-sat" *default-pool*)
@@ -2308,16 +2334,21 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
     (set! desert-spawn-mission-oasis #f)
     (kill-all-sat)
     (when 
-    (task-node-closed? (game-task-node arena-training-1-resolution))
+        (task-node-closed? (game-task-node arena-training-1-resolution))
         (set! arena-token-count 0)
         (set! in-tutorial? #f)
         (set! tutorial-freeze 0)
         (set! tutorial-msg 0)
-        )
-
-        (when 
+    )
+    (when 
         (task-node-open? (game-task-node wascity-pre-game-wait))
-            (task-node-close! (game-task-node wascity-pre-game-resolution) #t)
-        )
+        (task-node-close! (game-task-node wascity-pre-game-resolution) #t)
+    )
+    (when (and 
+                (<= (-> *target* fact health) 0.0)
+                (= weather-dark-mode #t)
+            )
+        (set! weather-dark-mode #f)
+    )
     (none)
 )

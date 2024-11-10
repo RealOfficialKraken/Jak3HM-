@@ -212,6 +212,9 @@
   (declare-type warp-gate process-drawable)
   (define *warp-gate-dark* (the-as entity warp-gate))
   (define test-level-loaded-dark? #f)
+  (defun-extern toggle-dark-mode none)
+
+  (defun-extern spawn-dust-storm none)
 
 
 ;; +++game-items

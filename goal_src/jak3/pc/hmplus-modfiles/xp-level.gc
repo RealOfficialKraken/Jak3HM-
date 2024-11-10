@@ -508,19 +508,36 @@
                     (when (or (= hud-timer-on? #t) (= r3-noto #t))
                         (set! health-pos 80)
                     )
-                    (clear matt-str)
-                    (clear *pc-encoded-matt-str*)
-                    (format matt-str "~s~%~%<COLOR_WHITE>~s~d"
-                    enemy-string
-                    color-string
-                    enemy-noto
+                    (when (= weather-dark-mode #f)
+                        (clear matt-str)
+                        (clear *pc-encoded-matt-str*)
+                        (format matt-str "~s~%~%<COLOR_WHITE>~s~d"
+                        enemy-string
+                        color-string
+                        enemy-noto
+                        )
+                        (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+                        (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+                        (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+                        (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 255 health-pos 0.0 (font-color default) (font-flags middle shadow kerning large))))
+                        (set! (-> font-ctx scale) 0.325)
+                        (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
                     )
-                    (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
-                    (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
-                    (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
-                    (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 255 health-pos 0.0 (font-color default) (font-flags middle shadow kerning large))))
-                    (set! (-> font-ctx scale) 0.325)
-                    (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+                    (when (= weather-dark-mode #t)
+                        (clear matt-str)
+                        (clear *pc-encoded-matt-str*)
+                        (format matt-str "~s~%~%<COLOR_WHITE>~s<COLOR_RED>??"
+                        enemy-string
+                        color-string
+                        enemy-noto
+                        )
+                        (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+                        (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+                        (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+                        (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 255 health-pos 0.0 (font-color default) (font-flags middle shadow kerning large))))
+                        (set! (-> font-ctx scale) 0.325)
+                        (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+                    )
                 )
                 (let (
                             (level-cap hpbar-max-hit-points)
@@ -568,206 +585,232 @@
 
         ;level based enemy-levels
 
-        (when ;WASCITYA
-            (and
-                (= (-> (level-get-target-inside *level*) name) 'wascitya)
-                (!= enemy-noto 1)
-            )
-            (set! enemy-noto 1)
-        )
-        (when ;WASCITYB
-            (and
-                (= (-> (level-get-target-inside *level*) name) 'wascityb)
-                (not (task-node-open? (game-task-node wascity-pre-game-battle)))
-                (!= enemy-noto 2)
-            )
-            (set! enemy-noto 2)
-        )
-        (when ;ARENA FIGHT 1
-            (and
-                (task-node-open? (game-task-node arena-fight-1-fight))
-                (!= enemy-noto 1)
-            )
-            (set! enemy-noto 1)
-        )
-        (when ;ARENA FIGHT 2
-            (and
-                (task-node-open? (game-task-node arena-fight-2-fight))
-                (!= enemy-noto notoriety-level)
-            )
-            (set! enemy-noto (+ notoriety-level 3))
-        )
-        (when ;ARENA FIGHT 3
-            (and
-                (task-node-open? (game-task-node arena-fight-3-fight))
-                (!= enemy-noto (+ notoriety-level 10))
-            )
-            (set! enemy-noto (+ notoriety-level 10))
-        )
-        (when ;DESERT
-            (and
-                (= (-> (level-get-target-inside *level*) name) 'desert)
-                (= in-satbattle? #f)
-                (!= enemy-noto notoriety-level)
-                (= start-was-uprising #f)
-            )
-            (when (>= notoriety-level 3)
-                (set! enemy-noto (- notoriety-level 2))
-                (set! start-was-uprising #t)
-                (set! wasi 0)
-            )
-            (when (< notoriety-level 3)
-                (set! enemy-noto notoriety-level)
-            )
-            (set! cdr-satbattle #t)
-            (set! cdr-i (rand-vu-int-range 2400 14000))
-        )
         (when
-            (and
-                (task-node-closed? (game-task-node desert-oasis-defense-meeting))
-                (not (task-node-closed? (game-task-node desert-oasis-defense-resolution)))
-                (= (-> (level-get-target-inside *level*) name) 'desert)
-                (!= enemy-noto 26)
+            (and 
+                (not (logtest? (-> *game-info* secrets) (game-secrets hero-mode)))
+                (= weather-dark-mode #t)
             )
-                (set! enemy-noto 26)
-                )
-        (when ;VOLCANOA
-            (and
-                (or 
-                    (= (-> (level-get-target-inside *level*) name) 'volcanoa)
-                    (= (-> (level-get-target-inside *level*) name) 'volcanob)
-                    (= (-> (level-get-target-inside *level*) name) 'volcanox)
-                )
-                (!= enemy-noto 11)
-            )
-            (set! enemy-noto 11)
-        )
-        (when ;TEMPLEA
-            (and
-                (= (-> (level-get-target-inside *level*) name) 'templea)
-                (!= enemy-noto 11)
-            )
-            (set! enemy-noto 11)
-        )
-        (when ;TEMPLEB
-            (and
-                (= (-> (level-get-target-inside *level*) name) 'templeb)
-                (!= enemy-noto 14)
-            )
-            (set! enemy-noto 14)
-        )
-        (when ;MINE
-            (and
-                (or 
-                    (= (-> (level-get-target-inside *level*) name) 'minea)
-                    (= (-> (level-get-target-inside *level*) name) 'mineb)
-                    (= (-> (level-get-target-inside *level*) name) 'minec)
-                )
+            (when ;DARK-WORLD
                 (and
-                    (!= enemy-noto 15)
-                    (!= enemy-noto 16)
+                    (!= enemy-noto 154)
+                )
+                (set! enemy-noto 154)
+            )
+        )
+
+        (when 
+            (and 
+                (not (logtest? (-> *game-info* secrets) (game-secrets hero-mode)))
+                (= weather-dark-mode #f)
+            )
+            (when ;WASDOORS
+                (and
+                    (= (-> (level-get-target-inside *level*) name) 'wasdoors)
+                    (!= enemy-noto 1)
+                )
+                (set! enemy-noto 1)
+            )
+            (when ;WASCITYA
+                (and
+                    (= (-> (level-get-target-inside *level*) name) 'wascitya)
+                    (!= enemy-noto 1)
+                )
+                (set! enemy-noto 1)
+            )
+            (when ;WASCITYB
+                (and
+                    (= (-> (level-get-target-inside *level*) name) 'wascityb)
+                    (not (task-node-open? (game-task-node wascity-pre-game-battle)))
+                    (!= enemy-noto 2)
+                )
+                (set! enemy-noto 2)
+            )
+            (when ;ARENA FIGHT 1
+                (and
+                    (task-node-open? (game-task-node arena-fight-1-fight))
+                    (!= enemy-noto 1)
+                )
+                (set! enemy-noto 1)
+            )
+            (when ;ARENA FIGHT 2
+                (and
+                    (task-node-open? (game-task-node arena-fight-2-fight))
+                    (!= enemy-noto notoriety-level)
+                )
+                (set! enemy-noto (+ notoriety-level 3))
+            )
+            (when ;ARENA FIGHT 3
+                (and
+                    (task-node-open? (game-task-node arena-fight-3-fight))
+                    (!= enemy-noto (+ notoriety-level 10))
+                )
+                (set! enemy-noto (+ notoriety-level 10))
+            )
+            (when ;DESERT
+                (and
+                    (= (-> (level-get-target-inside *level*) name) 'desert)
+                    (= in-satbattle? #f)
+                    (!= enemy-noto notoriety-level)
+                    (= start-was-uprising #f)
+                )
+                (when (>= notoriety-level 3)
+                    (set! enemy-noto (- notoriety-level 2))
+                    (set! start-was-uprising #t)
+                    (set! wasi 0)
+                )
+                (when (< notoriety-level 3)
+                    (set! enemy-noto notoriety-level)
+                )
+                (set! cdr-satbattle #t)
+                (set! cdr-i (rand-vu-int-range 2400 14000))
+            )
+            (when
+                (and
+                    (task-node-closed? (game-task-node desert-oasis-defense-meeting))
+                    (not (task-node-closed? (game-task-node desert-oasis-defense-resolution)))
+                    (= (-> (level-get-target-inside *level*) name) 'desert)
+                    (!= enemy-noto 26)
+                )
+                    (set! enemy-noto 26)
+                    )
+            (when ;VOLCANOA
+                (and
+                    (or 
+                        (= (-> (level-get-target-inside *level*) name) 'volcanoa)
+                        (= (-> (level-get-target-inside *level*) name) 'volcanob)
+                        (= (-> (level-get-target-inside *level*) name) 'volcanox)
+                    )
+                    (!= enemy-noto 11)
+                )
+                (set! enemy-noto 11)
+            )
+            (when ;TEMPLEA
+                (and
+                    (= (-> (level-get-target-inside *level*) name) 'templea)
+                    (!= enemy-noto 11)
+                )
+                (set! enemy-noto 11)
+            )
+            (when ;TEMPLEB
+                (and
+                    (= (-> (level-get-target-inside *level*) name) 'templeb)
+                    (!= enemy-noto 14)
+                )
+                (set! enemy-noto 14)
+            )
+            (when ;MINE
+                (and
+                    (or 
+                        (= (-> (level-get-target-inside *level*) name) 'minea)
+                        (= (-> (level-get-target-inside *level*) name) 'mineb)
+                        (= (-> (level-get-target-inside *level*) name) 'minec)
+                    )
+                    (and
+                        (!= enemy-noto 15)
+                        (!= enemy-noto 16)
+                        (!= enemy-noto 17)
+                        (!= enemy-noto 18)
+                    )
+                )
+                (set! enemy-noto (rand-vu-int-range 15 18))
+            )
+            (when ;CTYGENB
+                (and
+                    (= (-> (level-get-target-inside *level*) name) 'ctygenb)
                     (!= enemy-noto 17)
+                )
+                (set! enemy-noto 17)
+            )
+            (when ;SEW1
+                (and
+                    (= (-> (level-get-target-inside *level*) name) 'sewa)
                     (!= enemy-noto 18)
+                    (!= enemy-noto 19)
                 )
+                (set! enemy-noto (rand-vu-int-range 18 19))
             )
-            (set! enemy-noto (rand-vu-int-range 15 18))
-        )
-        (when ;CTYGENB
-            (and
-                (= (-> (level-get-target-inside *level*) name) 'ctygenb)
-                (!= enemy-noto 17)
-            )
-            (set! enemy-noto 17)
-        )
-        (when ;SEW1
-            (and
-                (= (-> (level-get-target-inside *level*) name) 'sewa)
-                (!= enemy-noto 18)
-                (!= enemy-noto 19)
-            )
-            (set! enemy-noto (rand-vu-int-range 18 19))
-        )
-        (when ;ctyport
-            (and
-                (= (-> (level-get-target-inside *level*) name) 'ctyport)
-                (!= enemy-noto 19)
-                (!= enemy-noto 20)
-            )
-            (set! enemy-noto (rand-vu-int-range 19 20))
-        )
-        (when ;ctyinda
-            (and
-                (= (-> (level-get-target-inside *level*) name) 'ctyinda)
-                (!= enemy-noto 21)
-                (!= enemy-noto 22)
-            )
-            (set! enemy-noto (rand-vu-int-range 21 22))
-        )
-        (when ;ctyindb
-            (and
-                (= (-> (level-get-target-inside *level*) name) 'ctyindb)
-                (!= enemy-noto 23)
-                (!= enemy-noto 24)
-                (!= enemy-noto 25)
-                (!= enemy-noto 26)
-                (!= enemy-noto 27)
-                (!= enemy-noto 28)
-            )
-            (set! enemy-noto (rand-vu-int-range 23 28))
-        )
-        (when ;ctysluma
-            (and
-                (= (-> (level-get-target-inside *level*) name) 'ctysluma)
-                (= (-> (level-get-target-inside *level*) name) 'ctyslumb)
-                (= (-> (level-get-target-inside *level*) name) 'ctyslumc)
-                (!= enemy-noto 29)
-                (!= enemy-noto 30)
-                (!= enemy-noto 31)
-                (!= enemy-noto 32)
-                (!= enemy-noto 33)
-                (!= enemy-noto 34)
-            )
-            (set! enemy-noto (rand-vu-int-range 29 34))
-        )
-        (when ;mhcitya+mhcityb
-            (and
-                (or
-                    (= (-> (level-get-target-inside *level*) name) 'mhcitya)
-                    (= (-> (level-get-target-inside *level*) name) 'mhcityb)
+            (when ;ctyport
+                (and
+                    (= (-> (level-get-target-inside *level*) name) 'ctyport)
+                    (!= enemy-noto 19)
+                    (!= enemy-noto 20)
                 )
-                (!= enemy-noto 23)
-                (!= enemy-noto 24)
-                (!= enemy-noto 25)
-                (!= enemy-noto 26)
-                (!= enemy-noto 27)
-                (!= enemy-noto 28)
+                (set! enemy-noto (rand-vu-int-range 19 20))
             )
-            (set! enemy-noto (rand-vu-int-range 23 28))
-        )
-
-        (when 
-        (and 
-            (= start-was-uprising #t)
-            (= (-> (level-get-target-inside *level*) name) 'desert)
-            *target*
-            (not *scene-player*)
-            (= (paused?) #f)
-            (= (pause-allowed?) #t)
-        )
-            (+! wasi 1)
-            (when (= wasi 3000)
-                (+! enemy-noto 1)
-                (set! wasi 0)
+            (when ;ctyinda
+                (and
+                    (= (-> (level-get-target-inside *level*) name) 'ctyinda)
+                    (!= enemy-noto 21)
+                    (!= enemy-noto 22)
+                )
+                (set! enemy-noto (rand-vu-int-range 21 22))
             )
-        )
+            (when ;ctyindb
+                (and
+                    (= (-> (level-get-target-inside *level*) name) 'ctyindb)
+                    (!= enemy-noto 23)
+                    (!= enemy-noto 24)
+                    (!= enemy-noto 25)
+                    (!= enemy-noto 26)
+                    (!= enemy-noto 27)
+                    (!= enemy-noto 28)
+                )
+                (set! enemy-noto (rand-vu-int-range 23 28))
+            )
+            (when ;ctysluma
+                (and
+                    (= (-> (level-get-target-inside *level*) name) 'ctysluma)
+                    (= (-> (level-get-target-inside *level*) name) 'ctyslumb)
+                    (= (-> (level-get-target-inside *level*) name) 'ctyslumc)
+                    (!= enemy-noto 29)
+                    (!= enemy-noto 30)
+                    (!= enemy-noto 31)
+                    (!= enemy-noto 32)
+                    (!= enemy-noto 33)
+                    (!= enemy-noto 34)
+                )
+                (set! enemy-noto (rand-vu-int-range 29 34))
+            )
+            (when ;mhcitya+mhcityb
+                (and
+                    (or
+                        (= (-> (level-get-target-inside *level*) name) 'mhcitya)
+                        (= (-> (level-get-target-inside *level*) name) 'mhcityb)
+                    )
+                    (!= enemy-noto 23)
+                    (!= enemy-noto 24)
+                    (!= enemy-noto 25)
+                    (!= enemy-noto 26)
+                    (!= enemy-noto 27)
+                    (!= enemy-noto 28)
+                )
+                (set! enemy-noto (rand-vu-int-range 23 28))
+            )
 
-        (when 
-            (and
-                (!= (-> (level-get-target-inside *level*) name) 'desert)
+            (when 
+            (and 
                 (= start-was-uprising #t)
+                (= (-> (level-get-target-inside *level*) name) 'desert)
+                *target*
+                (not *scene-player*)
+                (= (paused?) #f)
+                (= (pause-allowed?) #t)
             )
-                (set! wasi 0)
-                (set! start-was-uprising #f)
+                (+! wasi 1)
+                (when (= wasi 3000)
+                    (+! enemy-noto 1)
+                    (set! wasi 0)
+                )
+            )
+
+            (when 
+                (and
+                    (!= (-> (level-get-target-inside *level*) name) 'desert)
+                    (= start-was-uprising #t)
+                )
+                    (set! wasi 0)
+                    (set! start-was-uprising #f)
+                )
             )
 
 

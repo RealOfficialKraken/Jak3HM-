@@ -33,6 +33,10 @@
                      (set-setting! 'dust-storm-sound-scalar #f 1.0 0)
                      (rand-vu-float-range 0.35 0.6)
                      )
+                     ((= weather-dark-mode #t)
+                        (set-setting! 'dust-storm-sound-scalar #f 1.0 0)
+                        (rand-vu-float-range 1.0 1.0)
+                     )
                     (else
                       (remove-setting! 'dust-storm-sound-scalar)
                       (rand-vu-float-range 0.08 0.2)
@@ -905,4 +909,9 @@
     )
   0
   (none)
+  )
+
+  (defun spawn-dust-storm ()
+    (process-spawn dust-storm-randomizer :name "dust-storm-randomizer")
+    (none)
   )

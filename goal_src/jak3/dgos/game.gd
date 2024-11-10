@@ -502,4 +502,5 @@
   "maker-projectile.o"
   "planetboss.o"
   "brute-dagger.o"
+  "look-for-warpgate.o"
  ))

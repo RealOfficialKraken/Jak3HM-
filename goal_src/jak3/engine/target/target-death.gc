@@ -37,6 +37,11 @@
   (the-as continue-point #f)
   )
 
+  (define double-check-warp? #f)
+  (declare-type dust-storm-randomizer process)
+
+  
+
 ;; WARN: Found some very strange gotos. Check result carefully, this is not well tested.
 (defbehavior arrive-at-continue target ((arg0 continue-point))
   (cond
@@ -61,42 +66,33 @@
      (let ((s5-1 (new 'static 'vector))
            (a2-0 (find-nearest-entity (-> arg0 trans) warp-gate))
            (wgo-vec (new 'static 'vector  :x (meters 2254.46)  :y (meters 30.70)  :z (meters 149.23)  :w 1.0))
-           (wgd-vec (new 'static 'vector :x (meters 2384.7390)  :y (meters 36.5538)  :z (meters 537.5184) :w 1.0))
+           (wgd-vec (new 'static 'vector  :x (meters 2384.7390)  :y (meters 36.5538)  :z (meters 537.5184)  :w 1.0))
            (wg (search-process-tree *active-pool* (lambda ((p process)) (type? p warp-gate))))
            )
-       (when a2-0
+       (when (and
+                a2-0
+                (not (string= (-> arg0 name) "desert-warp-dark"))
+                (not (string= (-> arg0 name) "wasdoors-warp-overworld"))
+              )
          (set! (-> s5-1 quad) (-> a2-0 extra trans quad))
          (+! (-> s5-1 y) 9011.2)
          (go target-warp-in s5-1 (-> arg0 trans) a2-0)
          )
-         (when (string= (-> arg0 name) "wasdoors-warp-dark")
+         (when (string= (-> arg0 name) "desert-warp-dark")
           (set! (-> s5-1 quad) (-> wgd-vec quad))
           (+! (-> s5-1 y) 9011.2)
-          (cond 
-          ((= weather-dark-mode #t)
-            (set! weather-dark-mode #f)
-          )
-          (else 
-            (set! weather-dark-mode #t)
-          )
-          )
+          (toggle-dark-mode)
+          (set-continue! *game-info* "wasdoors-start" #t)
           (go target-warp-in s5-1 (-> arg0 trans) (the-as object #f))
-          (print "YOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
          )
          (when (string= (-> arg0 name) "wasdoors-warp-overworld")
           (set! (-> s5-1 quad) (-> wgo-vec quad))
           (+! (-> s5-1 y) 9011.2)
-          (cond 
-          ((= weather-dark-mode #t)
-            (set! weather-dark-mode #f)
-          )
-          (else 
-            (set! weather-dark-mode #t)
-          )
-          )
+          (toggle-dark-mode)
+          (set-continue! *game-info* "wasdoors-start" #t)
           (go target-warp-in s5-1 (-> arg0 trans) (the-as object #f))
-          (print "YOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
          )
+         (set! double-check-warp? #f)
        )
      )
     ((logtest? (continue-flags indax) (-> arg0 flags))
