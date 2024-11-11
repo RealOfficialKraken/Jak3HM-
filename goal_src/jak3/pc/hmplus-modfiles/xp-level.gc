@@ -232,9 +232,9 @@
 )
 
 (defun collect-orb-xp! ((xp-gain float))
-    (+! (-> *game-info* karma) (/ (* xp-gain enemy-noto) 3.5))
+    (+! (-> *game-info* karma) (/ (* xp-gain notoriety-level) 3.5))
     (set! xp-string "Orb Collected")
-    (set! *xp-gain* (/ (* xp-gain enemy-noto) 3.5))
+    (set! *xp-gain* (/ (* xp-gain notoriety-level) 3.5))
     (set! xp-draw #t)
     (set! xpi 0)
     (none)
@@ -465,10 +465,10 @@
         (when (= enemy-hp #t)
             (+! hpi 1)
                 (let (
-                    (color-string "<COLOR_WHITE>") ;color tags for levels
+                    (color-string "<COLOR_WHITE>Lv. ") ;color tags for levels
                     )
                     (when (and  
-                                (< enemy-noto (+ notoriety-level 3))
+                                (<= enemy-noto (+ notoriety-level 3))
                                 (> enemy-noto (- notoriety-level 3))
                                 (not (string= color-string "<COLOR_YELLOW>Lv. "))
                             )
@@ -481,7 +481,7 @@
                                 (set! color-string "<COLOR_RED>Lv. ")
                             )
                             (when (and  
-                                (< enemy-noto (- notoriety-level 3))
+                                (<= enemy-noto (- notoriety-level 3))
                                 (> enemy-noto (- notoriety-level 7))
                                 (not (string= color-string "<COLOR_GREEN>Lv. "))
                             )

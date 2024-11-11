@@ -1508,7 +1508,7 @@
               :on-complete #f
               :on-fail #f
               )
-            :borrow '((wasdoors 0 ldampeck special) (desert-game alias desert copy desboss1 special) (waswide 0 lbiped display))
+            :borrow '((desert-game alias desert copy desboss1 special) (waswide 0 lbiped display))
             :open? #f
             :on-close #f
             :reset #f
@@ -3098,7 +3098,7 @@
                 :scene #f
                 )
               )
-            :flags (game-task-node-flag set-task-mask save-on-life exclusive act1)
+            :flags (game-task-node-flag set-task-mask save-on-life act1)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node desert-artifact-race-1-resolution)
               (game-task-node none)
