@@ -492,7 +492,6 @@
   "dp-bipedal.o"
   "marauder.o"
   "marauder-c.o"
-  ;"desert-storm.o"
   "maker-part.o"
   "target-turret-shot.o"
   "target-turret.o"
@@ -503,4 +502,5 @@
   "planetboss.o"
   "brute-dagger.o"
   "look-for-warpgate.o"
+  "warp-room.o"
  ))

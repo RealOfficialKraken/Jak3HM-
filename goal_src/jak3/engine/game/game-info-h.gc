@@ -147,6 +147,8 @@
 
   ;; test-level stuff
   (define test-level-loaded? #f)
+  (define test-level-loaded-dark? #f)
+  (define test-level-loaded-mine? #f)
 
   (define warp-room-spawned? #f)
   (define warp-room-tutorial? #f)
@@ -211,8 +213,10 @@
   (defun-extern spawn-warp-gate vector string int none)
   (declare-type warp-gate process-drawable)
   (define *warp-gate-dark* (the-as entity warp-gate))
-  (define test-level-loaded-dark? #f)
   (defun-extern toggle-dark-mode none)
+
+  (define in-mine-level? #f)
+  (defun-extern mine-level (none))
 
   (defun-extern spawn-dust-storm none)
 

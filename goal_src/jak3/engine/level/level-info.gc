@@ -6644,6 +6644,24 @@
                       )
                     :want-sound (new 'static 'array symbol 3 'mine4 'mine5 'mine6)
                     )
+                    (new 'static 'continue-point
+                    :name "minea-warp"
+                    :level 'minea
+                    :flags (continue-flags no-auto warp-gate)
+                    :trans (new 'static 'vector :x (meters 248.4198) :y (meters 97.9794) :z (meters -6.5898) :w 1.0)
+                    :camera-trans (new 'static 'vector :x (meters 248.4160) :y (meters 102.9642) :z (meters -18.4370) :w 1.0)
+                    :quat (new 'static 'vector4h :data (new 'static 'array int16 4 0 -17792 0 #x6b77))
+                    :camera-rot (new 'static 'array int16 9 #x57f5 0 -23798 #xa7e #x7f2d #x9ee #x5c5f -3699 #x5765)
+                    :on-goto #f
+                    :vis-nick 'minec
+                    :vehicle-type #x1b
+                    :want-count 2
+                    :want (new 'static 'inline-array level-buffer-state-small 2
+                      (new 'static 'level-buffer-state-small :name 'minea :display? 'display)
+                      (new 'static 'level-buffer-state-small :name 'minec :display? 'display)
+                      )
+                    :want-sound (new 'static 'array symbol 3 'mine4 'mine5 'mine6)
+                    )
                   (new 'static 'continue-point
                     :name "minea-boss"
                     :level 'minea
@@ -10077,6 +10095,26 @@
                        :flags (continue-flags no-auto warp-gate)
                        :trans (new 'static 'vector :x (meters 2255.1242)  :y (meters 30.6497)  :z (meters 155.6433) :w 1.0)
                        :camera-trans (new 'static 'vector :x (meters 2255.5307) :y (meters 30.6592) :z (meters 155.0451) :w 1.0)
+                       :quat (new 'static 'vector4h :data (new 'static 'array int16 4 0 #xc46 0 #x7f64))
+                       :camera-rot (new 'static 'array int16 9 #x7fd7 0 -1595 #xbe #x7f0c #xf6c #x62e -3954 #x7ee8)
+                       :on-goto #f
+                       :vis-nick 'wasdoors
+                       :vehicle-type #x1b
+                       :want-count 4
+                       :want (new 'static 'inline-array level-buffer-state-small 4
+                         (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
+                         (new 'static 'level-buffer-state-small :name 'desertb :display? 'display)
+                         (new 'static 'level-buffer-state-small :name 'wasdoors :display? 'display)
+                         (new 'static 'level-buffer-state-small :name 'desert-game :display? 'display)
+                         )
+                       :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
+                       )
+                       (new 'static 'continue-point
+                       :name "wasdoors-warp-mine"
+                       :level 'wasdoors
+                       :flags (continue-flags no-auto warp-gate)
+                       :trans (new 'static 'vector :x (meters 2295.1145)  :y (meters 32.3285)  :z (meters 157.5470) :w 1.0)
+                       :camera-trans (new 'static 'vector :x (meters 2291.3276) :y (meters 37.4200) :z (meters 169.2213) :w 1.0)
                        :quat (new 'static 'vector4h :data (new 'static 'array int16 4 0 #xc46 0 #x7f64))
                        :camera-rot (new 'static 'array int16 9 #x7fd7 0 -1595 #xbe #x7f0c #xf6c #x62e -3954 #x7ee8)
                        :on-goto #f
