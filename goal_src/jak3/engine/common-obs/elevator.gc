@@ -607,14 +607,7 @@
       (set-setting! 'lightjak #f 0.0 0)
       (toggle-fence-collision self #t)
       (if (logtest? (-> self params flags) (elevator-flags grab))
-          (when (and
-                (or 
-                  (= in-mine-level? #f)
-                )
-                (= (-> self type) min-boss-elev)
-              )
-                (process-grab? *target* #f)
-              )
+          (process-grab? *target* #f)
           )
       )
     (let ((gp-1 (-> self on-activate)))
@@ -646,12 +639,7 @@
     (if (and (logtest? (-> self params flags) (elevator-flags grab))
              (and *target* (not (logtest? (-> *target* focus-status) (focus-status grabbed))))
              )
-        (when (and
-                (or 
-                  (= in-mine-level? #f)
-                )
-                (= (-> self type) min-boss-elev)
-              )
+        (when (= in-mine-level? #f)
                 (process-grab? *target* #f)
               )
         )

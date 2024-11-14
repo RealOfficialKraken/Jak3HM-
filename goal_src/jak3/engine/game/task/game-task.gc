@@ -1308,6 +1308,15 @@
             :play-continue "desert-ashelin"
             :kiosk-play-continue #f
             )
+            (new 'static 'game-task-info
+            :name "desert-ship-lod"
+            :pre-play-node (game-task-node desert-ship-lod-introduction)
+            :kiosk-play-node (game-task-node none)
+            :pre-play-continue "wasdoors-city"
+            :play-node (game-task-node desert-ship-lod-introduction)
+            :play-continue "wasdoors-city"
+            :kiosk-play-continue #f
+            )
           )
         )
   (set! (-> game-info sub-task-list)
@@ -23632,6 +23641,28 @@
             :suck-death-count #xa5
             :faction-commands '()
             )
+            (new 'static 'game-task-node-info
+            :level 'desert
+            :task (game-task desert-interceptors)
+            :name "desert-ship-lod-introduction"
+            :when-open #f
+            :flags (game-task-node-flag bbush act1 save-on-life)
+            :parent-node (new 'static 'array game-task-node 4
+              (game-task-node desert-interceptors-attack)
+              (game-task-node none)
+              (game-task-node none)
+              (game-task-node none)
+              )
+            :on-open #f
+            :manager #f
+            :borrow '()
+            :open? #f
+            :on-close #f
+            :reset #f
+            :suck-death-count #xa5
+            :command-index #x4
+            :faction-commands '()
+            )
           )
         )
   (set! (-> game-info mission-list) (new 'global 'boxed-array game-task-node-info 410))
@@ -23730,3 +23761,6 @@
       )
     )
   )
+
+
+;(foresta 0 lforring display)

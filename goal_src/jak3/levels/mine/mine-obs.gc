@@ -1937,9 +1937,7 @@
 ;; WARN: Return type mismatch int vs object.
 (defmethod go-initial-state ((this min-elec-gate))
   (if (task-node-closed? (game-task-node mine-blow-elevator))
-      (when (= in-mine-level? #f)
-        ((method-of-type elec-gate go-initial-state) this)
-      )
+      ((method-of-type elec-gate go-initial-state) this)
       (go (method-of-object this idle))
       )
   0
@@ -1967,7 +1965,6 @@
 (defstate running (min-boss-elev)
   :virtual #t
   :post (behavior ()
-    (when (= in-mine-level? #f)
       (let ((gp-0 (-> self root quat))
           (s5-0 (-> self entity quat))
           )
@@ -2001,7 +1998,6 @@
           )
         )
       )
-    )
     )
   )
 

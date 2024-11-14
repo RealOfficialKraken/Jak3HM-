@@ -152,6 +152,7 @@
   (desert-spawn-task-oasis 139)
   (desert-spawn-task-deserta 140)
   (desert-brute-killed 141)
+  (desert-ship-lod 142)
   )
 ;; ---game-task
 
@@ -578,6 +579,7 @@
   (desert-spawn-task-deserta-resolution)
   (desert-brute-killed-introduction)
   (desert-brute-killed-resolution)
+  (desert-ship-lod-introduction)
   )
 ;; ---game-task-node
 

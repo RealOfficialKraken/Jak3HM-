@@ -2244,6 +2244,45 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
     )
     (none)
   )
+  
+(defskelgroup skel-dm-ship dm-ship dm-ship-lod0-jg dm-ship-idle-ja
+              ((dm-ship-lod0-mg (meters 999999)))
+              :bounds (static-spherem 0 0 0 100)
+              :origin-joint-index 3
+              :global-effects 32
+              )
+
+(defun dm-dark-ship ((vec vector))
+    (let ((quater (new 'stack-no-clear 'vector))
+      (ship 
+          (handle->process 
+            (the manipy 
+            (process-spawn manipy
+            :init
+            manipy-init
+            vec
+            #f
+            (art-group-get-by-name *level* "skel-dm-ship" (the (pointer level) #f))
+            #f
+            0
+            #f
+            :name "dm-ship"
+            :from *default-dead-pool*
+            :stack-size #x18000
+            )
+          )
+        )
+      )
+    )
+    (set! (-> quater x) 30000.0)
+    (set! (-> quater y) 30000.0)
+    (set! (-> quater z) 30000.0)
+    (set! (-> quater w) 8000.0)
+    (send-event ship 'scale quater)
+    (send-event ship 'shadow #t)
+    )
+    (none)
+)
 
 (defun runs-on-blackout ()
     (kill-by-name "Fallen Satellite" *default-pool*)

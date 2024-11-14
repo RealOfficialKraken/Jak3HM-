@@ -504,7 +504,10 @@
           )
           (("warp-gate-dark")
             (set! (-> this continue) #f)
-            (when (not (search-process-tree *active-pool* (lambda ((p process)) (type? p kleever-npc))))
+            (when (and
+                    (not (search-process-tree *active-pool* (lambda ((p process)) (type? p kleever-npc))))
+                    (= in-desert-game-task? #f)
+                  )
               (set! (-> this continue) (get-continue-by-name *game-info* "desert-warp-dark"))
             )
             (set! (-> this on-activate) '())
