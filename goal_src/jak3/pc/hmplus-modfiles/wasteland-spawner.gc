@@ -262,6 +262,62 @@
     (none)
 )
 
+(define *waste-town-spawners* #f)
+(define *waste-ship-anchor* #f)
+(define in-anchor? #f)
+(define preanchor-town #f)
+
+(defun dm-dark-ship ((vec vector))
+    (let ((quater (new 'stack-no-clear 'quaternion :x 6.0 :y 6.0 :z 6.0 :w 1.0))
+        (veccy (new 'stack-no-clear 'vector))
+      (ship 
+            (the manipy 
+            (ppointer->process 
+                (process-spawn manipy
+                :init
+                manipy-init
+                vec
+                #f
+                (art-group-get-by-name *level* "skel-dm-ship" (the (pointer level) #f))
+                #f
+                0
+                #f
+                :name "dm-ship"
+                :from *default-dead-pool*
+                :stack-size #x18000
+                )
+            )
+          )
+      )
+    )
+    (send-event ship 'shadow #t)
+    (set! (-> veccy x) 55.0)
+    (set! (-> veccy y) 55.0)
+    (set! (-> veccy z) 55.0)
+    (send-event ship 'scale veccy)
+    (send-event ship 'max-vis-dist 9999999.0)
+    )
+    (none)
+)
+
+(defun quickanchor-town ()
+    (dm-dark-ship (new 'static 'vector
+        :x (meters 2009.4299) 
+        :y (meters 211.6466) 
+        :z (meters 2744.2368)
+        :w 1.0))
+    (set! in-anchor? #t)
+    (set! *waste-ship-anchor* #t)
+    (none)
+)
+
+(defun anchor-town ()
+    (when (= in-desert-game-task? #f)
+        (set! preanchor-town #t)
+    )
+    (none)
+)
+
 (defun spawn-kliever ((vec vector))
     (let ((kleever (the manipy
                     (ppointer->process (process-spawn manipy
@@ -1015,7 +1071,73 @@
             )
         )
     )
-
+    (when (and
+            (= in-desert-game-task? #f)
+            (= in-anchor? #t)
+          )
+        ;(< (vector-vector-distance (target-pos 0) v1-0) 8000000.0)
+        ;WATSE TOWN ANCHOR
+        (let (
+              (v1-0 (new 'static 'vector :x (meters 3016.7360) :y (meters 27.2753) :z (meters 2760.5092) :w 1.0))
+             )
+            #|(when (and 
+                    (not *waste-town-spawners*)
+                    (= (-> (level-get-target-inside *level*) name) 'desert)
+                  )  
+                    (let (
+                        (orig (vector-vector-distance (target-pos 0) v1-0))
+                        (v2-1 (new 'static 'vector :x (meters 2943.0642) :y (meters 23.8945) :z (meters 2740.1596) :w 1.0))
+                        (v2-2 (new 'static 'vector :x (meters 2974.6882) :y (meters 21.9412) :z (meters 2725.8251) :w 1.0))
+                        (v2-3 (new 'static 'vector :x (meters 2973.0068) :y (meters 22.0262) :z (meters 2755.4614) :w 1.0))
+                    )
+                        (when (< orig 700000.0)
+                            (set! *waste-town-spawners* #t)
+                            (set! enemy-noto 16)
+                            ;(process-spawn brute-boss v2-1 :name "Marauder Brute")
+                            (process-spawn marauder v2-2 :name "Marauder Ambusher")
+                            (process-spawn marauder v2-3 :name "Marauder Ambusher")
+                        )
+                        (when (>= orig 750000.0)
+                            (kill-by-name "Marauder Ambusher" *default-pool*)
+                            (set! *waste-town-spawners* #f)
+                        )
+                    )
+            )|#
+            (when 
+                (and
+                    (or 
+                        (= (-> (level-get-target-inside *level*) name) 'desert)
+                        (= (-> (level-get-target-inside *level*) name) 'desertg)
+                    )
+                    (not *waste-ship-anchor*)
+                )
+                (set! *waste-ship-anchor* #t)
+                (dm-dark-ship 
+                    (new 'static 'vector 
+                        :x (meters 3016.7360) 
+                        :y (meters 314.2753) 
+                        :z (meters 2760.5092) 
+                        :w 1.0
+                    )
+                )
+            )
+            (when 
+                (and
+                    (!= (-> (level-get-target-inside *level*) name) 'desert)
+                    (= *waste-ship-anchor* #t)
+                )
+                (kill-by-name "dm-ship" *default-pool*)
+                (set! *waste-ship-anchor* #f)
+            )
+            (when
+                (and 
+                    (= *waste-ship-anchor* #t)
+                    (= )
+                )
+                    
+                )
+        )
+    )
     
     (none)
 )

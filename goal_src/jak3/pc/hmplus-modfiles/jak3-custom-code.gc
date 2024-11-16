@@ -2252,37 +2252,30 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
               :global-effects 32
               )
 
-(defun dm-dark-ship ((vec vector))
-    (let ((quater (new 'stack-no-clear 'vector))
-      (ship 
-          (handle->process 
-            (the manipy 
-            (process-spawn manipy
-            :init
-            manipy-init
-            vec
-            #f
-            (art-group-get-by-name *level* "skel-dm-ship" (the (pointer level) #f))
-            #f
-            0
-            #f
-            :name "dm-ship"
-            :from *default-dead-pool*
-            :stack-size #x18000
-            )
-          )
-        )
-      )
+#|(deftype dm-skyship (process-drawable)
+  ((size          vector)
+   (pos           vector)
+   )
+  (:state-methods
+    idle
     )
-    (set! (-> quater x) 30000.0)
-    (set! (-> quater y) 30000.0)
-    (set! (-> quater z) 30000.0)
-    (set! (-> quater w) 8000.0)
-    (send-event ship 'scale quater)
-    (send-event ship 'shadow #t)
+  )
+
+  (defstate idle (dm-skyship)
+    :virtual #t
+    :code (behavior ()
+        (suspend)
     )
-    (none)
-)
+  )
+
+  (defbehavior dm-skyship-init-by-other dm-skyship ((vec vector))
+    (vector-copy! (-> self root trans) vec)
+    (quaternion-identity! (-> self root quat))
+    (vector-identity! (-> self root scale))
+    (go (method-of-object self idle))
+  )|#
+
+
 
 (defun runs-on-blackout ()
     (kill-by-name "Fallen Satellite" *default-pool*)

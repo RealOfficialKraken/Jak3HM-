@@ -506,9 +506,14 @@
             (set! (-> this continue) #f)
             (when (and
                     (not (search-process-tree *active-pool* (lambda ((p process)) (type? p kleever-npc))))
-                    (= in-desert-game-task? #f)
                   )
               (set! (-> this continue) (get-continue-by-name *game-info* "desert-warp-dark"))
+              (when (and 
+                      (task-node-closed? (game-task-node desert-rescue-introduction))
+                      (not (task-node-closed? (game-task-node desert-rescue-hold-doors)))
+                    )
+                (set! (-> this continue) (get-continue-by-name *game-info* "desert-warp-dark"))
+              )
             )
             (set! (-> this on-activate) '())
             (set! (-> this wait-for) '())
