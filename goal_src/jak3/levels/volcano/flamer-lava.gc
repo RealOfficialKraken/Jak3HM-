@@ -213,7 +213,7 @@
     :maximum-rotation-rate (degrees 360)
     :notice-nav-radius (meters 55)
     :frustration-distance (meters 8)
-    :frustration-time (seconds 4)
+    :frustration-time (seconds 1.3)
     :blocked-time (seconds 0.3)
     :circle-dist-lo 20480.0
     :circle-dist-hi 61440.0
@@ -1063,7 +1063,7 @@
       )
     (let ((gp-1 (get-focus! self)))
       (if (and gp-1
-               (time-elapsed? (-> self last-fire-time) (the int (* 300.0 (rand-vu-float-range 3.0 6.0))))
+               (time-elapsed? (-> self last-fire-time) (the int (* 300.0 (rand-vu-float-range 0.1 0.3))))
                (< (vector-vector-distance (get-trans gp-1 3) (-> self root trans)) 245760.0)
                )
           (go-virtual attack)
@@ -1111,7 +1111,7 @@
                  (set! (-> v1-24 attack-id) a0-25)
                  (set! (-> gp-2 attack-id) a0-25)
                  )
-               (set! (-> gp-2 timeout) (seconds 4))
+               (set! (-> gp-2 timeout) (seconds 1.3))
                (sound-play "gren-launch")
                (spawn-projectile metalhead-grenade-shot gp-2 self *default-dead-pool*)
                )

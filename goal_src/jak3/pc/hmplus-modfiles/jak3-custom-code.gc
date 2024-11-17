@@ -227,14 +227,6 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
     (logior! (-> *game-info* features) (game-feature 
                                                     gun
                                                     board
-                                                    gun-upgrade-yellow-ammo-1
-                                                    gun-upgrade-yellow-ammo-2
-                                                    gun-upgrade-red-ammo-1
-                                                    gun-upgrade-red-ammo-2
-                                                    gun-upgrade-blue-ammo-1
-                                                    gun-upgrade-blue-ammo-2
-                                                    gun-upgrade-dark-ammo-1
-                                                    gun-upgrade-dark-ammo-2
                                                     board-launch
                                                     board-zap
     ))
@@ -1687,26 +1679,26 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
                 )
                 (when (= log-sec 7)
                     (set! di-s "I've got me good eyes lookin on a new set")
-                    (set! di-s2 "of ivories, real BIG ones.")
+                    (set! di-s2 "of flashy ivories.")
                     (set! di-s3 "")
                     (set! di-s4 "")
                 )
                 (when (= log-sec 8)
-                    (set! di-s "I always find him in the armpit of the wasteland")
-                    (set! di-s2 "His name is Brute Dagger, and he's not one to")
-                    (set! di-s3 "mess around with.")
+                    (set! di-s "There ain't much life out there in the desert,")
+                    (set! di-s2 "but we've found some nice manta-ray nests")
+                    (set! di-s3 "")
                     (set! di-s4 "")
                 )
                 (when (= log-sec 9)
-                    (set! di-s "But I'm sure with yer lil' hero title,")
-                    (set! di-s2 "you'll find a way to take him down") 
-                    (set! di-s3 "Hee hee he")
+                    (set! di-s "Their skin is both a treasure, and delicious")
+                    (set! di-s2 "") 
+                    (set! di-s3 "")
                     (set! di-s4 "")
                 )
                 (when (= log-sec 10)
-                    (set! di-s "Go get em, lads")
-                    (set! di-s2 "") 
-                    (set! di-s3 "")
+                    (set! di-s "Go get me 16 of those suckers, and I'll")
+                    (set! di-s2 "reconsider about lettin ye look for some") 
+                    (set! di-s3 "arsenal")
                     (set! di-s4 "")
                 )
                 (when (= log-sec 11)

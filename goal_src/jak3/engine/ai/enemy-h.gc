@@ -257,7 +257,6 @@
    (enemy-flags                enemy-flag)
    (enemy-info                 enemy-info)
    (hit-points                 float)
-   (enemy-noto                 int)
    (gnd-collide-with           collide-spec)
    (attack-id                  uint32)
    (persistent-attack-id       uint32)
@@ -291,6 +290,7 @@
    (on-death                   pair)
    (idle-anim-player           idle-control          :inline)
    (rand-gen                   symbol)
+   (enemy-noto                 int)
    )
   (:state-methods
     dormant

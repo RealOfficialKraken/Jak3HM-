@@ -483,6 +483,28 @@
     )
   )
 
+  (defmethod eval-on-notice ((this warp-gate))
+  (let ((s5-0 (script-eval (-> this on-notice))))
+    (cond
+      ((= s5-0 'hide)
+       (logior! (-> this draw status) (draw-control-status no-draw))
+       (set! (-> this continue) #f)
+       )
+      (s5-0
+        (logclear! (-> this draw status) (draw-control-status no-draw))
+        (set! (-> this continue) (get-continue-by-name *game-info* (the-as string (car s5-0))))
+        (set! (-> this on-activate) (the-as pair (car (cdr s5-0))))
+        (set! (-> this wait-for) (the-as pair (car (cdr (cdr s5-0)))))
+        (set! (-> this on-close) (the-as pair (car (cdr (cdr (cdr s5-0))))))
+        )
+      (else
+        (set! (-> this continue) #f)
+        )
+      )
+    )
+  (-> this continue)
+  )
+
 
   (defmethod handle-notice ((this warp-gate))
   (let ((s5-0 (script-eval (-> this on-notice))))
@@ -506,6 +528,7 @@
             (set! (-> this continue) #f)
             (when (and
                     (not (search-process-tree *active-pool* (lambda ((p process)) (type? p kleever-npc))))
+                    (not (task-node-open? (game-task-node desert-oasis-defense-meeting)))
                   )
               (set! (-> this continue) (get-continue-by-name *game-info* "desert-warp-dark"))
               (when (and 
@@ -580,7 +603,22 @@
     (set-time! (-> self state-time))
     (update-transforms (-> self root))
     (until #f
-      (handle-notice self)
+      (let ((v1 (-> self name)))
+        (cond
+          ((and
+            (not (string= v1 "warp-gate-mine-overworld"))
+            (not (string= v1 "warp-gate-mine"))
+            (not (string= v1 "warp-gate-overworld"))
+            (not (string= v1 "warp-gate-dark"))
+            (not (string= v1 "warp-gate-intro"))
+          )
+            (eval-on-notice self)
+          )
+          (else 
+            (handle-notice self)
+          )
+          )
+      )
       (when (and (and *target*
                       (and (>= (-> self distance) (vector-vector-distance (-> self root trans) (-> *target* control trans)))
                            (not (logtest? (focus-status teleporting) (-> *target* focus-status)))

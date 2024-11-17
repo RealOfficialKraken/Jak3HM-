@@ -204,10 +204,10 @@
 ;XP dist
 
 (defun vehicle-killed? ((xp-gain float))
-    (+! (-> *game-info* fuel) (/ (* xp-gain enemy-noto) 2))
-    (+! (-> *game-info* karma) (/ (* xp-gain enemy-noto) 4))
+    (+! (-> *game-info* fuel) (/ (* xp-gain draw-enemy-noto) 2))
+    (+! (-> *game-info* karma) (/ (* xp-gain draw-enemy-noto) 4))
     (set! xp-string "Marauder Killed")
-    (set! *xp-gain* (/ (* xp-gain enemy-noto) 2))
+    (set! *xp-gain* (/ (* xp-gain draw-enemy-noto) 2))
     (set! xp-draw #t)
     (set! xpi 0)
     (none)
@@ -223,9 +223,12 @@
 )
 
 (defun enemy-killed? ((xp-gain float))
-    (+! (-> *game-info* karma) (/ (* xp-gain enemy-noto) 1.5))
+    (+! (-> *game-info* karma) (/ (* xp-gain draw-enemy-noto) 1.5))
+    (when (focus-test? *target* pilot)
+        (+! (-> *game-info* fuel) (/ (* xp-gain draw-enemy-noto) 4))
+    )
     (set! xp-string "Enemy Killed")
-    (set! *xp-gain* (/ (* xp-gain enemy-noto) 1.5))
+    (set! *xp-gain* (/ (* xp-gain draw-enemy-noto) 1.5))
     (set! xp-draw #t)
     (set! xpi 0)
     (none)
@@ -514,7 +517,7 @@
                         (format matt-str "~s~%~%<COLOR_WHITE>~s~d"
                         enemy-string
                         color-string
-                        enemy-noto
+                        draw-enemy-noto
                         )
                         (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
                         (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -529,7 +532,6 @@
                         (format matt-str "~s~%~%<COLOR_WHITE>~s<COLOR_RED>??"
                         enemy-string
                         color-string
-                        enemy-noto
                         )
                         (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
                         (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -663,6 +665,16 @@
                 )
                 (set! cdr-satbattle #t)
                 (set! cdr-i (rand-vu-int-range 2400 14000))
+            )
+            (when ;NESTA-B
+                (and
+                    (or 
+                        (= (-> (level-get-target-inside *level*) name) 'nsta)
+                        (= (-> (level-get-target-inside *level*) name) 'nstb)
+                    )
+                    (!= enemy-noto 13)
+                )
+                (set! enemy-noto 13)
             )
             (when
                 (and
@@ -1009,7 +1021,13 @@
         (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
     )
 
-    (when (focus-test? *target* pilot) ;for the turbo meter, also referenced in wvehicle.gc and wvehicle-util.gc
+    (when (and 
+            *target*
+            (not *scene-player*)
+            (= (paused?) #f)
+            (= (pause-allowed?) #t)
+            (focus-test? *target* pilot)
+            ) ;for the turbo meter, also referenced in wvehicle.gc and wvehicle-util.gc
             (let 
             (
                 (x 7)

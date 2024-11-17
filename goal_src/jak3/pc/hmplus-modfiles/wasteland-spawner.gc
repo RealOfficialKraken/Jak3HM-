@@ -1129,13 +1129,6 @@
                 (kill-by-name "dm-ship" *default-pool*)
                 (set! *waste-ship-anchor* #f)
             )
-            (when
-                (and 
-                    (= *waste-ship-anchor* #t)
-                    (= )
-                )
-                    
-                )
         )
     )
     
