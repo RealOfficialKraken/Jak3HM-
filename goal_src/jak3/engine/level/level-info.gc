@@ -10129,6 +10129,26 @@
                          )
                        :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
                        )
+                       (new 'static 'continue-point
+                       :name "wasdoors-warp-volcano"
+                       :level 'wasdoors
+                       :flags (continue-flags no-auto warp-gate)
+                       :trans (new 'static 'vector :x (meters 2231.6354)  :y (meters 31.86)  :z (meters 158.30) :w 1.0)
+                       :camera-trans (new 'static 'vector :x (meters 2291.3276) :y (meters 37.4200) :z (meters 169.2213) :w 1.0)
+                       :quat (new 'static 'vector4h :data (new 'static 'array int16 4 0 #xc46 0 #x7f64))
+                       :camera-rot (new 'static 'array int16 9 #x7fd7 0 -1595 #xbe #x7f0c #xf6c #x62e -3954 #x7ee8)
+                       :on-goto #f
+                       :vis-nick 'wasdoors
+                       :vehicle-type #x1b
+                       :want-count 4
+                       :want (new 'static 'inline-array level-buffer-state-small 4
+                         (new 'static 'level-buffer-state-small :name 'wasall :display? 'special)
+                         (new 'static 'level-buffer-state-small :name 'desertb :display? 'display)
+                         (new 'static 'level-buffer-state-small :name 'wasdoors :display? 'display)
+                         (new 'static 'level-buffer-state-small :name 'desert-game :display? 'display)
+                         )
+                       :want-sound (new 'static 'array symbol 3 'wasall1 'wascity1 'desert1)
+                       )
                      (new 'static 'continue-point
                        :name "wasdoors-desert"
                        :level 'wasdoors
@@ -18296,6 +18316,26 @@
         :flags (continue-flags no-auto)
         :trans (new 'static 'vector :x -188915.72 :y 82159.2 :z -1453556.1 :w 1.0)
         :camera-trans (new 'static 'vector :x -153738.44 :y 103218.38 :z -1490743.8 :w 1.0)
+        :quat (new 'static 'vector4h :data (new 'static 'array int16 4 -39 #x29c0 0 -30971))
+        :camera-rot (new 'static 'array int16 9 #x5cf9 0 #x57f5 -2729 #x7f0c #xb46 -22350 -3974 #x5c49)
+        :on-goto #f
+        :vis-nick 'volcanoa
+        :vehicle-type #x1b
+        :want-count 2
+        :want (new 'static 'inline-array level-buffer-state-small 2
+          (new 'static 'level-buffer-state-small :name 'volcanoa :display? 'display)
+          (new 'static 'level-buffer-state-small :name 'volcanox :display? 'display)
+          )
+        :want-sound (new 'static 'array symbol 3 'volcano1 'volcano2 'volcano3)
+        )
+        ;:trans (new 'static 'vector :x (meters -16.2419) :y (meters 5.7) :z (meters -245.2322) :w 1.0)
+        ;:camera-trans (new 'static 'vector :x (meters -15.5712) :y (meters 11.1468) :z (meters -231.4937) :w 1.0)
+      (new 'static 'continue-point
+        :name "volcanos-warp"
+        :level 'volcanoa
+        :flags (continue-flags no-auto warp-gate)
+        :trans (new 'static 'vector :x (meters -16.2419) :y (meters 5.7) :z (meters -245.2322) :w 1.0)
+        :camera-trans (new 'static 'vector :x (meters -15.5712) :y (meters 11.1468) :z (meters -231.4937) :w 1.0)
         :quat (new 'static 'vector4h :data (new 'static 'array int16 4 -39 #x29c0 0 -30971))
         :camera-rot (new 'static 'array int16 9 #x5cf9 0 #x57f5 -2729 #x7f0c #xb46 -22350 -3974 #x5c49)
         :on-goto #f

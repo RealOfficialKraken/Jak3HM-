@@ -192,6 +192,7 @@
   (define test-level-loaded? #f)
   (define test-level-loaded-dark? #f)
   (define test-level-loaded-mine? #f)
+  (define test-level-loaded-volcano? #f)
 
   (define warp-room-spawned? #f)
   (define warp-room-tutorial? #f)

@@ -279,7 +279,6 @@
       (dotimes (gp-2 (length *oasis-marauder-start*))
         (spawn-marauder self (-> *oasis-marauder-start* gp-2) #f)
         )
-        (set! in-desert-game-task? #t)
       (set-time! (-> self check-timer))
       (set-time! (-> self veh-fx-timer))
       (set! (-> self hud-counter)

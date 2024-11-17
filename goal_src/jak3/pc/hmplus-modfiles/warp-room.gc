@@ -13,11 +13,23 @@
         )
             (let ((dark-v (new 'static 'vector  :x (meters 2254.46)  :y (meters 30.70)  :z (meters 149.23)  :w 1.0)))
                 (spawn-warp-gate dark-v "warp-gate-dark" 90)
-        )
-        (let ((level-mine (new 'static 'vector  :x (meters 2296.7170)  :y (meters 32.5345)  :z (meters 153.7440)  :w 1.0)))
-                (spawn-warp-gate level-mine "warp-gate-mine-overworld" 94)
-        )
-        (set! test-level-loaded? #t)
+            )
+            (let ((level-mine (new 'static 'vector  :x (meters 2299.0676)  :y (meters 32.5507)  :z (meters 158.4272)  :w 1.0)))
+                (spawn-warp-gate level-mine "warp-gate-mine-overworld" 73)
+            )
+            (let ((level-volcano (new 'static 'vector  :x (meters 2231.6354)  :y (meters 31.86)  :z (meters 158.30)  :w 1.0)))
+                (spawn-warp-gate level-volcano "warp-gate-volcano-overworld" 125)
+            )
+            (let ((level-unnamed (new 'static 'vector  :x (meters 2213.6794)  :y (meters 33.5)  :z (meters 172.2017)  :w 1.0)))
+                (spawn-warp-gate level-unnamed "warp-gate-unnamed" 125)
+            )
+            (let ((level-unnamed (new 'static 'vector  :x (meters 2311.4011)  :y (meters 33.06)  :z (meters 176.9639)  :w 1.0)))
+                (spawn-warp-gate level-unnamed "warp-gate-unnamed" 50)
+            )
+            (let ((level-darkship (new 'static 'vector  :x (meters 2278.0166)  :y (meters 31.0716)  :z (meters 149.9975)  :w 1.0)))
+                (spawn-warp-gate level-darkship "warp-gate-darkship" 90)
+            )
+            (set! test-level-loaded? #t)
     )
 
     (when ;wasdoors warp gates despawn
@@ -34,6 +46,9 @@
         (set! *warp-gate-dark* #f)
         (kill-by-name "warp-gate-dark" *default-pool*)
         (kill-by-name "warp-gate-mine-overworld" *default-pool*)
+        (kill-by-name "warp-gate-volcano-overworld" *default-pool*)
+        (kill-by-name "warp-gate-darkship" *default-pool*)
+        (kill-by-name "warp-gate-unnamed" *default-pool*)
     )
 
     (when ;desert dark gate spawn
@@ -88,6 +103,41 @@
         )
             (set! test-level-loaded-mine? #f)
             (kill-by-name "warp-gate-mine" *default-pool*)
+    )
+
+    (when ;volcano gate spawn
+        (and
+            (= (pause-allowed?) #t)
+            *target*
+            (= test-level-loaded-volcano? #f)
+            (= in-pre-tutorial? #f)
+            (or 
+                (= (-> (level-get-target-inside *level*) name) 'volcanoa)
+                (= (-> (level-get-target-inside *level*) name) 'volcanob)
+                (= (-> (level-get-target-inside *level*) name) 'volcanoc)
+                (= (-> (level-get-target-inside *level*) name) 'volcanox)
+            )
+        )
+            (let ((volcano (new 'static 'vector :x (meters -16.2419) :y (meters 5.7) :z (meters -245.2322) :w 1.0)))
+                (spawn-warp-gate-dark volcano "warp-gate-volcano" 90)
+        )
+        (set! test-level-loaded-volcano? #t)
+    )
+
+    (when 
+        (and ;volcano gate despawn
+            (= (pause-allowed?) #t)
+            *target*
+            (and 
+                (!= (-> (level-get-target-inside *level*) name) 'volcanoa)
+                (!= (-> (level-get-target-inside *level*) name) 'volcanob)
+                (!= (-> (level-get-target-inside *level*) name) 'volcanoc)
+                (!= (-> (level-get-target-inside *level*) name) 'volcanox)
+            )
+            (= test-level-loaded-volcano? #t)
+        )
+            (set! test-level-loaded-volcano? #f)
+            (kill-by-name "warp-gate-volcano" *default-pool*)
     )
 
 
