@@ -40,6 +40,28 @@ a safe space. This will not occur while (= in-desert-game-task? #t)
 ---------------------------------------------------------------
 
 
+TODO:
+- create rest of enemy ID's and aliases
+- find a way to make a pickup-type, then add the skeleton for the eco crystals
+These will drop from any enemy at a rare chance, giving jak his darkjak special 
+powers after obtaining a certain amount
+- make a questline with kliever to unlock the upgrades in the secrets menu. 
+The questline should consist of going back to certain areas and killing select enemies
+- Make anchors in the wasteland and haven city
+These are giant scale battles that require a lot of skill and level to complete
+Winning these can give XP, orbs/gems, eco crystals, a weapon mod, or a gun mod 
+at rare chances.
+- create warp gates for the levels you cant travel back to
+These will be utilized with quests from NPCs: delivering something, killing X amount of
+enemies, finding something, and killing bosses
+
+BUGS:
+- jak has vulcan fury in arena 3
+- flamer seems way too fast
+- find a way to include dark-world with the oasis mission (if u can, ig)
+- some of the satellite fights crash the game still
+- decrease chances of weaponmod drop from satellites
+
 
 |#
 (defun-extern level-up! int none)
