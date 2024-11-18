@@ -18,7 +18,7 @@
 (defun-extern spawn-roaming-satellite vector none)
 
 
-(defun spawn-manipy-sat ((vec vector) (stri string))
+(defun spawn-manipy-sat ((vec vector) (stri string) (arrow? symbol))
   (process-spawn manipy
                  :init
                  manipy-init
@@ -29,15 +29,17 @@
                  0
                  #f
                  :name stri)
-    (let (
-        (gp-3 (new 'stack-no-clear 'task-arrow-params))
-        (self1 (the-as process #f))
+    (when arrow?
+        (let (
+            (gp-3 (new 'stack-no-clear 'task-arrow-params))
+            (self1 (the-as process #f))
+            )
+            (set! (-> gp-3 pos quad) (-> vec quad))
+            (quaternion-identity! (-> gp-3 quat))
+            (set! (-> gp-3 flags) (task-arrow-flags taf3 taf8))
+            (set! (-> gp-3 map-icon) (the-as uint 12))
+            (process-spawn task-arrow gp-3 :name "task-arrow-satellite")
         )
-        (set! (-> gp-3 pos quad) (-> vec quad))
-        (quaternion-identity! (-> gp-3 quat))
-        (set! (-> gp-3 flags) (task-arrow-flags taf3 taf8))
-        (set! (-> gp-3 map-icon) (the-as uint 12))
-        (process-spawn task-arrow gp-3 :name "task-arrow-satellite")
     )
   (none)
 )
@@ -751,7 +753,7 @@
                                 (= cdr-satbattle #f)
                                 (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
                             )
-                                (spawn-manipy-sat desert-spawn "manipy-sat-desertb1")
+                                (spawn-manipy-sat desert-spawn "manipy-sat-desertb1" #t)
                                 (kill-by-name "task-arrow-custom" *default-pool*)
                                 (set! spawned-desertb1-poi? #t)
                         )
@@ -794,7 +796,7 @@
                                 (= cdr-satbattle #f)
                                 (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
                             )
-                                (spawn-manipy-sat desert-spawn "manipy-sat-desertb2")
+                                (spawn-manipy-sat desert-spawn "manipy-sat-desertb2" #t)
                                 (kill-by-name "task-arrow-custom" *default-pool*)
                                 (set! spawned-desertb2-poi? #t)
                         )
@@ -836,7 +838,7 @@
                                 (= cdr-satbattle #f)
                                 (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
                             )
-                                (spawn-manipy-sat desert-spawn "manipy-sat-desertd1")
+                                (spawn-manipy-sat desert-spawn "manipy-sat-desertd1" #t)
                                 (kill-by-name "task-arrow-custom" *default-pool*)
                                 (set! spawned-desertd1-poi? #t)
                         )
@@ -878,7 +880,7 @@
                                 (= cdr-satbattle #f)
                                 (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
                             )
-                                (spawn-manipy-sat desert-spawn "manipy-sat-desertd2")
+                                (spawn-manipy-sat desert-spawn "manipy-sat-desertd2" #t)
                                 (kill-by-name "task-arrow-custom" *default-pool*)
                                 (set! spawned-desertd2-poi? #t)
                         )
@@ -920,7 +922,7 @@
                                 (= cdr-satbattle #f)
                                 (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
                             )
-                                (spawn-manipy-sat desert-spawn "manipy-sat-deserta1")
+                                (spawn-manipy-sat desert-spawn "manipy-sat-deserta1" #t)
                                 (kill-by-name "task-arrow-custom" *default-pool*)
                                 (set! spawned-deserta1-poi? #t)
                         )
@@ -962,7 +964,7 @@
                                 (= cdr-satbattle #f)
                                 (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
                             )
-                                (spawn-manipy-sat desert-spawn "manipy-sat-deserta2")
+                                (spawn-manipy-sat desert-spawn "manipy-sat-deserta2" #t)
                                 (kill-by-name "task-arrow-custom" *default-pool*)
                                 (set! spawned-deserta2-poi? #t)
                         )
@@ -1004,7 +1006,7 @@
                                 (= cdr-satbattle #f)
                                 (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
                             )
-                                (spawn-manipy-sat desert-spawn "manipy-sat-desertc1")
+                                (spawn-manipy-sat desert-spawn "manipy-sat-desertc1" #t)
                                 (kill-by-name "task-arrow-custom" *default-pool*)
                                 (set! spawned-desertc1-poi? #t)
                         )
@@ -1046,7 +1048,7 @@
                                 (= cdr-satbattle #f)
                                 (<= (vector-vector-distance (target-pos 0) desert-spawn) bigsphere-rad)
                             )
-                                (spawn-manipy-sat desert-spawn "manipy-sat-desertc2")
+                                (spawn-manipy-sat desert-spawn "manipy-sat-desertc2" #t)
                                 (kill-by-name "task-arrow-custom" *default-pool*)
                                 (set! spawned-desertc2-poi? #t)
                         )
@@ -1064,6 +1066,69 @@
                                     (set! enemy-noto (rand-vu-int-range 23 40))
                                 )
                                 (set! cdr-satbattle #t)
+
+                        )
+                    )
+                    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    ;;;;;;;;;;;;;;;;;;;;VOLCANO;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    (let ((desert-spawn 
+                        (new 'static 'vector 
+                        :x (meters -2.9549)
+                        :y (meters 2.7735)
+                        :z (meters -134.4601)
+                        :w 1.0))
+                        (s1 
+                        (new 'static 'vector 
+                        :x (meters 25.7504)
+                        :y (meters 2.2762)
+                        :z (meters -151.3469)
+                        :w 1.0))
+                        (s2 
+                        (new 'static 'vector 
+                        :x (meters -47.9361)
+                        :y (meters 2.2078)
+                        :z (meters -170.3293)
+                        :w 1.0)))
+                        (when (and 
+                                (= in-volcano-level? #t)
+                                (task-node-closed? (game-task-node volcano-darkeco-resolution))
+                                (and
+                                    (!= (-> (level-get-target-inside *level*) name) 'volcanoa)
+                                    (!= (-> (level-get-target-inside *level*) name) 'volcanob)
+                                    (!= (-> (level-get-target-inside *level*) name) 'volcanoc)
+                                    (!= (-> (level-get-target-inside *level*) name) 'volcanox)
+                                )
+                              )
+                              (set! in-volcano-level? #f)
+                        )
+                        (when (and 
+                                (= in-volcano-level? #f)
+                                (task-node-closed? (game-task-node volcano-darkeco-resolution))
+                                (or 
+                                    (= (-> (level-get-target-inside *level*) name) 'volcanoa)
+                                    (= (-> (level-get-target-inside *level*) name) 'volcanob)
+                                    (= (-> (level-get-target-inside *level*) name) 'volcanoc)
+                                    (= (-> (level-get-target-inside *level*) name) 'volcanox)
+                                )
+                              )
+                                (set! in-volcano-level? #t)
+                                (spawn-volcano-mobs)
+                              )
+                        (when 
+                            (and
+                                (not (search-process-tree *active-pool* (lambda ((p process)) (type? p dm-mine-spider-spawner))))
+                                (= in-volcano-level? #t)
+                                (= in-satbattle? #f)
+                                (<= (vector-vector-distance (target-pos 0) desert-spawn) noticesphere-rad)
+                            )
+                                (kill-by-name "manipy-sat" *default-pool*)
+                                (spawn-roaming-satellite desert-spawn)
+                                (process-spawn dm-mine-spider-spawner s1 :name "dm-spawner")
+                                (process-spawn dm-mine-spider-spawner s2 :name "dm-spawner")
+                                (set! in-satbattle? #t)
+                                (when (< enemy-noto 30)
+                                    (set! enemy-noto (rand-vu-int-range 19 30))
+                                )
 
                         )
                     )

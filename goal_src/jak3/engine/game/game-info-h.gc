@@ -43,6 +43,8 @@
 (define-extern mantis type)
 (define-extern spiky-frog type)
 (define-extern tomb-baby-spider type)
+(define-extern dm-mine-spider type)
+(define-extern neo-sat type)
 (defun remap-enemy-type-name ((en-type type))
   "returns the appropriate type name (symbol) for the stats tracker"
 
@@ -82,6 +84,8 @@
     ((type-type? en-type mantis) 'mantis)
     ((type-type? en-type spiky-frog) 'spiky-frog)
     ((type-type? en-type tomb-baby-spider) 'tomb-baby-spider)
+    ((type-type? en-type dm-mine-spider) 'dm-spider)
+    ((type-type? en-type neo-sat) 'neo-sat)
     (else (-> en-type symbol)))
   )
 
@@ -262,7 +266,12 @@
   (define in-mine-level? #f)
   (defun-extern mine-level (none))
 
+  (define in-volcano-level? #f)
+  (defun-extern volcano-level (none))
+
   (defun-extern spawn-dust-storm none)
+
+  (defun-extern spawn-manipy-sat vector string symbol none)
   
 
 

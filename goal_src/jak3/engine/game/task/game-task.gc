@@ -6112,8 +6112,8 @@
               :restart-info (new 'static 'resetter-params
                 :flags (resetter-flag auto-reset text-message)
                 :fail (new 'static 'resetter-spec
-                  :continue "desert-ashelin"
-                  :node (game-task-node desert-oasis-defense-battle)
+                  :continue "desert-ef-start"
+                  :node (game-task-node desert-oasis-defense-meeting)
                   :reset-mode 'try
                   :execute #f
                   )
@@ -6123,8 +6123,8 @@
               :quit-info (new 'static 'resetter-params
                 :flags (resetter-flag auto-reset)
                 :fail (new 'static 'resetter-spec
-                  :continue "desert-ashelin"
-                  :node (game-task-node desert-oasis-defense-battle)
+                  :continue "desert-ef-start"
+                  :node (game-task-node desert-oasis-defense-meeting)
                   :reset-mode 'life
                   :execute #f
                   )
@@ -6134,8 +6134,8 @@
               :fail-info (new 'static 'resetter-params
                 :flags (resetter-flag auto-reset)
                 :fail (new 'static 'resetter-spec
-                  :continue "desert-ashelin"
-                  :node (game-task-node desert-oasis-defense-battle)
+                  :continue "desert-ef-start"
+                  :node (game-task-node desert-oasis-defense-meeting)
                   :reset-mode 'life
                   :execute #f
                   )
@@ -6147,8 +6147,8 @@
                 :flags (resetter-flag auto-reset text-message no-audio no-slow-down)
                 :fail (new 'static 'resetter-spec :continue #f :reset-mode 'life :execute #f)
                 :retry (new 'static 'resetter-spec
-                  :continue "desert-ashelin"
-                  :node (game-task-node desert-oasis-defense-battle)
+                  :continue "desert-ef-start"
+                  :node (game-task-node desert-oasis-defense-meeting)
                   :reset-mode 'try
                   :execute #f
                   )

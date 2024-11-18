@@ -479,6 +479,7 @@
   "desertspawn-oasis.o"
   "desertspawn-deserta.o"
   "mod-save-stats.o"
+  "dm-mine-spider.o"
   "jak3-custom-code.o"
   "xp-level.o"
   "wasteland-spawner.o"

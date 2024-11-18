@@ -611,6 +611,7 @@
         )
             (give-weapon! "yellow-2" 1)
         )
+        (auto-save-user)
     )
 (none)
 )

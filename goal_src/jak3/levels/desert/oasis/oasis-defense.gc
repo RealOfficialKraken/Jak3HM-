@@ -239,9 +239,6 @@
               (set! (-> *was-squad-control* target-count) 0)
               0
               )
-            (if (and (< f30-0 819200.0) (-> *setting-control* user-current turbo))
-                (set-setting! 'turbo #f 0.0 0)
-                )
             (when (< f30-0 327680.0)
               (was-squad-manager-kill)
               (set-setting! 'stop-vehicle? #t 0.0 0)

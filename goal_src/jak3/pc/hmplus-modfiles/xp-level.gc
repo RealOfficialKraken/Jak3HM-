@@ -465,6 +465,8 @@
                 (set! (-> *game-info* karma) 0.0)
             )
 
+            ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;HPBAR;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
         (when (= enemy-hp #t)
             (+! hpi 1)
                 (let (
@@ -685,16 +687,32 @@
                 )
                     (set! enemy-noto 26)
                     )
-            (when ;VOLCANOA
+            (when ;VOLCANO MISSION
                 (and
                     (or 
                         (= (-> (level-get-target-inside *level*) name) 'volcanoa)
                         (= (-> (level-get-target-inside *level*) name) 'volcanob)
                         (= (-> (level-get-target-inside *level*) name) 'volcanox)
                     )
+                    (not (task-node-closed? (game-task-node volcano-darkeco-resolution)))
                     (!= enemy-noto 11)
                 )
                 (set! enemy-noto 11)
+            )
+            (when ;VOLCANO BACKTRACK LEVEL
+                (and
+                    (or 
+                        (= (-> (level-get-target-inside *level*) name) 'volcanoa)
+                        (= (-> (level-get-target-inside *level*) name) 'volcanob)
+                        (= (-> (level-get-target-inside *level*) name) 'volcanox)
+                    )
+                    (task-node-closed? (game-task-node volcano-darkeco-resolution))
+                    (or 
+                        (< enemy-noto 14)
+                        (> enemy-noto 20)
+                    )
+                )
+                (set! enemy-noto (rand-vu-int-range 14 20))
             )
             (when ;TEMPLEA
                 (and

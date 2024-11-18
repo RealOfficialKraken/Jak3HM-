@@ -86,8 +86,6 @@
   |#
 
 
-
-;; +++artifact-type
 (defenum artifact-type
   :type uint8
   (artifact-a)
@@ -95,10 +93,6 @@
   (artifact-c)
   (artifact-d)
   )
-;; ---artifact-type
-
-
-;; DECOMP BEGINS
 
 (deftype artifact-info (structure)
   ((pos            vector  :inline)

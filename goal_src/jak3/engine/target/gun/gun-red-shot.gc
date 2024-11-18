@@ -271,7 +271,7 @@
                                   'attack
                                   #f
                                   (static-attack-info :mask (vehicle-impulse-factor) ((id (-> this attack-id))
-                                                                                      (damage (+ (+ (/ (* (the float guns-level) 1.85) 2.0) 2.0) (/ notoriety-level 1.2)))
+                                                                                      (damage (+ (* (/ (* (the float guns-level) 6.85) 3.0) 2.0) (/ notoriety-level 1.2)))
                                                                                       (vehicle-damage-factor 3.0)
                                                                                       (vehicle-impulse-factor 1.0)
                                                                                       (mode 'explode)

@@ -54,10 +54,10 @@ at rare chances.
 - create warp gates for the levels you cant travel back to
 These will be utilized with quests from NPCs: delivering something, killing X amount of
 enemies, finding something, and killing bosses
+- Make mostly all enemies have faster attacks the higher the level they are
 
 BUGS:
 - jak has vulcan fury in arena 3
-- flamer seems way too fast
 - find a way to include dark-world with the oasis mission (if u can, ig)
 - some of the satellite fights crash the game still
 - decrease chances of weaponmod drop from satellites
@@ -69,6 +69,27 @@ BUGS:
 (defun-extern level-up-cars! int none)
 (defun-extern wasseem-attack-check none)
 (defun-extern spawn-brute-artifact none)
+
+(define spider-1-vec (new 'static 'vector 
+                        :x (meters -34.6815)
+                        :y (meters 2.3782)
+                        :z (meters -164.6925)
+                        :w 1.0))
+(define spider-2-vec (new 'static 'vector 
+                        :x (meters -50.4494)
+                        :y (meters 2.1483)
+                        :z (meters -180.6845)
+                        :w 1.0))
+(define spider-3-vec (new 'static 'vector 
+                        :x (meters 42.3747)
+                        :y (meters 16.1467)
+                        :z (meters -296.8571)
+                        :w 1.0))
+(define sat-volcano (new 'static 'vector 
+                        :x (meters -2.9549)
+                        :y (meters 2.7735)
+                        :z (meters -134.4601)
+                        :w 1.0))
 
 (define menu-unlocked? #f)
 
@@ -2275,6 +2296,52 @@ BUGS:
     )
     (none)
   )
+
+  (defun spawn-volcano-mobs ()
+    (let ((vsat (new 'static 'vector 
+                :x (meters -2.9549)
+                :y (meters 2.7735)
+                :z (meters -134.4601)
+                :w 1.0))
+            (vspwnr1 (new 'static 'vector 
+                :x (meters -34.6815)
+                :y (meters 2.3782)
+                :z (meters -164.6925)
+                :w 1.0))
+            (vspwnr2 (new 'static 'vector 
+                :x (meters -50.4494)
+                :y (meters 2.1483)
+                :z (meters -180.6845)
+                :w 1.0))
+            (vspwnr3 (new 'static 'vector 
+                :x (meters 42.3747)
+                :y (meters 16.1467)
+                :z (meters -296.8571)
+                :w 1.0))
+                )
+        (spawn-manipy-sat vsat "manipy-sat" #f)
+        ;(process-spawn dm-mine-spider-spawner vspwnr1 :name "dm-spawner")
+        (process-spawn dm-mine-spider-spawner vspwnr2 :name "dm-spawner")
+        (process-spawn dm-mine-spider-spawner vspwnr3 :name "dm-spawner")
+    )
+  )
+
+  (defun volcano-level ()
+    (cond 
+        ((= in-volcano-level? #f)
+            (reset-actors 'life)
+            (set! in-volcano-level? #t)
+            (spawn-volcano-mobs)
+        )
+        ((= in-volcano-level? #t)
+            (set! in-volcano-level? #f)
+            (reset-actors 'life)
+            (kill-by-name "dm-spawner" *default-pool*)
+            (kill-by-name "manipy-sat" *default-pool*)
+        )
+    )
+    (none)
+  )
   
 (defskelgroup skel-dm-ship dm-ship dm-ship-lod0-jg dm-ship-idle-ja
               ((dm-ship-lod0-mg (meters 999999)))
@@ -2317,6 +2384,10 @@ BUGS:
     (task-node-open! (game-task-node desert-spawn-task-deserta-goto-artifact) #t)
     (set! desert-spawn-mission-oasis #f)
     (kill-all-sat)
+    (when (= enemy-hp #t)
+        (set! enemy-hp #f)
+        (set! hpi 0)
+    )
     (when 
         (task-node-closed? (game-task-node arena-training-1-resolution))
         (set! arena-token-count 0)
@@ -2332,5 +2403,9 @@ BUGS:
         (toggle-dark-mode)
         (set-continue! *game-info* "wasdoors-city" #t)
       )
+    (when (= in-volcano-level? #t)
+        (kill-by-name "dm-spawner" *default-pool*)
+        (spawn-volcano-mobs)
+    )
     (none)
 )
