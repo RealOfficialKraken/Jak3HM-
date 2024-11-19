@@ -1173,6 +1173,7 @@
                     (or 
                         (= (-> (level-get-target-inside *level*) name) 'desert)
                         (= (-> (level-get-target-inside *level*) name) 'desertg)
+                        (= (-> (level-get-target-inside *level*) name) 'wasdoors)
                     )
                     (not *waste-ship-anchor*)
                 )
@@ -1189,6 +1190,7 @@
             (when 
                 (and
                     (!= (-> (level-get-target-inside *level*) name) 'desert)
+                    (!= (-> (level-get-target-inside *level*) name) 'wasdoors)
                     (= *waste-ship-anchor* #t)
                 )
                 (kill-by-name "dm-ship" *default-pool*)

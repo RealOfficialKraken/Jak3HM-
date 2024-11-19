@@ -236,15 +236,7 @@ BUGS:
 
 (defun runs-jak3-every-frame () ;;START RUNNING EVERY FRAME
 
-(when (= in-pre-tutorial? #t)
-    (let ((vec (new 'static 'vector :x (meters 2387.7595) :y (meters 36.5880) :z (meters 539.4780) :w 1.0)))
-    (when (>= (vector-vector-distance (target-pos 0) vec) 8200000.0)
-        (intro-play)
-        (kill-by-name "warp-gate-intro" *default-pool*)
-        (set! weather-dark-mode #f)
-    )
-  )
-)
+
 
 (when (= camera-locked? #t)
     (set-master-mode 'game)
@@ -2071,11 +2063,12 @@ BUGS:
 
     (when 
         (and
-            *target*
             (= weather-dark-mode #t)
             (or
                 (= (-> *time-of-day-context* overide-enable) #f)
+                (= (-> *mood-control* overide-weather-flag) #f)
                 (!= (-> *time-of-day-context* mode) (the-as time-of-day-palette-id 5))
+                (!= (-> *time-of-day-context* time) 19.0)
             )
         )
             (send-event (ppointer->process *time-of-day*) 'change 'hour 19)
@@ -2135,6 +2128,24 @@ BUGS:
             (intro-play)
             (set! weather-dark-mode #f)
         )
+
+        (when (= in-pre-tutorial? #t)
+            (let ((vec (new 'static 'vector :x (meters 2387.7595) :y (meters 36.5880) :z (meters 539.4780) :w 1.0)))
+            (when (>= (vector-vector-distance (target-pos 0) vec) 8200000.0)
+                (intro-play)
+                (kill-by-name "warp-gate-intro" *default-pool*)
+                (set! weather-dark-mode #f)
+            )
+        )
+        )
+
+        (when 
+            (and
+                (= weather-dark-mode #f)
+                (= in-pre-tutorial? #t)
+            )
+            (set! weather-dark-mode #t)
+            )
 
         (when 
                 (and 
@@ -2345,7 +2356,7 @@ BUGS:
   
 (defskelgroup skel-dm-ship dm-ship dm-ship-lod0-jg dm-ship-idle-ja
               ((dm-ship-lod0-mg (meters 999999)))
-              :bounds (static-spherem 0 0 0 100)
+              :bounds (static-spherem 999999 999999 999999 999999)
               :origin-joint-index 3
               :global-effects 32
               )

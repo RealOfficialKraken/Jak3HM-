@@ -31,15 +31,6 @@
     :virtual #t
     :code (behavior ()
         (loop
-            (when 
-                (and 
-                    (= weather-dark-mode #f)
-                    (not *scene-player*)
-                    (= (paused?) #f)
-                    (= (pause-allowed?) #t)
-                )
-                (toggle-dark-mode)
-            )
             (let 
                 ((desert-storm 
                     (search-process-tree *active-pool* 

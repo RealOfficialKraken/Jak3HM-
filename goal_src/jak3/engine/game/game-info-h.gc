@@ -203,7 +203,6 @@
 
   (define *spawn-vec* (new-stack-vector0))
   (defun-extern boss-brute! vector none)
-  (define weather-dark-mode #f)
   (define in-pre-tutorial? #f)
 
   (defun-extern give-random-weapon (none))

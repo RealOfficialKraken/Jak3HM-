@@ -5,6 +5,7 @@
 ;; name in dgo: main
 ;; dgos: GAME
 
+(define weather-dark-mode #f)
 (define-extern menu-respond-to-pause (function symbol))
 (define-extern anim-tester-add-object (function string none))
 (defun-extern runs-jak3-every-frame (none))
