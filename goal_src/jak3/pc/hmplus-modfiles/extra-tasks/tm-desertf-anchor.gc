@@ -1,0 +1,395 @@
+(in-package goal)
+
+;name: tm-desertf-anchor.gc
+
+(defun-extern spawn-fireball vector vector none)
+
+(defpart 9163
+  :init-specs ((:texture (pal-lightning level-default-sprite))
+    (:birth-func 'birth-func-set-quat)
+    (:num 1.0)
+    (:scale-x (meters 1))
+    (:scale-y (meters 700))
+    (:r 128.0 64.0)
+    (:g 128.0 64.0)
+    (:b 128.0 64.0)
+    (:a 128.0)
+    (:timer (seconds 0.017))
+    (:flags (sp-cpuinfo-flag-2 sp-cpuinfo-flag-3 sp-cpuinfo-flag-14 left-multiply-quat))
+    )
+  )
+
+(deftype tm-desertf-anchor (task-manager)
+  ((wave                           int)
+   (max-count                      int)
+   (ship-inside?                 symbol)
+   (blast-i                        int)
+   (fling-i                        int)
+   (fling-max                      int)
+   (wave-i                         int)
+   (general-i                      int)
+   (fog-i                        float)
+   (hit-points                   float)
+   (lightning-pos               vector)
+   (spawn-pos                   vector)
+   (spawn-count                    int)
+   (wave-sp      (inline-array vector))
+   (spawn-points (inline-array vector))
+   (fireball-sp  (inline-array vector))
+  )
+ (:state-methods
+ active
+ idle
+ dormant
+ start-battle
+ general-handler
+ fling-fireball
+ lightning-blast
+ spawn-wave
+ dead
+ )
+)
+  
+
+(defstate active (tm-desertf-anchor)
+    :virtual #t
+    :code 
+    (behavior ()
+        (when (= in-debug? #t)
+            (go-virtual start-battle)
+        )
+        (let ((vec (new 'static 'vector 
+                            :x (meters 1983.4888) 
+                            :y (meters 314.2753) 
+                            :z (meters 2685.8525) 
+                            :w 1.0
+                        )))
+            (set! (-> self spawn-pos) vec)
+            (set! (-> self ship-inside?) #f)
+            (set! (-> self hit-points) 4000.0)
+            (set! (-> self general-i) 0)
+            (set! (-> self max-count) (* (+ (-> self wave) 2) 2))
+            (loop
+                (+! (-> self general-i) 1)
+                (cond 
+                    ((or 
+                            (= (-> (level-get-target-inside *level*) name) 'desert)
+                            (= (-> (level-get-target-inside *level*) name) 'desertg)
+                            (= (-> (level-get-target-inside *level*) name) 'wasdoors)
+                        )
+                        (let ((i-i (-> self general-i)))
+                            (when (= i-i 1200)
+                                (set! in-desertf-anchor? #t)
+                                (set! weather-dark-mode #t)
+                                (set! enemy-noto 54)
+                            )
+                            (when (= i-i 1196)
+                                (when (= white-mode #f)
+                                    (toggle-white-mode)
+                                )
+                            )
+                            (when (= i-i 1199)
+                                (when (= white-mode #t)
+                                    (toggle-white-mode)
+                                )
+                            )
+                            (when (>= i-i 1201)
+                                (print "~%~%dm-ship SPAWNED~%~%")
+                                (go-virtual idle)
+                            )
+                            (cond 
+                                ((and 
+                                    (<= (vector-vector-distance (-> self spawn-pos) (target-pos 0)) 7200000.0)
+                                    (< (-> self fog-i) 1.0)
+                                )
+                                    (+! (-> self fog-i) 0.003)
+                                    (set! (-> *mood-control* overide-weather-flag) #t)
+                                )
+                                (else
+                                    (set! (-> self fog-i) 1.0)
+                                )
+                            )
+                            (format *stdcon* "~%~%active: general-i = ~D~%fog-i: ~F~%~%" (-> self general-i) (-> self fog-i))
+                        )
+                    )
+                    (else 
+                        (go-virtual dormant)
+                        (print "~%~%WENT DORMANT, WILL SPAWN ONCE INSIDE LEVEL~%~%")
+                    )
+                )
+                (suspend)
+            )
+        )
+    )
+)
+
+(defstate dormant (tm-desertf-anchor)
+    :virtual #t
+    :code
+    (behavior ()
+        (loop 
+            (cond 
+                ((and
+                    (or 
+                        (= (-> (level-get-target-inside *level*) name) 'desert)
+                        (= (-> (level-get-target-inside *level*) name) 'desertg)
+                        (= (-> (level-get-target-inside *level*) name) 'wasdoors)
+                    )
+                    (not *waste-ship-anchor*)
+                )
+                    (print "~%~%dm-ship SPAWNED~%~%")
+                    (set! in-desertf-anchor? #t)
+                    (go-virtual idle)
+                )
+                (else
+                    (when (= in-desertf-anchor? #t)
+                        (set! in-desertf-anchor? #f)
+                        (kill-by-name "dm-ship" *default-pool*)
+                    )
+                    (suspend)
+                )
+            )
+            (suspend)
+        )
+    )
+)
+
+(defstate idle (tm-desertf-anchor)
+    :virtual #t
+    :code
+    (behavior ()
+        (loop 
+            (when (<= (vector-vector-distance (-> self spawn-pos) (target-pos 0)) 4200000.0)
+                    (print "~%~%|||||||||||||BATTLE STARTED|||||||||||||~%~%")
+                    (set! in-satbattle? #t)
+                    (set! enemy-noto 54)
+                    (go-virtual start-battle)
+            )
+            (suspend)
+        )
+    )
+)
+
+(defstate start-battle (tm-desertf-anchor)
+    :virtual #t
+    :code
+    (behavior ()
+        (set! (-> self wave) 1)
+        (set! (-> self general-i) 0)
+        (set! (-> self blast-i) 0)
+        (set! (-> self fling-i) 0)
+        (set! (-> self fling-max) 15)
+        (set! (-> self spawn-points)
+          (new 'static
+               'inline-array
+               vector
+               8
+               (static-vectorm 1459.8339 26.78 -372.99)
+               (static-vectorm 1463.6805 26.78 -376.08)
+               (static-vectorm 1492.99 26.8 -367.22)
+               (static-vectorm 1487.64 28.06 -346.1145)
+               (static-vectorm 1465.36 27.78 -345.94)
+               (static-vectorm 1463.6805 26.78 -376.08)
+               (static-vectorm 1492.99 26.8 -367.22)
+               (static-vectorm 1487.64 28.06 -346.1145)
+               (static-vectorm 1465.36 27.78 -345.94)
+            )
+        )
+        (set! (-> self fireball-sp)
+          (new 'static
+               'inline-array
+               vector
+               27
+               (static-vectorm 1960.6270 26.78 2963.3300)
+               (static-vectorm 2047.1525 26.78 3026.7756)
+               (static-vectorm 1991.6225 26.78 2935.8791)
+               (static-vectorm 2058.5498 26.78 2760.7683)
+               (static-vectorm 2060.6682 26.78 2683.8244)
+               (static-vectorm 1969.8875 26.78 2645.7346)
+               (static-vectorm 1939.8687 26.78 2681.7270)
+               (static-vectorm 1903.5489 26.78 2646.2697)
+               (static-vectorm 1941.5935 26.78 2722.9638)
+               (static-vectorm 1947.8621 26.78 2779.0361)
+               (static-vectorm 2006.4748 26.78 2790.4409)
+               (static-vectorm 2026.6580 26.78 2721.3125)
+               (static-vectorm 1906.4324 26.78 2584.0651)
+               (static-vectorm 1862.9023 26.78 2599.0007)
+               (static-vectorm 1991.8981 26.78 2588.6503)
+               (static-vectorm 1870.5859 28.71 2646.9987)
+               (static-vectorm 1935.6380 28.71 2416.9560)
+               (static-vectorm 1944.0841 28.71 2491.1970)
+               (static-vectorm 1827.1391 28.71 2585.9370)
+               (static-vectorm 1828.8286 28.71 2698.2343)
+               (static-vectorm 1919.8422 28.71 2829.7145)
+               (static-vectorm 2037.8553 28.71 2921.2331)
+               (static-vectorm 1967.0367 28.71 3028.0673)
+               (static-vectorm 2063.0974 28.71 3079.4370)
+               (static-vectorm 2091.9807 28.71 3175.7692)
+               (static-vectorm 2000.0195 28.71 3167.6311)
+               (static-vectorm 1974.5571 28.71 3219.3796)
+            )
+        )
+        (add-setting! 'music 'desres2 0.0 0)
+        (spawn-dust-storm)
+        (set-setting! 'dust-storm-sound-scalar #f 10.0 10)
+        (send-event (handle->process (-> *game-info* dust-storm)) 'set-intensity 1000)
+        (go-virtual general-handler)
+    )
+)
+
+(defstate general-handler (tm-desertf-anchor)
+    :virtual #t
+    :code
+    (behavior ()
+        (loop
+            (when (and
+                    (not (search-process-tree *active-pool* (lambda ((p process)) (type? p dp-bipedal))))
+                    (not (search-process-tree *active-pool* (lambda ((p process)) (type? p marauder))))
+                    (not (search-process-tree *active-pool* (lambda ((p process)) (type? p neo-wasp))))
+                    (< (-> self spawn-count) (-> self max-count))
+                  )
+                  (set! (-> self spawn-count) 0)
+                  (go-virtual spawn-wave)
+            )
+            (when (rand-vu-percent? 0.7)
+                (+! (-> self blast-i) 1)
+            )
+            (+! (-> self fling-i) 1)
+            (when (>= (-> self blast-i) 800)
+                (go-virtual lightning-blast)
+            )
+            (when (>= (-> self fling-i) (-> self fling-max))
+                (go-virtual fling-fireball)
+            )
+            (format *stdcon* "~%general-handler: blast-i = ~D/800~%general-handler: fling-i = ~D/~D~%" (-> self blast-i) (-> self fling-i) (-> self fling-max))
+            (suspend)
+        )
+    )
+)
+
+
+
+(defstate lightning-blast (tm-desertf-anchor)
+    :virtual #t
+    :code
+    (behavior ()
+        (set! (-> self general-i) 0)
+        ;put particle setup here
+        (loop
+            (let ((a2-2 (new 'static 'vector :x (meters 1983.4888) :y (meters 314.2753) :z (meters 2685.8525) :w 1.0))
+                (a2-3 (new 'static 'vector :x (meters 1983.4888) :y (meters 0.2753) :z (meters 2685.8525) :w 1.0)))
+            (set! (-> self lightning-pos) (-> *target* root trans))
+            ;(set! (-> *part-id-table* 1763 init-specs 4 initial-valuef) (vector-length a2-2))
+            (draw-beam (-> *part-id-table* 9163) a2-3 a2-2 #t)
+            )
+            (+! (-> self general-i) 1)
+            (when (>= (-> self general-i) 300)
+                
+                (set! (-> self blast-i) 0)
+                ;put explosion here
+                (go-virtual general-handler)
+            )
+            (format *stdcon* "~%lightning-blast: general-i = ~D/300~%~%" (-> self general-i))
+            (suspend)
+        )
+    )
+)
+
+(defstate fling-fireball (tm-desertf-anchor)
+    :virtual #t
+    :code
+    (behavior ()
+        (set! (-> self general-i) 0)
+        (loop
+            (+! (-> self general-i) 1)
+            (when (>= (-> self general-i) 30)
+                ;put projectile info and spawn here
+                (let ((rnd (rand-vu-int-range 1 14))
+                      (rnd2 (rand-vu-float-range -30.0 30.0))
+                      (rnd3 (rand-vu-float-range -30.0 30.0))
+                      (vec (new-stack-vector0))
+                      (startpos (new-stack-vector0))
+                      (plusvec (new-stack-vector0)) 
+                      (off (new 'static 'vector :x (meters 0.0) :y (meters 0.0) :z (meters 0.0) :w 1.0))  
+                     )
+                    (set! off (new 'static 'vector :x (meters 0.0) :y (meters 0.0) :z (meters 0.0) :w 1.0))
+                    (set! plusvec (new 'static 'vector))
+                    (set! vec (new 'static 'vector))
+                    (set! startpos (new 'static 'vector))
+                    (if (rand-vu-percent? 0.5)
+                        (+! (-> off x) (rand-vu-float-range 0.0 100000.0))
+                        (-! (-> off x) (rand-vu-float-range 0.0 100000.0))
+                    )
+                    (if (rand-vu-percent? 0.5)
+                        (+! (-> off z) (rand-vu-float-range 0.0 100000.0))
+                        (-! (-> off z) (rand-vu-float-range 0.0 100000.0))
+                    )
+                    (set! vec (-> self fireball-sp (rand-vu-int-range 1 27)))
+                    (vector-copy! plusvec (vector+! plusvec off vec))
+                    (set! startpos vec)
+                    (set! (-> startpos y) 960000.0)
+                    (spawn-fireball vec startpos)
+                )
+                (set! (-> self fling-i) 0)
+                (set! (-> self fling-max) (rand-vu-int-range 7 30))
+                (go-virtual general-handler)
+            )
+        )
+    )
+)
+
+(defstate spawn-wave (tm-desertf-anchor)
+    :virtual #t
+    :code
+    (behavior ()
+        (set! (-> self wave-sp)
+          (new 'static
+               'inline-array
+               vector
+               14
+               (static-vectorm 1916.65 23.62 2701.48)
+               (static-vectorm 1883.65 21.42 2750.90)
+               (static-vectorm 1891.54 22.07 2740.75)
+               (static-vectorm 1921.78 23.43 2765.01)
+               (static-vectorm 2000.65 29.69 2806.30)
+               (static-vectorm 2008.37 29.86 2821.89)
+               (static-vectorm 1993.06 29.99 2814.21)
+               (static-vectorm 2009.65 30.36 2740.88)
+               (static-vectorm 2034.21 31.88 2734.43)
+               (static-vectorm 2076.38 34.71 2740.96)
+               (static-vectorm 2067.31 32.89 2765.49)
+               (static-vectorm 2047.30 28.04 2826.78)
+               (static-vectorm 2016.61 29.53 2823.34)
+               (static-vectorm 2011.11 29.83 2855.87)
+            )
+        )
+        (+! (-> self wave) 1)
+        (set! (-> self max-count) (+ (-> self wave) 6))
+        (loop
+                (let ((rnd (rand-vu-int-range 1 3))
+                  (vec (new-stack-vector0))
+                 )
+                (set! vec (-> self wave-sp (rand-vu-int-range 1 14)))
+                (spawn-dark-maker vec)
+                (+! (-> self spawn-count) 1)
+                #|(case rnd
+                    ((1)
+                    (spawn-dark-maker vec)
+                    )
+                    ((2)
+                    (spawn-dark-maker vec)
+                    )
+                    ((3)
+                    (spawn-dark-maker vec)
+                    ;(+! (-> vec y) 135000.0)
+                    ;(process-spawn neo-wasp vec :name "neo-wasp")
+                    )
+                )|#
+                (when (>= (-> self spawn-count) (-> self max-count))
+                    (go-virtual general-handler)
+                )
+            )
+            (suspend)
+        )
+    )
+)

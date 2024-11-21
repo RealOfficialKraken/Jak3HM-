@@ -266,13 +266,12 @@
 
 (define *waste-town-spawners* #f)
 (define *waste-ship-anchor* #f)
-(define in-anchor? #f)
+(define in-desertf-anchor? #f)
 (define preanchor-town #f)
 
 (defun dm-dark-ship ((vec vector))
-    (let ((quater (new 'stack-no-clear 'quaternion :x 6.0 :y 6.0 :z 6.0 :w 1.0))
-        (veccy (new 'stack-no-clear 'vector))
-      (ship 
+    (let ((veccy (new 'stack-no-clear 'vector))
+          (ship 
             (the manipy 
             (ppointer->process 
                 (process-spawn manipy
@@ -280,7 +279,7 @@
                 manipy-init
                 vec
                 #f
-                (art-group-get-by-name *level* "skel-dm-ship" (the (pointer level) #f))
+                (art-group-get-by-name *level* "skel-dm-skyship" (the (pointer level) #f))
                 #f
                 0
                 #f
@@ -308,7 +307,7 @@
         :y (meters 211.6466) 
         :z (meters 2744.2368)
         :w 1.0))
-    (set! in-anchor? #t)
+    (set! in-desertf-anchor? #t)
     (set! *waste-ship-anchor* #t)
     (none)
 )
@@ -1138,7 +1137,7 @@
     )
     (when (and
             (= in-desert-game-task? #f)
-            (= in-anchor? #t)
+            (= in-desertf-anchor? #t)
           )
         ;(< (vector-vector-distance (target-pos 0) v1-0) 8000000.0)
         ;WATSE TOWN ANCHOR
@@ -1178,13 +1177,13 @@
                     (not *waste-ship-anchor*)
                 )
                 (set! *waste-ship-anchor* #t)
-                (dm-dark-ship 
-                    (new 'static 'vector 
-                        :x (meters 3016.7360) 
+                (let ((vec (new 'static 'vector 
+                        :x (meters 1983.4888) 
                         :y (meters 314.2753) 
-                        :z (meters 2760.5092) 
+                        :z (meters 2685.8525) 
                         :w 1.0
-                    )
+                    )))
+                (dm-dark-ship vec)
                 )
             )
             (when 

@@ -309,6 +309,8 @@ void extract_common(const ObjectFileDB& db,
   extract_single_ag("FRSTA.DGO", "dm-ship-ag", db, tex_db, tfrag_level);
   extract_single_ag("LPTRL.DGO", "dm-mine-spider-ag", db, tex_db, tfrag_level);
   extract_single_ag("LPTRL.DGO", "dm-mine-spider-spawner-ag", db, tex_db, tfrag_level);
+  extract_single_ag("PRECA.DGO", "neo-wasp-ag", db, tex_db, tfrag_level);
+  extract_single_ag("TOWB.DGO", "neo-wasp-b-ag", db, tex_db, tfrag_level);
 
   add_all_textures_from_level(tfrag_level, "ARTSPOOL", tex_db);
   extract_art_groups_from_level(db, tex_db, {}, "ARTSPOOL", tfrag_level, art_group_data);

@@ -1498,7 +1498,7 @@
             :task (game-task desert-interceptors)
             :name "desert-interceptors-attack-exclude"
             :when-open #f
-            :flags (game-task-node-flag exclusive bbush act1 set-task-mask)
+            :flags (game-task-node-flag exclusive no-percent bbush act1 set-task-mask)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node desert-interceptors-attack)
               (game-task-node none)
@@ -1518,6 +1518,60 @@
               :on-fail #f
               )
             :borrow '((desert-game alias desert copy desboss1 special) (waswide 0 lbiped display))
+            :open? #f
+            :on-close #f
+            :reset #f
+            :suck-death-count #xa5
+            :command-index #x4
+            :faction-commands '()
+            )
+            (new 'static 'game-task-node-info
+            :level 'desert
+            :task (game-task desert-interceptors)
+            :name "desertf-anchor-introduction"
+            :when-open #f
+            :flags (game-task-node-flag no-percent act1)
+            :parent-node (new 'static 'array game-task-node 4
+              (game-task-node desert-interceptors-attack-exclude)
+              (game-task-node none)
+              (game-task-node none)
+              (game-task-node none)
+              )
+            :on-open #f
+            :manager #f
+            :borrow '()
+            :open? #f
+            :on-close #f
+            :reset #f
+            :suck-death-count #xa5
+            :command-index #x4
+            :faction-commands '()
+            )
+            (new 'static 'game-task-node-info
+            :level 'desert
+            :task (game-task desert-interceptors)
+            :name "desertf-anchor-resolution"
+            :when-open #f
+            :flags (game-task-node-flag bbush act1 exclusive set-task-mask)
+            :parent-node (new 'static 'array game-task-node 4
+              (game-task-node desert-interceptors-attack-exclude)
+              (game-task-node none)
+              (game-task-node none)
+              (game-task-node none)
+              )
+            :on-open #f
+            :manager (new 'static 'task-manager-info
+              :level #f
+              :type-to-spawn 'tm-desertf-anchor
+              :intro-scene #f
+              :resolution-scene #f
+              :resolution-scene-continue #f
+              :final-node (game-task-node desertf-anchor-resolution)
+              :vehicle-type #x1b
+              :on-complete #f
+              :on-fail #f
+              )
+            :borrow '((desert-game alias desert copy deschase special))
             :open? #f
             :on-close #f
             :reset #f

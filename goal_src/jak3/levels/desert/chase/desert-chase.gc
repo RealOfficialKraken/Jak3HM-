@@ -745,6 +745,45 @@
     )
   )
 
+
+(define *fireball-pool* (new 'global 'process-tree "fireball-pool"))
+
+(defun spawn-fireball ((arg0 vector) (arg1 vector))
+    (let ((gp-0 (new 'stack-no-clear 'projectile-init-by-other-params)))
+    (let ((v1-5 (ppointer->handle (process-spawn catapult-target arg1 :name "catapult-target"))))
+      (set! (-> gp-0 ent) (the-as entity #f))
+      (set! (-> gp-0 charge) 1.0)
+      (set! (-> gp-0 options) (projectile-options))
+      (logclear! (-> gp-0 options) (projectile-options po14 po15 po16))
+      (set! (-> gp-0 pos quad) (-> arg0 quad))
+      (set! (-> gp-0 notify-handle) (the-as handle #f))
+      (set! (-> gp-0 owner-handle) (the-as handle #f))
+      ;; og:preserve-this
+      (set! (-> gp-0 target-handle) 
+        (if (rand-vu-percent? 0.2)
+          (the-as handle #f)
+          v1-5
+        )
+      )
+      )
+    (set! (-> gp-0 target-pos quad) (-> arg1 quad))
+    (set! (-> gp-0 ignore-handle) (the-as handle #f))
+    (let* ((v1-13 *game-info*)
+           (a0-27 (+ (-> v1-13 attack-id) 1))
+           )
+      (set! (-> v1-13 attack-id) a0-27)
+      (set! (-> gp-0 attack-id) a0-27)
+      )
+    (set! (-> gp-0 timeout) (seconds 10))
+    (set! (-> gp-0 damage) 4.0)
+    (logior! (-> gp-0 options) (projectile-options po14))
+    (spawn-projectile v-catapult-shot gp-0 *active-pool* *default-dead-pool*)
+    )
+  0
+  (none)
+)
+
+
 (defmethod fire-catapult-shot ((this desert-chase-ambush-manager) (arg0 vector) (arg1 vector))
   (let ((gp-0 (new 'stack-no-clear 'projectile-init-by-other-params)))
     (let ((v1-5 (ppointer->handle (process-spawn catapult-target arg1 :name "catapult-target" :to this))))

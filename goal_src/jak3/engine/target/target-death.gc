@@ -8,6 +8,7 @@
 ;; DECOMP BEGINS
 
 (define *auto-continue* #f)
+(define-extern weather-dark-mode symbol)
 
 ;; WARN: Return type mismatch object vs continue-point.
 (defun next-continue ((arg0 continue-point))

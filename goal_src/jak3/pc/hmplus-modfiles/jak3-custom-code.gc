@@ -2294,6 +2294,56 @@ BUGS:
     (none)
   )
 
+
+  (define white-mode #f)
+
+  (defun toggle-white-mode ()
+    (cond 
+        ((= white-mode #t)
+
+            (set! white-mode #f)
+        )
+        ((= white-mode #f)
+            (set! white-mode #t)
+            (set! (-> *time-of-day-context* overide-enable) #t)
+            (set! (-> *mood-control* overide-weather-flag) #t)
+            (set! (-> *overide-mood-fog-table*
+                                   data
+                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                                   fog-color
+                                   x
+                                   )
+                               255.0
+                               )
+            (set! (-> *overide-mood-fog-table*
+                                   data
+                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                                   fog-color
+                                   y
+                                   )
+                               255.0
+                               )
+            (set! (-> *overide-mood-fog-table*
+                                   data
+                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                                   fog-color
+                                   z
+                                   )
+                               255.0
+                               )
+            (set! (-> *overide-mood-fog-table*
+                                   data
+                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                                   fog-color
+                                   w
+                                   )
+                               255.0
+                               )
+        )
+    )
+    (none)
+  )
+
   (defun mine-level ()
     (cond 
         ((= in-mine-level? #f)
@@ -2354,9 +2404,9 @@ BUGS:
     (none)
   )
   
-(defskelgroup skel-dm-ship dm-ship dm-ship-lod0-jg dm-ship-idle-ja
+(defskelgroup skel-dm-skyship dm-ship dm-ship-lod0-jg dm-ship-idle-ja
               ((dm-ship-lod0-mg (meters 999999)))
-              :bounds (static-spherem 999999 999999 999999 999999)
+              :bounds (static-spherem 0 0 0 90999999)
               :origin-joint-index 3
               :global-effects 32
               )

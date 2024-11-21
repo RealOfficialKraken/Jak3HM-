@@ -502,6 +502,10 @@
   "maker-projectile.o"
   "planetboss.o"
   "brute-dagger.o"
+  "hover-nav-control-h.o"
+  "hover-enemy-h.o"
+  "neo-wasp.o"
   "look-for-warpgate.o"
+  "tm-desertf-anchor.o"
   "warp-room.o"
  ))
