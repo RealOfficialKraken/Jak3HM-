@@ -244,6 +244,14 @@
     (none)
 )
 
+(defun side-enemy-killed? ()
+    (+! (-> *game-info* side-enemies-killed?) 1)
+    (set! xp-string "Current Quest")
+    (set! *xp-gain* 1.0)
+    (set! xp-draw #t)
+    (none)
+)
+
 (defun collect-orb-xp! ((xp-gain float))
     (+! (-> *game-info* karma) (/ (* xp-gain notoriety-level) 3.5))
     (set! xp-string "Orb Collected")

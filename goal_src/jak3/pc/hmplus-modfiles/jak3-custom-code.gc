@@ -1663,6 +1663,7 @@ BUGS:
                 (set! di-s4 "")
                 (set! log-id 1)
                 (set! log-sec 0)
+                (set! (-> *game-info* side-enemies-killed?) 0)
                 (disable-hudmap)
             )
         )
@@ -1972,13 +1973,137 @@ BUGS:
             )
 
 (when (and
-        (task-node-closed? (game-task-node wascity-kleeverquest-mantaray-res))
         (task-node-open? (game-task-node wascity-kleeverquest-marauders))
-        (not (task-node-open? (game-task-node desert-spawn-task-deserta-goto-artifact)))
+        *target*
+        (= (paused?) #f)
+        (= (pause-allowed?) #t)
+        (not *scene-player*)
+        (= desert-spawn-mission-deserta #f)
       )
-        (spawn-deserta-artifact)
-      )        
+      (spawn-deserta-artifact)
+)
 
+
+
+;quest params for kliever
+
+(when 
+    (and
+        (= in-menu? #t)
+        (= in-modifiers? #f)
+        (= in-gunmods? #f)
+        (= in-superpowers? #f)
+        (= in-skill? #f)
+        (task-node-closed? (game-task-node wascity-gungame-introduction))
+        (not (task-node-closed? (game-task-node wascity-gungame-resolution)))
+    )
+    (cond 
+    ((task-node-open? (game-task-node wascity-kleeverquest-lavatoad))
+
+    (clear matt-str)
+    (clear *pc-encoded-matt-str*)
+    (format matt-str "<COLOR_CYAN>Current Quest:~%<COLOR_YELLOW>Lava Toad Skins <COLOR_GREEN>~d/16"
+    (-> *game-info* side-enemies-killed?)
+    )
+    (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+    (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+    ;; reset bucket settings prior to drawing - font won't do self for us, and
+    ;; draw-raw-image can sometimes mess them up. (intro sequence)
+    (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+    (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 250 130 0.0 (font-color default) (font-flags middle shadow kerning large))))
+        (set! (-> font-ctx scale) 0.325)
+        (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+        (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
+                                    (bucket-id particles)
+                                    )
+        (draw-sprite2d-xy s2-0 0 120 700 58 (new 'static 'rgba :a #x40) #x3fffff)
+    )
+)
+((task-node-open? (game-task-node wascity-kleeverquest-mantaray))
+
+    (clear matt-str)
+    (clear *pc-encoded-matt-str*)
+    (format matt-str "<COLOR_CYAN>Current Quest:~%<COLOR_YELLOW>Collect Manta-Ray Skins <COLOR_GREEN>~d/8~%<COLOR_YELLOW>Slay the <COLOR_WHITE>Albino<COLOR_YELLOW> Manta-Ray <COLOR_GREEN>0/1"
+    (-> *game-info* side-enemies-killed?)
+    )
+    (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+    (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+    ;; reset bucket settings prior to drawing - font won't do self for us, and
+    ;; draw-raw-image can sometimes mess them up. (intro sequence)
+    (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+    (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 250 130 0.0 (font-color default) (font-flags middle shadow kerning large))))
+        (set! (-> font-ctx scale) 0.325)
+        (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+        (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
+                                    (bucket-id particles)
+                                    )
+        (draw-sprite2d-xy s2-0 0 120 700 58 (new 'static 'rgba :a #x40) #x3fffff)
+    )
+)
+((task-node-open? (game-task-node wascity-kleeverquest-marauders))
+
+    (clear matt-str)
+    (clear *pc-encoded-matt-str*)
+    (format matt-str "<COLOR_CYAN>Current Quest:~%<COLOR_YELLOW>Go to the Artifact that Kleiver marked on your map"
+    )
+    (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+    (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+    ;; reset bucket settings prior to drawing - font won't do self for us, and
+    ;; draw-raw-image can sometimes mess them up. (intro sequence)
+    (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+    (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 250 130 0.0 (font-color default) (font-flags middle shadow kerning large))))
+        (set! (-> font-ctx scale) 0.325)
+        (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+        (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
+                                    (bucket-id particles)
+                                    )
+        (draw-sprite2d-xy s2-0 0 120 700 58 (new 'static 'rgba :a #x40) #x3fffff)
+    )
+)
+((task-node-open? (game-task-node wascity-kleeverquest-bruteboss))
+
+    (clear matt-str)
+    (clear *pc-encoded-matt-str*)
+    (format matt-str "<COLOR_CYAN>Current Quest:~%<COLOR_YELLOW>Slay the DaggerBrute Boss <COLOR_GREEN>0/1"
+    (-> *game-info* side-enemies-killed?)
+    )
+    (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+    (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+    ;; reset bucket settings prior to drawing - font won't do self for us, and
+    ;; draw-raw-image can sometimes mess them up. (intro sequence)
+    (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+    (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 250 130 0.0 (font-color default) (font-flags middle shadow kerning large))))
+        (set! (-> font-ctx scale) 0.325)
+        (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+        (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
+                                    (bucket-id particles)
+                                    )
+        (draw-sprite2d-xy s2-0 0 120 700 58 (new 'static 'rgba :a #x40) #x3fffff)
+    )
+)
+(else
+(clear matt-str)
+    (clear *pc-encoded-matt-str*)
+    (format matt-str "<COLOR_GREEN>Current Quest Completed, return to Kleiver"
+    (-> *game-info* side-enemies-killed?)
+    )
+    (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+    (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+    ;; reset bucket settings prior to drawing - font won't do self for us, and
+    ;; draw-raw-image can sometimes mess them up. (intro sequence)
+    (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+    (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 250 130 0.0 (font-color default) (font-flags middle shadow kerning large))))
+        (set! (-> font-ctx scale) 0.325)
+        (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+        (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
+                                    (bucket-id particles)
+                                    )
+        (draw-sprite2d-xy s2-0 0 120 700 58 (new 'static 'rgba :a #x40) #x3fffff)
+    )
+)
+
+)
+)
 
         (when 
 (and 
@@ -2504,6 +2629,8 @@ BUGS:
     (task-node-open! (game-task-node desert-spawn-task-oasis-goto-artifact) #t)
     (task-node-open! (game-task-node desert-spawn-task-deserta-goto-artifact) #t)
     (set! desert-spawn-mission-oasis #f)
+    (set! desert-spawn-mission-deserta #f)
+    (set! desert-spawn-mission-brute #f)
     (kill-all-sat)
     (when (= enemy-hp #t)
         (set! enemy-hp #f)

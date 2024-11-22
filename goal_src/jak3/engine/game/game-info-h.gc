@@ -239,6 +239,7 @@
   (define-extern xp-string string)
   (define-extern notoriety-level int)
   (define-extern xpi int)
+  (defun-extern side-enemy-killed? (none))
 
   (defun-extern runs-on-blackout (none))
   (define desert-spawn-mission-oasis #f)
@@ -684,6 +685,7 @@
    (current-vehicle         vehicle-type-u8)
    (vehicle-turbo-ready     float)
    (percent-complete        float)
+   (side-enemies-killed?    int)
    )
   (:methods
     (initialize! (_type_ symbol game-save string resetter-spec) _type_)
