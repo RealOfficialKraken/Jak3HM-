@@ -246,7 +246,6 @@
                     (not (search-process-tree *active-pool* (lambda ((p process)) (type? p dp-bipedal))))
                     (not (search-process-tree *active-pool* (lambda ((p process)) (type? p marauder))))
                     (not (search-process-tree *active-pool* (lambda ((p process)) (type? p neo-wasp))))
-                    (< (-> self spawn-count) (-> self max-count))
                   )
                   (set! (-> self spawn-count) 0)
                   (go-virtual spawn-wave)
@@ -286,7 +285,7 @@
             (when (>= (-> self general-i) 300)
                 
                 (set! (-> self blast-i) 0)
-                ;put explosion here
+                ;put explosion and damage-sphere here
                 (go-virtual general-handler)
             )
             (format *stdcon* "~%lightning-blast: general-i = ~D/300~%~%" (-> self general-i))
@@ -303,7 +302,6 @@
         (loop
             (+! (-> self general-i) 1)
             (when (>= (-> self general-i) 30)
-                ;put projectile info and spawn here
                 (let ((rnd (rand-vu-int-range 1 14))
                       (rnd2 (rand-vu-float-range -30.0 30.0))
                       (rnd3 (rand-vu-float-range -30.0 30.0))
@@ -372,7 +370,18 @@
                 (set! vec (-> self wave-sp (rand-vu-int-range 1 14)))
                 (spawn-dark-maker vec)
                 (+! (-> self spawn-count) 1)
-                #|(case rnd
+                (when (>= (-> self spawn-count) (-> self max-count))
+                    (go-virtual general-handler)
+                )
+            )
+            (suspend)
+        )
+    )
+)
+
+
+
+#|(case rnd
                     ((1)
                     (spawn-dark-maker vec)
                     )
@@ -385,11 +394,3 @@
                     ;(process-spawn neo-wasp vec :name "neo-wasp")
                     )
                 )|#
-                (when (>= (-> self spawn-count) (-> self max-count))
-                    (go-virtual general-handler)
-                )
-            )
-            (suspend)
-        )
-    )
-)

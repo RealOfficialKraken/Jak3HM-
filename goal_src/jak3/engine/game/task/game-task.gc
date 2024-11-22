@@ -4230,6 +4230,294 @@
             :description (text-id talk-to-kleiver)
             :faction-commands '()
             )
+            (new 'static 'game-task-node-info
+            :level 'wascity
+            :task (game-task wascity-gungame)
+            :name "wascity-kleeverquest-lavatoad"
+            :when-open (new 'static 'boxed-array :type game-task-event
+              (new 'static 'game-task-event
+                :actor (game-task-actor kleever-wascityb)
+                :action (game-task-action idle)
+                :tex (game-task-icon gaticon-02)
+                :scene "wascity-gun-intro"
+                )
+              (new 'static 'game-task-event
+                :actor (game-task-actor minimap)
+                :action (game-task-action show)
+                :tex (game-task-icon gaticon-116)
+                :scene #f
+                )
+              )
+            :flags (game-task-node-flag save-on-life act1)
+            :parent-node (new 'static 'array game-task-node 4
+              (game-task-node wascity-gungame-introduction)
+              (game-task-node none)
+              (game-task-node none)
+              (game-task-node none)
+              )
+            :on-open #f
+            :manager #f
+            :borrow '((waswide 0 lkleever special))
+            :open? #f
+            :on-close #f
+            :reset #f
+            :suck-death-count #xa5
+            :command-index #x18
+            :description (text-id talk-to-kleiver)
+            :faction-commands '()
+            )
+            (new 'static 'game-task-node-info
+            :level 'wascity
+            :task (game-task wascity-gungame)
+            :name "wascity-kleeverquest-lavatoad-res"
+            :when-open (new 'static 'boxed-array :type game-task-event
+              (new 'static 'game-task-event
+                :actor (game-task-actor kleever-wascityb)
+                :action (game-task-action idle)
+                :tex (game-task-icon gaticon-02)
+                :scene "wascity-gun-intro"
+                )
+              (new 'static 'game-task-event
+                :actor (game-task-actor minimap)
+                :action (game-task-action show)
+                :tex (game-task-icon gaticon-116)
+                :scene #f
+                )
+              )
+            :flags (game-task-node-flag save-on-life act1)
+            :parent-node (new 'static 'array game-task-node 4
+              (game-task-node wascity-kleeverquest-lavatoad)
+              (game-task-node none)
+              (game-task-node none)
+              (game-task-node none)
+              )
+            :on-open #f
+            :manager #f
+            :borrow '((waswide 0 lkleever special))
+            :open? #f
+            :on-close #f
+            :reset #f
+            :suck-death-count #xa5
+            :command-index #x18
+            :description (text-id talk-to-kleiver)
+            :faction-commands '()
+            )
+            (new 'static 'game-task-node-info
+            :level 'wascity
+            :task (game-task wascity-gungame)
+            :name "wascity-kleeverquest-mantaray"
+            :when-open (new 'static 'boxed-array :type game-task-event
+              (new 'static 'game-task-event
+                :actor (game-task-actor kleever-wascityb)
+                :action (game-task-action idle)
+                :tex (game-task-icon gaticon-02)
+                :scene "wascity-gun-intro"
+                )
+              (new 'static 'game-task-event
+                :actor (game-task-actor minimap)
+                :action (game-task-action show)
+                :tex (game-task-icon gaticon-116)
+                :scene #f
+                )
+              )
+            :flags (game-task-node-flag save-on-life act1)
+            :parent-node (new 'static 'array game-task-node 4
+              (game-task-node wascity-kleeverquest-lavatoad-res)
+              (game-task-node none)
+              (game-task-node none)
+              (game-task-node none)
+              )
+            :on-open #f
+            :manager #f
+            :borrow '((waswide 0 lkleever special))
+            :open? #f
+            :on-close #f
+            :reset #f
+            :suck-death-count #xa5
+            :command-index #x18
+            :description (text-id talk-to-kleiver)
+            :faction-commands '()
+            )
+            (new 'static 'game-task-node-info
+            :level 'wascity
+            :task (game-task wascity-gungame)
+            :name "wascity-kleeverquest-mantaray-res"
+            :when-open (new 'static 'boxed-array :type game-task-event
+              (new 'static 'game-task-event
+                :actor (game-task-actor kleever-wascityb)
+                :action (game-task-action idle)
+                :tex (game-task-icon gaticon-02)
+                :scene "wascity-gun-intro"
+                )
+              (new 'static 'game-task-event
+                :actor (game-task-actor minimap)
+                :action (game-task-action show)
+                :tex (game-task-icon gaticon-116)
+                :scene #f
+                )
+              )
+            :flags (game-task-node-flag save-on-life act1)
+            :parent-node (new 'static 'array game-task-node 4
+              (game-task-node wascity-kleeverquest-mantaray)
+              (game-task-node none)
+              (game-task-node none)
+              (game-task-node none)
+              )
+            :on-open #f
+            :manager #f
+            :borrow '((waswide 0 lkleever special))
+            :open? #f
+            :on-close #f
+            :reset #f
+            :suck-death-count #xa5
+            :command-index #x18
+            :description (text-id talk-to-kleiver)
+            :faction-commands '()
+            )
+            (new 'static 'game-task-node-info
+            :level 'wascity
+            :task (game-task wascity-gungame)
+            :name "wascity-kleeverquest-marauders"
+            :when-open (new 'static 'boxed-array :type game-task-event
+              (new 'static 'game-task-event
+                :actor (game-task-actor kleever-wascityb)
+                :action (game-task-action idle)
+                :tex (game-task-icon gaticon-02)
+                :scene "wascity-gun-intro"
+                )
+              (new 'static 'game-task-event
+                :actor (game-task-actor minimap)
+                :action (game-task-action show)
+                :tex (game-task-icon gaticon-116)
+                :scene #f
+                )
+              )
+            :flags (game-task-node-flag save-on-life act1)
+            :parent-node (new 'static 'array game-task-node 4
+              (game-task-node wascity-kleeverquest-mantaray-res)
+              (game-task-node none)
+              (game-task-node none)
+              (game-task-node none)
+              )
+            :on-open #f
+            :manager #f
+            :borrow '((waswide 0 lkleever special))
+            :open? #f
+            :on-close #f
+            :reset #f
+            :suck-death-count #xa5
+            :command-index #x18
+            :description (text-id talk-to-kleiver)
+            :faction-commands '()
+            )
+            (new 'static 'game-task-node-info
+            :level 'wascity
+            :task (game-task wascity-gungame)
+            :name "wascity-kleeverquest-marauders-res"
+            :when-open (new 'static 'boxed-array :type game-task-event
+              (new 'static 'game-task-event
+                :actor (game-task-actor kleever-wascityb)
+                :action (game-task-action idle)
+                :tex (game-task-icon gaticon-02)
+                :scene "wascity-gun-intro"
+                )
+              (new 'static 'game-task-event
+                :actor (game-task-actor minimap)
+                :action (game-task-action show)
+                :tex (game-task-icon gaticon-116)
+                :scene #f
+                )
+              )
+            :flags (game-task-node-flag save-on-life act1)
+            :parent-node (new 'static 'array game-task-node 4
+              (game-task-node wascity-kleeverquest-marauders)
+              (game-task-node none)
+              (game-task-node none)
+              (game-task-node none)
+              )
+            :on-open #f
+            :manager #f
+            :borrow '((waswide 0 lkleever special))
+            :open? #f
+            :on-close #f
+            :reset #f
+            :suck-death-count #xa5
+            :command-index #x18
+            :description (text-id talk-to-kleiver)
+            :faction-commands '()
+            )
+            (new 'static 'game-task-node-info
+            :level 'wascity
+            :task (game-task wascity-gungame)
+            :name "wascity-kleeverquest-bruteboss"
+            :when-open (new 'static 'boxed-array :type game-task-event
+              (new 'static 'game-task-event
+                :actor (game-task-actor kleever-wascityb)
+                :action (game-task-action idle)
+                :tex (game-task-icon gaticon-02)
+                :scene "wascity-gun-intro"
+                )
+              (new 'static 'game-task-event
+                :actor (game-task-actor minimap)
+                :action (game-task-action show)
+                :tex (game-task-icon gaticon-116)
+                :scene #f
+                )
+              )
+            :flags (game-task-node-flag save-on-life act1)
+            :parent-node (new 'static 'array game-task-node 4
+              (game-task-node wascity-kleeverquest-marauders-res)
+              (game-task-node none)
+              (game-task-node none)
+              (game-task-node none)
+              )
+            :on-open #f
+            :manager #f
+            :borrow '((waswide 0 lkleever special))
+            :open? #f
+            :on-close #f
+            :reset #f
+            :suck-death-count #xa5
+            :command-index #x18
+            :description (text-id talk-to-kleiver)
+            :faction-commands '()
+            )
+            (new 'static 'game-task-node-info
+            :level 'wascity
+            :task (game-task wascity-gungame)
+            :name "wascity-kleeverquest-bruteboss-res"
+            :when-open (new 'static 'boxed-array :type game-task-event
+              (new 'static 'game-task-event
+                :actor (game-task-actor kleever-wascityb)
+                :action (game-task-action idle)
+                :tex (game-task-icon gaticon-02)
+                :scene "wascity-gun-intro"
+                )
+              (new 'static 'game-task-event
+                :actor (game-task-actor minimap)
+                :action (game-task-action show)
+                :tex (game-task-icon gaticon-116)
+                :scene #f
+                )
+              )
+            :flags (game-task-node-flag save-on-life act1)
+            :parent-node (new 'static 'array game-task-node 4
+              (game-task-node wascity-kleeverquest-bruteboss)
+              (game-task-node none)
+              (game-task-node none)
+              (game-task-node none)
+              )
+            :on-open #f
+            :manager #f
+            :borrow '((waswide 0 lkleever special))
+            :open? #f
+            :on-close #f
+            :reset #f
+            :suck-death-count #xa5
+            :command-index #x18
+            :description (text-id talk-to-kleiver)
+            :faction-commands '()
+            )
           (new 'static 'game-task-node-info
             :level 'wascity
             :task (game-task wascity-gungame)
@@ -4250,7 +4538,7 @@
               )
             :flags (game-task-node-flag close-task save-on-life act1)
             :parent-node (new 'static 'array game-task-node 4
-              (game-task-node wascity-gungame-introduction)
+              (game-task-node wascity-kleeverquest-bruteboss-res)
               (game-task-node none)
               (game-task-node none)
               (game-task-node none)

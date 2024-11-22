@@ -15,6 +15,7 @@
 (define-extern override-player-controls (function cpad-info int))
 (define-extern *highscore-info-array* (array highscore-info))
 (define-extern *user* symbol)
+(defun-extern mission-complete? int (none))
 
 ;; DECOMP BEGINS
 
@@ -792,12 +793,7 @@
        (let ((s5-1 (the int arg1)))
          (when (not (or (task-complete? this (the-as game-task s5-1)) (>= (the-as uint 1) (the-as uint s5-1))))
            ;(set! (-> this task-deaths) 0)
-          (set! in-desert-game-task? #f)
-          (+! (-> *game-info* karma) (/ (* 130 notoriety-level) 2))
-          (set! *xp-gain* (the float (/ (* 130 notoriety-level) 2)))
-          (set! xp-string "Mission Complete")
-          (set! xp-draw #t)
-          (set! xpi 0)
+          (mission-complete? 130)
            (set! (-> this task-pickup-time) (-> *display* game-clock frame-counter))
            (set! (-> this task-complete-time s5-1) (-> *display* game-clock frame-counter))
            (+! (-> this fuel) 0.0)

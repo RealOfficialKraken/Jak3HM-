@@ -203,6 +203,16 @@
 
 ;XP dist
 
+(defun mission-complete? ((amount int)) ;default amount is 130
+    (set! in-desert-game-task? #f)
+    (+! (-> *game-info* karma) (/ (* amount notoriety-level) 2))
+    (set! *xp-gain* (the float (/ (* amount notoriety-level) 2)))
+    (set! xp-string "Mission Complete")
+    (set! xp-draw #t)
+    (set! xpi 0)
+    (none)
+)
+
 (defun vehicle-killed? ((xp-gain float))
     (+! (-> *game-info* fuel) (/ (* xp-gain draw-enemy-noto) 2))
     (+! (-> *game-info* karma) (/ (* xp-gain draw-enemy-noto) 4))
