@@ -459,6 +459,7 @@
      (when (= (-> this fact pickup-type) (pickup-type gun-yellow-1))
       (give-random-weapon)
       (kill-by-name "task-arrow-upgrade" *default-pool*)
+      (kill-by-name "task-arrow-custom" *default-pool*)
      )
     )
     (((pickup-type skill))

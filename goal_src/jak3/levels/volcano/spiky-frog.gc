@@ -1003,6 +1003,8 @@
             )
       (side-enemy-killed?)
       (when (= (-> *game-info* side-enemies-killed?) 16)
+        (r3-hint)
+        (auto-save-user)
         (task-node-close! (game-task-node wascity-kleeverquest-lavatoad) #t)
       )
      )

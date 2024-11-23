@@ -1870,7 +1870,10 @@
       )
     (when (and (<= (-> self hit-points) 0.0)(-> *marauder-c-nav-enemy-info* nav-mesh))
       (enemy-killed? (rand-vu-float-range 245.0 315.0))
-      (when (rand-vu-percent? 0.3)
+      (when (and
+              (rand-vu-percent? 0.3)
+              (string= (-> self name) "brute-boss")
+            )
         (spawn-gun-upgrade (-> self root trans) 1.0)
       )
       (set! desert-spawn-mission-brute #f)

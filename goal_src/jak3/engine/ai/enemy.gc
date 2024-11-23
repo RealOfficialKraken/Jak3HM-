@@ -1829,6 +1829,9 @@
                         (set! enemy-string "Elite Neo-Satellite")
                       )
                     )
+                    ((= enemy-name 'manta-ray)
+                      (set! enemy-string "Manta-Ray")
+                    )
                     (else 
                       (set! enemy-string (the string enemy-name))
                     )

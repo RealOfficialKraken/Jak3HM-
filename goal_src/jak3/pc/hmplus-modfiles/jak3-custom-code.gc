@@ -283,6 +283,7 @@ BUGS:
 (= in-gunmods? #f)
 (= in-superpowers? #f)
 (= on-vehicle? #f)
+(= in-dialogue? #f)
 (not (focus-test? *target* pilot))
 )
 (set! in-menu? #t)
@@ -1620,6 +1621,51 @@ BUGS:
 
     (when
         (and
+            (= r3-hints #t)
+            *target*
+            (not *scene-player*)
+            (= (paused?) #f)
+            (= (pause-allowed?) #t)
+        )
+            (+! r3-hinti 1)
+            (let ((ani-num 0))
+                (clear matt-str)
+                (clear *pc-encoded-matt-str*)
+                (format matt-str "(~s) <COLOR_WHITE>Quest Updated"
+                hint-string
+                )
+                (when (< r3-hinti 0)
+                    (set! ani-num r3-hinti)
+                )
+                (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+                (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+                (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+                (let ((font-ctx (new 'stack 'font-context *font-default-matrix* ani-num 270 0.0 (font-color default) (font-flags shadow kerning large))))
+                (set! (-> font-ctx scale) 0.325)
+                (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+            )
+            (+! r3-hinti2 1)
+            (when (>= r3-hinti2 35)
+                (case-str hint-string
+                    (("<COLOR_YELLOW>R3")
+                        (set! hint-string "<COLOR_ORANGE>R3")
+                    )
+                    (else
+                        (set! hint-string "<COLOR_YELLOW>R3")
+                    )
+                )
+                (set! r3-hinti2 0)
+            )
+            (when (>= r3-hinti 800)
+                (set! r3-hints #f)
+            )
+            (when (= in-menu? #t)
+                (set! r3-hints #f)
+            )
+        )
+
+    (when
+        (and
             (task-node-open? (game-task-node wascity-gungame-introduction))
             (<= (vector-vector-distance 
                     (new 'static 'vector
@@ -1764,6 +1810,8 @@ BUGS:
                     (meters -408.5743) 
                     1.0)
                     (task-node-close! (game-task-node wascity-gungame-introduction) #t)
+                    (process-spawn hud-map :init hud-init-by-other :name "hud-map" :to *target*)
+                    (r3-hint)
                 )
             )
 
@@ -1837,12 +1885,18 @@ BUGS:
                     (set! di-s4 "")
                 )
                 (when (= log-sec 3)
-                    (set! di-s "You collect me 8 manta-ray skins, and")
-                    (set! di-s2 "hunt down the albino for me, I'll lead") 
-                    (set! di-s3 "ye to a nice artifact out in the desert")
+                    (set! di-s "To really make this new armor, ye need to")
+                    (set! di-s2 "hunt down 4 albinos for me, then I'll lead") 
+                    (set! di-s3 "you guys to a nice artifact out in the desert")
                     (set! di-s4 "")
                 )
                 (when (= log-sec 4)
+                    (set! di-s "I last saw them back in that volcano")
+                    (set! di-s2 "hiding around other manta-rays") 
+                    (set! di-s3 "")
+                    (set! di-s4 "")
+                )
+                (when (= log-sec 5)
                     (set! in-dialogue? #f)
                     (camera-unlocked)
                     (set! log-id 0)
@@ -1854,6 +1908,7 @@ BUGS:
                     1.0)
                     (process-spawn hud-map :init hud-init-by-other :name "hud-map" :to *target*)
                     (task-node-close! (game-task-node wascity-kleeverquest-lavatoad-res) #t)
+                    (r3-hint)
                 )
             )
 
@@ -1935,7 +1990,7 @@ BUGS:
                 )
                 (when (= log-sec 4)
                     (set! di-s "There's a real knuckle dragger out there")
-                    (set! di-s2 "who keeps messing with our catches") 
+                    (set! di-s2 "who keeps messing with our catches")
                     (set! di-s3 "")
                     (set! di-s4 "")
                 )
@@ -1953,7 +2008,7 @@ BUGS:
                 )
                 (when (= log-sec 7)
                     (set! di-s "This artifact is completely safe")
-                    (set! di-s2 "go get em, heroes") 
+                    (set! di-s2 "go get em, heroes")
                     (set! di-s3 "")
                     (set! di-s4 "")
                 )
@@ -1969,6 +2024,7 @@ BUGS:
                     1.0)
                     (process-spawn hud-map :init hud-init-by-other :name "hud-map" :to *target*)
                     (task-node-close! (game-task-node wascity-kleeverquest-mantaray-res) #t)
+                    (r3-hint)
                 )
             )
 
@@ -2002,7 +2058,7 @@ BUGS:
 
     (clear matt-str)
     (clear *pc-encoded-matt-str*)
-    (format matt-str "<COLOR_CYAN>Current Quest:~%<COLOR_YELLOW>Lava Toad Skins <COLOR_GREEN>~d/16"
+    (format matt-str "<COLOR_CYAN>Current Quest:~%<COLOR_YELLOW>Gather Lava Toad Skins <COLOR_GREEN>~d/16"
     (-> *game-info* side-enemies-killed?)
     )
     (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
@@ -2023,7 +2079,7 @@ BUGS:
 
     (clear matt-str)
     (clear *pc-encoded-matt-str*)
-    (format matt-str "<COLOR_CYAN>Current Quest:~%<COLOR_YELLOW>Collect Manta-Ray Skins <COLOR_GREEN>~d/8~%<COLOR_YELLOW>Slay the <COLOR_WHITE>Albino<COLOR_YELLOW> Manta-Ray <COLOR_GREEN>0/1"
+    (format matt-str "<COLOR_CYAN>Current Quest:~%<COLOR_YELLOW>Slay <COLOR_WHITE>Albino<COLOR_YELLOW> Manta-Rays <COLOR_GREEN>~d/4"
     (-> *game-info* side-enemies-killed?)
     )
     (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
@@ -2361,6 +2417,14 @@ BUGS:
     (none)
 )
 
+(defun r3-hint ()
+    (set! r3-hinti -100)
+    (set! r3-hinti2 0)
+    (set! hint-string "<COLOR_YELLOW>R3")
+    (set! r3-hints #t)
+    (none)
+)
+
 #|(defun spawn-riftring-doors ()
     (let ((pos (new 'static 'vector 
     :x (meters 2311.1208)
@@ -2428,10 +2492,7 @@ BUGS:
         )
         )
         (when (= in-desert-game-task? #f)
-            (if (rand-vu-percent? 0.08) 
-                (spawn-gun-upgrade pos 1.0)
-                (spawn-artifact pos)
-            )
+            (spawn-artifact pos)
             (task-node-open! (game-task-node desert-spawn-task-deserta-goto-artifact) #t)
             (set! desert-spawn-mission-deserta #t)
             (set-mcount)
@@ -2564,7 +2625,61 @@ BUGS:
                 :y (meters 1.7311)
                 :z (meters -134.0780)
                 :w 1.0))
+            (ray1 (new 'static 'vector 
+                :x (meters 116.7456)
+                :y (meters 26.3955)
+                :z (meters 97.0830)
+                :w 1.0))
+            (ray2 (new 'static 'vector 
+                :x (meters 108.2330)
+                :y (meters 26.3494)
+                :z (meters 104.4923)
+                :w 1.0))
+            (ray3 (new 'static 'vector 
+                :x (meters 91.7798)
+                :y (meters 4.2707)
+                :z (meters 184.8023)
+                :w 1.0))
+            (ray4 (new 'static 'vector 
+                :x (meters 100.0860)
+                :y (meters 4.2804)
+                :z (meters 189.9547)
+                :w 1.0))
+            (ray5 (new 'static 'vector 
+                :x (meters 64.7718)
+                :y (meters 1.9312)
+                :z (meters -27.1555)
+                :w 1.0))
+            (ray6 (new 'static 'vector 
+                :x (meters 76.7986)
+                :y (meters 2.0951)
+                :z (meters -43.2198)
+                :w 1.0))
+            (ray7 (new 'static 'vector 
+                :x (meters 63.8897)
+                :y (meters 2.0640)
+                :z (meters -51.8499)
+                :w 1.0))
+            (ray8 (new 'static 'vector 
+                :x (meters 69.4898)
+                :y (meters 2.2157)
+                :z (meters -42.0185)
+                :w 1.0))
+            (ray9 (new 'static 'vector 
+                :x (meters 60.3712)
+                :y (meters 2.4700)
+                :z (meters -63.0167)
+                :w 1.0))
                 )
+        (process-spawn manta ray1 :name "manta")
+        (process-spawn manta ray2 :name "manta")
+        (process-spawn manta ray3 :name "manta")
+        (process-spawn manta ray4 :name "manta")
+        (process-spawn manta ray5 :name "manta")
+        (process-spawn manta ray6 :name "manta")
+        (process-spawn manta ray7 :name "manta")
+        (process-spawn manta ray8 :name "manta")
+        (process-spawn manta ray9 :name "manta")
         (spawn-manipy-sat vsat "manipy-sat" #f)
         ;(process-spawn dm-mine-spider-spawner vspwnr1 :name "dm-spawner")
         (process-spawn dm-mine-spider-spawner vspwnr2 :name "dm-spawner")
@@ -2653,6 +2768,7 @@ BUGS:
       )
     (when (= in-volcano-level? #t)
         (kill-by-name "dm-spawner" *default-pool*)
+        (kill-by-name "manta" *default-pool*)
         (spawn-volcano-mobs)
     )
     (none)

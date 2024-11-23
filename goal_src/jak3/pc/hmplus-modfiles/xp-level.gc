@@ -205,6 +205,7 @@
 
 (defun mission-complete? ((amount int)) ;default amount is 130
     (set! in-desert-game-task? #f)
+    (set! (-> *game-info* side-enemies-killed?) 0)
     (+! (-> *game-info* karma) (/ (* amount notoriety-level) 2))
     (set! *xp-gain* (the float (/ (* amount notoriety-level) 2)))
     (set! xp-string "Mission Complete")

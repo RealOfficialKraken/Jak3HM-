@@ -45,6 +45,7 @@
 (define-extern tomb-baby-spider type)
 (define-extern dm-mine-spider type)
 (define-extern neo-sat type)
+(define-extern manta type)
 (defun remap-enemy-type-name ((en-type type))
   "returns the appropriate type name (symbol) for the stats tracker"
 
@@ -86,6 +87,7 @@
     ((type-type? en-type tomb-baby-spider) 'tomb-baby-spider)
     ((type-type? en-type dm-mine-spider) 'dm-spider)
     ((type-type? en-type neo-sat) 'neo-sat)
+    ((type-type? en-type manta) 'manta-ray)
     (else (-> en-type symbol)))
   )
 
@@ -253,6 +255,12 @@
   (define arena-token-count 0)
   (defun-extern spawn-gun-upgrade vector float none)
   (defun-extern task-arrow-custom vector symbol none)
+
+  (defun-extern r3-hint (none))
+  (define r3-hinti 0)
+  (define r3-hints #f)
+  (define r3-hinti2 0)
+  (define hint-string "")
 
   (define kill-eco-delay #f)
   (define killeci 0)

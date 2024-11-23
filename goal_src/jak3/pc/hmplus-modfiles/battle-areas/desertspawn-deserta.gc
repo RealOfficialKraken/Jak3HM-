@@ -351,6 +351,22 @@
              (when (-> self hud-counter)
                (send-event (handle->process (-> self hud-counter)) 'hide-and-die)
                (set! (-> self hud-counter) (the-as handle #f))
+               (task-node-close! (game-task-node wascity-kleeverquest-marauders) #t)
+               (let ((pos 
+                    (new 'static 'vector
+                    :x (meters 2539.2421)
+                    :y (meters 23.0453)
+                    :z (meters 3332.9597)
+                    :w 1.0
+                    )
+                  )
+                )
+                  (spawn-gun-upgrade pos 1.0)
+                  (task-arrow-custom pos #t)
+                  (r3-hint)
+                  (auto-save-user)
+               )
+               (task-node-open! (game-task-node desert-spawn-task-deserta-goto-artifact) #t)
                )
              )
             (else
