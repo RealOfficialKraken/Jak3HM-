@@ -570,6 +570,41 @@
 (defmethod event-handler ((this marauder-c) (arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
   (local-vars (v0-1 object))
   (case arg2
+    (('touched)
+     (when (= (remap-enemy-type-name (-> this type)) 'bruteboss)
+      (let* ((s3-0 arg0)
+            (v1-1 (if (type? s3-0 process-drawable)
+                      s3-0
+                      )
+                  )
+            )
+       (when v1-1
+         (let ((s3-1 (-> (the-as process-drawable v1-1) root))
+               (a1-3 (new 'stack 'collide-query))
+               )
+           0.0
+           (set! (-> a1-3 start-pos quad) (-> this root root-prim prim-core world-sphere quad))
+           (vector-!
+             (-> a1-3 move-dist)
+             (the-as vector (-> (the-as collide-shape s3-1) root-prim prim-core))
+             (-> a1-3 start-pos)
+             )
+           (let ((v1-6 a1-3))
+             (set! (-> v1-6 radius) 40.96)
+             (set! (-> v1-6 collide-with) (collide-spec backgnd))
+             (set! (-> v1-6 ignore-process0) this)
+             (set! (-> v1-6 ignore-process1) (ppointer->process (-> this parent)))
+             (set! (-> v1-6 ignore-pat) (-> this root pat-ignore-mask))
+             (set! (-> v1-6 action-mask) (collide-action solid))
+             )
+           (if (< (fill-and-probe-using-line-sphere *collide-cache* a1-3) 0.0)
+               (send-attack this arg0 (the-as touching-shapes-entry (-> arg3 param 0)) (-> this attack-id))
+               )
+           )
+         )
+       )
+     )
+     )
     (('nav-mesh-moved)
      (let ((v1-1 (-> arg3 param 0)))
        (-> arg3 param 1)
@@ -583,7 +618,20 @@
        (vector+! (-> this jump-info dest-pos) (-> this jump-info dest-pos) (the-as vector v1-1))
        )
      )
-    (('hit 'hit-flinch 'hit-knocked)
+    (('hit)
+      (when (and (<= (-> self hit-points) 0.0)(-> *marauder-c-nav-enemy-info* nav-mesh))
+        (enemy-killed? (rand-vu-float-range 245.0 315.0))
+        (when (and
+                (rand-vu-percent? 0.3)
+                (!= (remap-enemy-type-name (-> this type)) 'bruteboss)
+              )
+          (spawn-gun-upgrade (-> self root trans) 1.0)
+        )
+        (set! desert-spawn-mission-brute #f)
+        (set! in-satbattle? #f)
+        (task-node-close! (game-task-node desert-brute-killed-resolution) #t)
+        (kill-by-name "was-artifact" *default-pool*)
+      )
      (let* ((s1-0 (handle->process (-> this incoming attacker-handle)))
             (v1-5 (if (type? s1-0 process-focusable)
                       s1-0
@@ -596,16 +644,6 @@
            )
        )
      ((method-of-type nav-enemy event-handler) this arg0 arg1 arg2 arg3)
-     )
-    (('impact-impulse)
-     (let ((v1-11 (the-as object (-> arg3 param 0))))
-       (when (< 4096.0 (-> (the-as rigid-body-impact v1-11) impulse))
-         (logior! (-> this root penetrated-by) (penetrate vehicle))
-         (set! (-> this hit-points) 0.0)
-         (go (method-of-object this knocked))
-         #t
-         )
-       )
      )
     (('save)
      (let ((a0-23 (the-as object (-> arg3 param 0))))
@@ -792,7 +830,7 @@
   )
 
 (defmethod knocked-land-anim ((this marauder-c) (arg0 enemy-knocked-info))
-  #|(cond
+  (cond
     ((not (focus-test? this dead))
      (cond
        ((-> this knocked-back?)
@@ -841,7 +879,7 @@
         (joint-control-channel-group! v1-18 (the-as art-joint-anim (-> this draw art-group data 25)) num-func-seek!)
         )
       )
-    )|#
+    )
   #t
   )
 
@@ -1868,19 +1906,6 @@
           (t9-0)
           )
       )
-    (when (and (<= (-> self hit-points) 0.0)(-> *marauder-c-nav-enemy-info* nav-mesh))
-      (enemy-killed? (rand-vu-float-range 245.0 315.0))
-      (when (and
-              (rand-vu-percent? 0.3)
-              (string= (-> self name) "brute-boss")
-            )
-        (spawn-gun-upgrade (-> self root trans) 1.0)
-      )
-      (set! desert-spawn-mission-brute #f)
-      (set! in-satbattle? #f)
-      (task-node-close! (game-task-node desert-brute-killed-resolution) #t)
-      (kill-by-name "was-artifact" *default-pool*)
-    )
     (if (< (vector-dot (-> self root transv) (vector-z-quaternion! (new 'stack-no-clear 'vector) (-> self root quat)))
            0.0
            )

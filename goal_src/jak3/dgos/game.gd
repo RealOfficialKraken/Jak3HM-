@@ -479,8 +479,12 @@
   "desertspawn-oasis.o"
   "desertspawn-deserta.o"
   "mod-save-stats.o"
-  "dm-mine-spider.o"
-  "jak3-custom-code.o"
+  "dm-mine-spider.o" ;enemy modfiles
+  "hover-nav-control-h.o"
+  "hover-enemy-h.o"
+  "neo-wasp.o"
+  "manta.o"
+  "jak3-custom-code.o" ;custom-mod
   "xp-level.o"
   "wasteland-spawner.o"
   "rope-system-h.o"
@@ -502,11 +506,8 @@
   "maker-projectile.o"
   "planetboss.o"
   "brute-dagger.o"
-  "hover-nav-control-h.o"
-  "hover-enemy-h.o"
-  "neo-wasp.o"
-  "manta.o"
   "look-for-warpgate.o"
   "tm-desertf-anchor.o"
+  "tm-vin-intro.o"
   "warp-room.o"
  ))

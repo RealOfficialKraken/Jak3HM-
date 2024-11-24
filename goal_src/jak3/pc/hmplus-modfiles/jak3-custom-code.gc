@@ -2039,8 +2039,6 @@ BUGS:
       (spawn-deserta-artifact)
 )
 
-
-
 ;quest params for kliever
 
 (when 
@@ -2055,113 +2053,109 @@ BUGS:
     )
     (cond 
     ((task-node-open? (game-task-node wascity-kleeverquest-lavatoad))
+        (clear matt-str)
+        (clear *pc-encoded-matt-str*)
+        (format matt-str "<COLOR_CYAN>Current Quest:~%<COLOR_YELLOW>Gather Lava Toad Skins <COLOR_GREEN>~d/16"
+        (-> *game-info* side-enemies-killed?)
+        )
+        (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+        (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+        ;; reset bucket settings prior to drawing - font won't do self for us, and
+        ;; draw-raw-image can sometimes mess them up. (intro sequence)
+        (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+        (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 250 130 0.0 (font-color default) (font-flags middle shadow kerning large))))
+            (set! (-> font-ctx scale) 0.325)
+            (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+            (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
+                                        (bucket-id particles)
+                                        )
+            (draw-sprite2d-xy s2-0 0 120 700 58 (new 'static 'rgba :a #x40) #x3fffff)
+        )
+    )
+    ((task-node-open? (game-task-node wascity-kleeverquest-mantaray))
+        (clear matt-str)
+        (clear *pc-encoded-matt-str*)
+        (format matt-str "<COLOR_CYAN>Current Quest:~%<COLOR_YELLOW>Slay <COLOR_WHITE>Albino<COLOR_YELLOW> Manta-Rays <COLOR_GREEN>~d/4"
+        (-> *game-info* side-enemies-killed?)
+        )
+        (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+        (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+        ;; reset bucket settings prior to drawing - font won't do self for us, and
+        ;; draw-raw-image can sometimes mess them up. (intro sequence)
+        (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+        (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 250 130 0.0 (font-color default) (font-flags middle shadow kerning large))))
+            (set! (-> font-ctx scale) 0.325)
+            (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+            (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
+                                        (bucket-id particles)
+                                        )
+            (draw-sprite2d-xy s2-0 0 120 700 58 (new 'static 'rgba :a #x40) #x3fffff)
+        )
+    )
+    ((task-node-open? (game-task-node wascity-kleeverquest-marauders))
+        (clear matt-str)
+        (clear *pc-encoded-matt-str*)
+        (format matt-str "<COLOR_CYAN>Current Quest:~%<COLOR_YELLOW>Go to the Artifact that Kleiver marked on your map"
+        )
+        (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+        (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+        ;; reset bucket settings prior to drawing - font won't do self for us, and
+        ;; draw-raw-image can sometimes mess them up. (intro sequence)
+        (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+        (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 250 130 0.0 (font-color default) (font-flags middle shadow kerning large))))
+            (set! (-> font-ctx scale) 0.325)
+            (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+            (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
+                                        (bucket-id particles)
+                                        )
+            (draw-sprite2d-xy s2-0 0 120 700 58 (new 'static 'rgba :a #x40) #x3fffff)
+        )
+    )
+    ((task-node-open? (game-task-node wascity-kleeverquest-bruteboss))
+        (clear matt-str)
+        (clear *pc-encoded-matt-str*)
+        (format matt-str "<COLOR_CYAN>Current Quest:~%<COLOR_YELLOW>Slay Dagger Brute <COLOR_GREEN>0/1"
+        (-> *game-info* side-enemies-killed?)
+        )
+        (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+        (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+        ;; reset bucket settings prior to drawing - font won't do self for us, and
+        ;; draw-raw-image can sometimes mess them up. (intro sequence)
+        (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+        (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 250 130 0.0 (font-color default) (font-flags middle shadow kerning large))))
+            (set! (-> font-ctx scale) 0.325)
+            (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+            (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
+                                        (bucket-id particles)
+                                        )
+            (draw-sprite2d-xy s2-0 0 120 700 58 (new 'static 'rgba :a #x40) #x3fffff)
+        )
+    )
+    (else
+        (clear matt-str)
+        (clear *pc-encoded-matt-str*)
+        (format matt-str "<COLOR_GREEN>Current Quest Completed, return to Kleiver"
+        (-> *game-info* side-enemies-killed?)
+        )
+        (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+        (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+        ;; reset bucket settings prior to drawing - font won't do self for us, and
+        ;; draw-raw-image can sometimes mess them up. (intro sequence)
+        (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+        (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 250 130 0.0 (font-color default) (font-flags middle shadow kerning large))))
+            (set! (-> font-ctx scale) 0.325)
+            (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+            (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
+                                        (bucket-id particles)
+                                        )
+            (draw-sprite2d-xy s2-0 0 120 700 58 (new 'static 'rgba :a #x40) #x3fffff)
+        )
+    )
 
-    (clear matt-str)
-    (clear *pc-encoded-matt-str*)
-    (format matt-str "<COLOR_CYAN>Current Quest:~%<COLOR_YELLOW>Gather Lava Toad Skins <COLOR_GREEN>~d/16"
-    (-> *game-info* side-enemies-killed?)
     )
-    (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
-    (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
-    ;; reset bucket settings prior to drawing - font won't do self for us, and
-    ;; draw-raw-image can sometimes mess them up. (intro sequence)
-    (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
-    (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 250 130 0.0 (font-color default) (font-flags middle shadow kerning large))))
-        (set! (-> font-ctx scale) 0.325)
-        (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
-        (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
-                                    (bucket-id particles)
-                                    )
-        (draw-sprite2d-xy s2-0 0 120 700 58 (new 'static 'rgba :a #x40) #x3fffff)
-    )
-)
-((task-node-open? (game-task-node wascity-kleeverquest-mantaray))
-
-    (clear matt-str)
-    (clear *pc-encoded-matt-str*)
-    (format matt-str "<COLOR_CYAN>Current Quest:~%<COLOR_YELLOW>Slay <COLOR_WHITE>Albino<COLOR_YELLOW> Manta-Rays <COLOR_GREEN>~d/4"
-    (-> *game-info* side-enemies-killed?)
-    )
-    (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
-    (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
-    ;; reset bucket settings prior to drawing - font won't do self for us, and
-    ;; draw-raw-image can sometimes mess them up. (intro sequence)
-    (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
-    (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 250 130 0.0 (font-color default) (font-flags middle shadow kerning large))))
-        (set! (-> font-ctx scale) 0.325)
-        (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
-        (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
-                                    (bucket-id particles)
-                                    )
-        (draw-sprite2d-xy s2-0 0 120 700 58 (new 'static 'rgba :a #x40) #x3fffff)
-    )
-)
-((task-node-open? (game-task-node wascity-kleeverquest-marauders))
-
-    (clear matt-str)
-    (clear *pc-encoded-matt-str*)
-    (format matt-str "<COLOR_CYAN>Current Quest:~%<COLOR_YELLOW>Go to the Artifact that Kleiver marked on your map"
-    )
-    (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
-    (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
-    ;; reset bucket settings prior to drawing - font won't do self for us, and
-    ;; draw-raw-image can sometimes mess them up. (intro sequence)
-    (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
-    (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 250 130 0.0 (font-color default) (font-flags middle shadow kerning large))))
-        (set! (-> font-ctx scale) 0.325)
-        (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
-        (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
-                                    (bucket-id particles)
-                                    )
-        (draw-sprite2d-xy s2-0 0 120 700 58 (new 'static 'rgba :a #x40) #x3fffff)
-    )
-)
-((task-node-open? (game-task-node wascity-kleeverquest-bruteboss))
-
-    (clear matt-str)
-    (clear *pc-encoded-matt-str*)
-    (format matt-str "<COLOR_CYAN>Current Quest:~%<COLOR_YELLOW>Slay the DaggerBrute Boss <COLOR_GREEN>0/1"
-    (-> *game-info* side-enemies-killed?)
-    )
-    (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
-    (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
-    ;; reset bucket settings prior to drawing - font won't do self for us, and
-    ;; draw-raw-image can sometimes mess them up. (intro sequence)
-    (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
-    (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 250 130 0.0 (font-color default) (font-flags middle shadow kerning large))))
-        (set! (-> font-ctx scale) 0.325)
-        (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
-        (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
-                                    (bucket-id particles)
-                                    )
-        (draw-sprite2d-xy s2-0 0 120 700 58 (new 'static 'rgba :a #x40) #x3fffff)
-    )
-)
-(else
-(clear matt-str)
-    (clear *pc-encoded-matt-str*)
-    (format matt-str "<COLOR_GREEN>Current Quest Completed, return to Kleiver"
-    (-> *game-info* side-enemies-killed?)
-    )
-    (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
-    (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
-    ;; reset bucket settings prior to drawing - font won't do self for us, and
-    ;; draw-raw-image can sometimes mess them up. (intro sequence)
-    (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
-    (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 250 130 0.0 (font-color default) (font-flags middle shadow kerning large))))
-        (set! (-> font-ctx scale) 0.325)
-        (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
-        (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
-                                    (bucket-id particles)
-                                    )
-        (draw-sprite2d-xy s2-0 0 120 700 58 (new 'static 'rgba :a #x40) #x3fffff)
-    )
-)
-
-)
 )
 
-        (when 
+(when 
 (and 
 (= in-dialogue? #t)
 (not (cpad-hold? 0 x))
@@ -2341,20 +2335,54 @@ BUGS:
                                    )
                                255.0
                                )
+            (set! (-> *overide-mood-color-table*
+                                   data
+                                   (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2))
+                                   lgt-color
+                                   y
+                                   )
+                               1.0
+                               )
+            (set! (-> *overide-mood-color-table*
+                                   data
+                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                                   lgt-color
+                                   y
+                                   )
+                               0.0
+                               )
+            (set! (-> *overide-mood-color-table*
+                                   data
+                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                                   lgt-color
+                                   z
+                                   )
+                               1.0
+                               )
+            (set! (-> *overide-mood-color-table*
+                                   data
+                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                                   lgt-color
+                                   w
+                                   )
+                               1.0
+                               )
             ;(spawn-riftring-doors)
         )
 
-        (when 
-        (and
-            *target*
-            (= weather-dark-mode #f)
-            (= (-> *time-of-day-context* overide-enable) #t)
-        )
-            (set! (-> *time-of-day-context* overide-enable) #f)
-            (set! (-> *mood-control* overide-weather-flag) #f)
-            (send-event (ppointer->process *time-of-day*) 'change 'ratio 1.0)
-            (send-event (ppointer->process *time-of-day*) 'change 'hour 0)
-        )
+        (when
+            (and
+                (= weather-dark-mode #f)
+                (= white-mode #f)
+                (or
+                    (= (-> *time-of-day-context* overide-enable) #t)
+                    (= (-> *mood-control* overide-weather-flag) #t)
+                )
+            )
+                (set! (-> *time-of-day-context* overide-enable) #f)
+                (set! (-> *mood-control* overide-weather-flag) #f)
+            )
+
 
         (when 
         (and
@@ -2367,6 +2395,7 @@ BUGS:
             (= (-> (level-get-target-inside *level*) name) 'waspala)
         )
             (intro-play)
+            (kill-by-name "warp-gate-intro" *default-pool*)
             (set! weather-dark-mode #f)
         )
 
@@ -2532,6 +2561,8 @@ BUGS:
         (reset-actors 'life)
         (spawn-dust-storm)
         (set! weather-dark-mode #t)
+        (set! (-> *mood-control* overide-weather-flag) #f)
+        (set! (-> *time-of-day-context* overide-enable) #f)
         (set! *force-stop-pilot* #t)
         (set-continue! *game-info* "wasdoors-city" #t)
         (task-node-close! (game-task-node desert-interceptors-attack) #f)
@@ -2541,49 +2572,101 @@ BUGS:
   )
 
 
-  (define white-mode #f)
 
   (defun toggle-white-mode ()
     (cond 
         ((= white-mode #t)
-
             (set! white-mode #f)
+            (when (= weather-dark-mode #t)
+                (lambda ()
+                (mem-copy! (the-as pointer *overide-mood-color-table*) (the-as pointer *debug-mood-color-table*) 256)
+                (mem-copy! (the-as pointer *overide-mood-fog-table*) (the-as pointer *debug-mood-fog-table*) 384)
+                (dotimes (v1-0 8)
+                  (set! (-> *overide-mood-color-table* data v1-0 lgt-color w) 1.0)
+                  (set! (-> *overide-mood-color-table* data v1-0 amb-color w) 1.0)
+                  (set! (-> *overide-mood-fog-table* data v1-0 fog-color w) 1.0)
+                  (set! (-> *overide-mood-fog-table* data v1-0 fog-dists x)
+                        (* 0.00024414062 (-> *overide-mood-fog-table* data v1-0 fog-dists x))
+                        )
+                  (set! (-> *overide-mood-fog-table* data v1-0 fog-dists y)
+                        (* 0.00024414062 (-> *overide-mood-fog-table* data v1-0 fog-dists y))
+                        )
+                  (set-vector! (-> *time-of-day-context* times v1-0) 1.0 1.0 1.0 1.0)
+                  )
+                (set-vector! (-> *time-of-day-context* filter-color) 1.0 1.0 1.0 1.0)
+                (set! (-> *time-of-day-context* current-clouds cloud-min) (-> *mood-control* mood-clouds cloud-min))
+                (set! (-> *time-of-day-context* current-clouds cloud-max) (-> *mood-control* mood-clouds cloud-max))
+                )
+                (set! (-> *time-of-day-context* overide-enable) #f)
+            )
+            (set! (-> *overide-mood-color-table*
+                                   data
+                                   (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2))
+                                   lgt-color
+                                   y
+                                   )
+                               1.0
+                               )
+            (set! (-> *overide-mood-color-table*
+                                   data
+                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                                   lgt-color
+                                   y
+                                   )
+                               0.0
+                               )
+            (set! (-> *overide-mood-color-table*
+                                   data
+                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                                   lgt-color
+                                   z
+                                   )
+                               1.0
+                               )
+            (set! (-> *overide-mood-color-table*
+                                   data
+                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                                   lgt-color
+                                   w
+                                   )
+                               1.0
+                               )
+            (set! (-> *time-of-day-context* overide-enable) #f)
         )
         ((= white-mode #f)
             (set! white-mode #t)
             (set! (-> *time-of-day-context* overide-enable) #t)
-            (set! (-> *mood-control* overide-weather-flag) #t)
-            (set! (-> *overide-mood-fog-table*
+            (set! (-> *overide-mood-color-table*
                                    data
-                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
-                                   fog-color
-                                   x
-                                   )
-                               255.0
-                               )
-            (set! (-> *overide-mood-fog-table*
-                                   data
-                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
-                                   fog-color
+                                   (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2))
+                                   lgt-color
                                    y
                                    )
-                               255.0
+                               1.9921
                                )
-            (set! (-> *overide-mood-fog-table*
+            (set! (-> *overide-mood-color-table*
                                    data
                                    (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
-                                   fog-color
+                                   lgt-color
+                                   y
+                                   )
+                               1.9921
+                               )
+            (set! (-> *overide-mood-color-table*
+                                   data
+                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                                   lgt-color
                                    z
                                    )
-                               255.0
+                               1.9921
                                )
-            (set! (-> *overide-mood-fog-table*
+            (set! (-> *overide-mood-color-table*
                                    data
                                    (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
-                                   fog-color
+                                   lgt-color
                                    w
                                    )
-                               255.0
+                               17.0
                                )
         )
     )
@@ -2741,6 +2824,8 @@ BUGS:
     (kill-by-name "manipy-sat" *default-pool*)
     (kill-by-name "dp-bipedal" *default-pool*)
     (kill-by-name "marauder-c" *default-pool*)
+    (kill-by-name "brute-boss" *default-pool*)
+    (kill-by-name "vin-effect" *default-pool*)
     (task-node-open! (game-task-node desert-spawn-task-oasis-goto-artifact) #t)
     (task-node-open! (game-task-node desert-spawn-task-deserta-goto-artifact) #t)
     (set! desert-spawn-mission-oasis #f)

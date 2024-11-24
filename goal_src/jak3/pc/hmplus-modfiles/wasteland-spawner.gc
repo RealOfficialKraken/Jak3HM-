@@ -44,6 +44,39 @@
   (none)
 )
 
+(defskelgroup skel-vin-effect vin-effect vin-effect-lod0-jg vin-effect-idle-ja
+              ((vin-effect-lod0-mg (meters 999999)))
+              :bounds (static-spherem 0 0 0 9999)
+              :origin-joint-index 3
+              )
+
+(defun spawn-vin-effect ((vec vector))
+    (let ((vin (the manipy 
+                (ppointer->process
+                    (process-spawn manipy
+                    :init
+                    manipy-init
+                    vec
+                    #f
+                    (art-group-get-by-name *level* "skel-vin-effect" (the (pointer level) #f))
+                    #f
+                    0
+                    #f
+                    :name "vin-effect"))
+                    )
+                )
+            (vscale (new 'static 'vector))
+            (qscale (new 'static 'quaternion))
+            )
+            (set! (-> vscale x) 175.0)
+            (set! (-> vscale y) 175.0)
+            (set! (-> vscale z) 175.0)
+            (send-event vin 'scale vscale)
+            (send-event vin 'rot-x (degrees 78))
+        )
+    (none)
+)
+
 (define task-arrow-spawned? #f)
 
 (defun task-arrow-custom ((vec vector) (light? symbol))

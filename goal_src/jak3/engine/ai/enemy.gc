@@ -1832,6 +1832,9 @@
                     ((= enemy-name 'manta-ray)
                       (set! enemy-string "Manta-Ray")
                     )
+                    ((= enemy-name 'bruteboss)
+                      (set! enemy-string "Brute Dagger")
+                    )
                     (else 
                       (set! enemy-string (the string enemy-name))
                     )
@@ -1981,7 +1984,11 @@
           )
          )
        )
+     (when (or
+          (!= (remap-enemy-type-name (-> this type)) 'bruteboss)
+         )
      (go (method-of-object this knocked))
+     )
      )
     ((= msg 'hit)
      (logclear! (-> this mask) (process-mask actor-pause))
