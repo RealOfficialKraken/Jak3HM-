@@ -163,7 +163,7 @@
   (none)
   )
 
-#|
+
 (defun get-nav-control ((arg0 process-drawable) (arg1 nav-mesh))
   (if (not arg1)
       (set! arg1 (nav-mesh-from-res-tag (-> arg0 entity) 'nav-mesh-actor 0))
@@ -173,8 +173,8 @@
     (add-process-drawable-to-nav-mesh *default-nav-mesh* arg0 #t)
     )
   (none)
-  )|#
-
+  )
+#|
 (defun get-nav-control ((arg0 process-drawable) (arg1 nav-mesh))
   (if (not arg1)
       (set! arg1 (nav-mesh-from-res-tag (-> arg0 entity) 'nav-mesh-actor 0))
@@ -192,7 +192,7 @@
     )
   (add-process-drawable-to-nav-mesh arg1 arg0 #t)
   (none)
-  )
+  )|#
 
 
 (defmethod find-nearest-poly-to-point ((this nav-control) (arg0 vector))

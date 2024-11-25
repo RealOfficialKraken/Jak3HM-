@@ -1833,7 +1833,7 @@
                       (set! enemy-string "Manta-Ray")
                     )
                     ((= enemy-name 'bruteboss)
-                      (set! enemy-string "Brute Dagger")
+                      (set! enemy-string "Goredrinker")
                     )
                     (else 
                       (set! enemy-string (the string enemy-name))

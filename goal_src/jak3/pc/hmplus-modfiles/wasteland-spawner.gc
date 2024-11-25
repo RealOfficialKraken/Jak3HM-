@@ -693,6 +693,7 @@
         (= in-desert-game-task? #f)
         (= desert-spawn-mission-brute #f)
         (= cdr-satbattle #f)
+        (task-node-open? (game-task-node wascity-kleeverquest-bruteboss))
         (task-node-closed? (game-task-node desert-brute-killed-introduction))
             (or
                 (and
@@ -716,7 +717,7 @@
             (= (paused?) #f)
             (= (pause-allowed?) #t)
         )
-        (kill-by-name "Brute Dagger" *default-pool*)
+        (kill-by-name "goredrinker" *default-pool*)
         (spawn-brute-artifact)
         (set! in-satbattle? #f)
         (set! cdr-satbattle #t)

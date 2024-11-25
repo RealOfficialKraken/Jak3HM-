@@ -330,7 +330,7 @@
 (and 
 (!= (/ (mod (-> *game-info* continue-deaths) 10000) 1000) 1)
 (logtest? (-> *game-info* features) (game-feature gun-blue-1))
-(task-node-closed? (game-task-node arena-fight-3-fight))
+(task-node-closed? (game-task-node arena-fight-3-training))
 )
 (set! has-blue-1 #f)
 (logclear! (-> *game-info* features) (game-feature gun-blue-1))

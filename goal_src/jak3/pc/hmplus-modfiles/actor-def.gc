@@ -213,7 +213,6 @@
           (when (= desert-spawn-mission-brute #t)
             (boss-brute! (-> this root trans))
             (set! in-satbattle? #t)
-            (set! desert-spawn-mission-brute #f)
           )
           (go (method-of-object this die))
           )

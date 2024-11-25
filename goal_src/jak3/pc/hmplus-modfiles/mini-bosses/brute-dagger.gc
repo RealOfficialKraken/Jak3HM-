@@ -50,7 +50,7 @@
                 (ppointer->process
             (process-spawn brute-boss 
             vec 
-            :name "Brute Dagger"
+            :name "goredrinker"
             *default-pool*))
                 )
             )
