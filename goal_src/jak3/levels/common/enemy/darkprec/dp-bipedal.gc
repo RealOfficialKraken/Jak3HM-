@@ -1783,7 +1783,7 @@
   :enter (behavior ()
     (let ((gp-0 (new 'stack-no-clear 'shield-sphere-spawn-params)))
       (set! (-> gp-0 owner) (process->handle self))
-      (set! (-> gp-0 sphere-size) 5.25)
+      (set! (-> gp-0 sphere-size) 3.25)
       (set! (-> gp-0 track-joint) 27)
       (set! (-> gp-0 enable-time) (seconds 0.1))
       (set! (-> gp-0 disable-time) (seconds 0.1))

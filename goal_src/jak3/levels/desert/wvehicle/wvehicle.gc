@@ -842,7 +842,7 @@
        (set! (-> this susp-spring-control) 0.5)
        (set! (-> this jump-control) 0.0)
        (if (logtest? (vehicle-flag player-driving) (-> this v-flags))
-           (cpad-set-buzz! (-> *cpad-list* cpads 0) 0 925 (seconds 0.3))
+           (cpad-set-buzz! (-> *cpad-list* cpads 0) 0 255 (seconds 0.05))
            )
        (if (and (not (logtest? (-> this controls prev-flags) (vehicle-controls-flag vcf0)))
                 (logtest? (-> this v-flags) (vehicle-flag on-ground))

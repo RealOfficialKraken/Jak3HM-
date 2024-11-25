@@ -1965,7 +1965,7 @@
 (defstate running (min-boss-elev)
   :virtual #t
   :post (behavior ()
-      (let ((gp-0 (-> self root quat))
+    (let ((gp-0 (-> self root quat))
           (s5-0 (-> self entity quat))
           )
       (quaternion-pseudo-seek gp-0 gp-0 s5-0 0.005)
