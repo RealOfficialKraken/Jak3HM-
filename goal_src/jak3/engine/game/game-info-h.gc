@@ -93,6 +93,21 @@
     (else (-> en-type symbol)))
   )
 
+  (define draw-targbar #f)
+  (define targbar-i 0)
+  (define targbar-max-hit-points 0.0)
+  (define targbar-hit-points 0.0)
+  (define targbar-max-eco-light 0.0)
+  (define targbar-eco-light 0.0)
+  (define targbar-max-eco-dark 0.0)
+  (define targbar-eco-dark 0.0)
+  (define targbar-draw-x 0)
+  (define targbar-draw-y 0)
+
+  (defun-extern delayed-heal (none))
+  (define delayed-heal-full #f)
+  (define del-i 0)
+
   (define draw-enemy-noto 0)
 
   (define extra-offthetop 0.0)

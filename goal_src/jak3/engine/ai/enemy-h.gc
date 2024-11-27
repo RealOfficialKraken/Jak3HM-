@@ -190,6 +190,7 @@
    (gem-no-seg                           uint32)
    (gem-offset                           sphere  :inline)
    (knocked-off                          symbol)
+   (enemy-noto                           int)
    )
   (:methods
     (copy-enemy-info! (_type_ _type_) none)
@@ -290,7 +291,6 @@
    (on-death                   pair)
    (idle-anim-player           idle-control          :inline)
    (rand-gen                   symbol)
-   (enemy-noto                 int)
    )
   (:state-methods
     dormant

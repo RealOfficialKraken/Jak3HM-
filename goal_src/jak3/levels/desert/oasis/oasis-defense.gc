@@ -32,7 +32,7 @@
 
 (define *oasis-vehicle-start* (new 'static 'boxed-array :type oasis-point
                                 (new 'static 'oasis-point
-                                  :pos (new 'static 'vector :x 2378927.8 :y 89453.77 :z 10338013.0 :w 1.0)
+                                  :pos (new 'static 'vector :x 2378927.8 :y 57453.77 :z 10338013.0 :w 1.0)
                                   :quat (new 'static 'quaternion :x -0.0047 :y 0.8075 :z -0.0137 :w 0.5896)
                                   )
                                 (new 'static 'oasis-point
@@ -62,7 +62,7 @@
                                      :quat (new 'static 'quaternion :y 0.7718 :w 0.6357)
                                      )
                                    (new 'static 'oasis-point
-                                     :pos (new 'static 'vector :x 2351683.5 :y 89942.836 :z 10210302.0 :w 1.0)
+                                     :pos (new 'static 'vector :x 2351683.5 :y 57942.836 :z 10210302.0 :w 1.0)
                                      :quat (new 'static 'quaternion :y -0.9924 :w -0.1222)
                                      )
                                    )
@@ -150,7 +150,7 @@
                                          :quat (new 'static 'quaternion :y -0.3212 :w -0.9469)
                                          )
                                        (new 'static 'oasis-point
-                                         :pos (new 'static 'vector :x 2293810.0 :y 89958.4 :z 10373563.0 :w 1.0)
+                                         :pos (new 'static 'vector :x 2293810.0 :y 57958.4 :z 10373563.0 :w 1.0)
                                          :quat (new 'static 'quaternion :y -0.7906 :w -0.6123)
                                          )
                                        (new 'static 'oasis-point
@@ -269,7 +269,7 @@
       (set-setting! 'music 'oasisfi 0.0 0)
       (set-setting! 'fog-special-interp-rate #f 0.025 0)
       (set-setting! 'fog-special-interp-targ #f 0.9 0)
-      (set! enemy-noto 37)
+      (set! enemy-noto (rand-vu-int-range 18 20))
       (dotimes (gp-1 (length *oasis-vehicle-start*))
         (spawn-v-marauder self -1 gp-1)
         )
@@ -281,8 +281,8 @@
       (set! (-> self hud-counter)
             (ppointer->handle (process-spawn hud-marauder :init hud-init-by-other :name "hud-marauder" :to self))
             )
-      (set! (-> *game-info* counter) (the float (- (+ (-> self marauder-count) 127) (-> self total-spawned))))
-      (until (and (>= (-> self total-spawned) (the-as uint 127))
+      (set! (-> *game-info* counter) (the float (- (+ (-> self marauder-count) 57) (-> self total-spawned))))
+      (until (and (>= (-> self total-spawned) (the-as uint 57))
                   (zero? (-> self marauder-count))
                   (zero? (-> self vehicle-count))
                   )
@@ -333,7 +333,7 @@
           (set-time! (-> self veh-fx-timer))
           )
         (when (>= (+ (current-time) (seconds -2.5)) (-> self check-timer))
-          (when (and (< (-> self vehicle-count) (the-as uint 3)) (< (-> self total-spawned) (the-as uint 127)))
+          (when (and (< (-> self vehicle-count) (the-as uint 3)) (< (-> self total-spawned) (the-as uint 57)))
             (let ((gp-5 0))
               (dotimes (v1-156 3)
                 (let ((a0-71 (-> self vehicle v1-156)))
@@ -349,7 +349,7 @@
                 (s5-4 (new 'stack-no-clear 'vector))
                 )
             (dotimes (s4-2 (length *oasis-marauder-spawn-point*))
-              (when (and (< (-> self marauder-count) (the-as uint 7)) (< (-> self total-spawned) (the-as uint 127)))
+              (when (and (< (-> self marauder-count) (the-as uint 7)) (< (-> self total-spawned) (the-as uint 57)))
                 (let ((s3-1 (-> *oasis-marauder-spawn-point* s4-2)))
                   (vector-! s5-4 (-> s3-1 pos) (camera-pos))
                   (if (< (vector-dot gp-6 s5-4) 0.0)
@@ -361,7 +361,7 @@
             )
           (set-time! (-> self check-timer))
           )
-        (let ((v1-182 (- (+ (-> self marauder-count) 127) (-> self total-spawned))))
+        (let ((v1-182 (- (+ (-> self marauder-count) 57) (-> self total-spawned))))
           (cond
             ((zero? v1-182)
              (when (-> self hud-counter)
@@ -457,7 +457,7 @@
                     (when (and s1-0 (not (-> s4-0 spawned-marauder?)) (let ((f0-6 40960.0))
                                                                         (and (< f30-0 (* f0-6 f0-6))
                                                                              (< (-> this marauder-count) (the-as uint 7))
-                                                                             (< (-> this total-spawned) (the-as uint 127))
+                                                                             (< (-> this total-spawned) (the-as uint 57))
                                                                              )
                                                                         )
                                )

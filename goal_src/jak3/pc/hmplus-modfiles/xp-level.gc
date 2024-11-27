@@ -173,7 +173,10 @@
     (set! draw-levelup-noto #t)
     (set! noto-string "<COLOR_ORANGE>Notoriety<COLOR_YELLOW>")
     (set! draw-levelup-int (-> *game-info* total-trys))
-    (set! (-> *target* fact health) (-> *FACT-bank* health-max-default))
+    (when (!= (-> *target* fact health-max) (+ (-> *FACT-bank* health-max-default) (/ (-> *game-info* total-trys) 5)))
+        (set! (-> *target* fact health-max) (+ (-> *FACT-bank* health-max-default) (/ (-> *game-info* total-trys) 5)))
+    )
+    (set! (-> *target* fact health) (-> *target* fact health-max))
     (auto-save-user)
     (levelup-glow-yellow)
     (none)
@@ -219,20 +222,12 @@
 )
 
 (defun vehicle-killed? ((xp-gain float))
-    (let ((karma (-> *game-info* karma))
-          (fuel (-> *game-info* fuel))
-          (xp-gain2 (/ (* xp-gain draw-enemy-noto) 2))
-          (xp-gain3 (/ (* xp-gain draw-enemy-noto) 4)))
-        (when (>= xp-gain2 135.0)
-            (set! xp-gain 135.0)
-        )
-        (+! fuel xp-gain2)
-        (+! karma xp-gain3)
-        (set! xp-string "Marauder Killed")
-        (set! *xp-gain* xp-gain2)
-        (set! xp-draw #t)
-        (set! xpi 0)
-    )
+    (+! (-> *game-info* fuel) (/ (* xp-gain draw-enemy-noto) 2))
+    (+! (-> *game-info* karma) (/ (* xp-gain draw-enemy-noto) 4))
+    (set! xp-string "Marauder Killed")
+    (set! *xp-gain* (/ (* xp-gain draw-enemy-noto) 2))
+    (set! xp-draw #t)
+    (set! xpi 0)
     (none)
 )
 
@@ -249,13 +244,13 @@
     (let ((xp-gain2 (/ (* xp-gain draw-enemy-noto) 1.5))
           (xp-gain3 (/ (* xp-gain draw-enemy-noto) 4)))
 
-        (when (> xp-gain2 235.0)
-            (set! xp-gain2 235.0)
+        (when (> xp-gain2 2500.0)
+            (set! xp-gain2 2500.0)
         )
         (+! (-> *game-info* karma) xp-gain2)
         (when (focus-test? *target* pilot)
-            (when (> xp-gain3 235.0)
-                (set! xp-gain3 235.0)
+            (when (> xp-gain3 2500.0)
+                (set! xp-gain3 2500.0)
             )
             (+! (-> *game-info* fuel) xp-gain3)
         )
@@ -284,7 +279,106 @@
     (none)
 )
 
+(defun delayed-heal ()
+     (set! (-> *target* fact health-max) (+ (-> *FACT-bank* health-max-default) (/ notoriety-level 3)))
+     (set! delayed-heal-full #t)
+     (set! del-i 0)
+    (none)
+)
 
+(defun draw-targbar-hp ()
+    (let 
+            (
+                (x 7)
+                (y 358)
+                (progress 0.0)
+                (arg3 (new 'static 'rgba 
+                    :r 0
+                    :g 255
+                    :b 0
+                    :a #x40
+                    )
+                    )
+            )
+            (let (
+                    (level-cap (-> *target* fact health-max))
+                    (arg1 (-> *target* fact health))
+                    )
+                        (when (!= progress (/ arg1 level-cap))
+                            (set! progress (/ arg1 level-cap))
+                        )
+                    )
+                (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
+                                    (bucket-id particles)
+                                    )
+            (draw-sprite2d-xy s2-0 x y 63 14 (new 'static 'rgba :a (-> arg3 a)) #x3fffff)
+            (draw-sprite2d-xy s2-0 (+ x 1) (+ y 1) (the int (* 61.0 progress)) 12 arg3 #x3fffff)
+            )
+            )
+    (none)
+)
+(defun draw-targbar-dark ()
+    (let 
+            (
+                (x 7)
+                (y 342)
+                (progress 0.0)
+                (arg3 (new 'static 'rgba 
+                    :r 155
+                    :g 0
+                    :b 255
+                    :a #x40
+                    )
+                    )
+            )
+            (let (
+                    (level-cap (-> *FACT-bank* eco-pill-dark-max-default))
+                    (arg1 (-> *game-info* eco-pill-dark))
+                    )
+                        (when (!= progress (/ arg1 level-cap))
+                            (set! progress (/ arg1 level-cap))
+                        )
+                    )
+                (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
+                                    (bucket-id particles)
+                                    )
+            (draw-sprite2d-xy s2-0 x y 63 14 (new 'static 'rgba :a (-> arg3 a)) #x3fffff)
+            (draw-sprite2d-xy s2-0 (+ x 1) (+ y 1) (the int (* 61.0 progress)) 12 arg3 #x3fffff)
+            )
+            )
+    (none)
+)
+(defun draw-targbar-light ()
+    (let 
+            (
+                (x 7)
+                (y 326)
+                (progress 0.0)
+                (arg3 (new 'static 'rgba 
+                    :r 200
+                    :g 200
+                    :b 200
+                    :a #x40
+                    )
+                    )
+            )
+            (let (
+                    (level-cap (-> *FACT-bank* eco-pill-light-max-default))
+                    (arg1 (-> *game-info* eco-pill-light))
+                    )
+                        (when (!= progress (/ arg1 level-cap))
+                            (set! progress (/ arg1 level-cap))
+                        )
+                    )
+                (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
+                                    (bucket-id particles)
+                                    )
+            (draw-sprite2d-xy s2-0 x y 63 14 (new 'static 'rgba :a (-> arg3 a)) #x3fffff)
+            (draw-sprite2d-xy s2-0 (+ x 1) (+ y 1) (the int (* 61.0 progress)) 12 arg3 #x3fffff)
+            )
+            )
+    (none)
+)
 
 (defun draw-XP-bar ()
 (when 
@@ -626,6 +720,49 @@
                 )
             )
         )
+
+        ;TARGBAR
+        (when 
+            (and
+                (not *scene-player*)
+                *target*
+                (not (focus-test? *target* pilot))
+            )
+                (draw-targbar-hp)
+                (draw-targbar-dark)
+                (when (task-node-closed? (game-task-node temple-oracle-meeting))
+                    (draw-targbar-light)
+                )
+                (when (!= (-> *target* fact health-max) (+ (-> *FACT-bank* health-max-default) (/ (-> *game-info* total-trys) 3)))
+                    (set! (-> *target* fact health-max) (+ (-> *FACT-bank* health-max-default) (/ (-> *game-info* total-trys) 3)))
+                )
+            )
+
+        (when
+            (and
+                (not *scene-player*)
+                (= (paused?) #f)
+                (= (pause-allowed?) #t)
+                *target*
+                (= delayed-heal-full #t)
+            )
+                (+! del-i 1)
+                (when 
+                    (and
+                        (!= (-> *target* fact health) (+ (-> *FACT-bank* health-max-default) (/ (-> *game-info* total-trys) 3)))
+                        (>= del-i 0)
+                        (< del-i 260)
+                    )
+                    (set! (-> *target* fact health) (+ (-> *FACT-bank* health-max-default) (/ (-> *game-info* total-trys) 3)))
+                    (set! del-i 0)
+                    (set! delayed-heal-full #f)
+                )
+                (when (>= del-i 260)
+                    (set! (-> *target* fact health) (+ (-> *FACT-bank* health-max-default) (/ (-> *game-info* total-trys) 3)))
+                    (set! del-i 0)
+                    (set! delayed-heal-full #f)
+                )
+            )
 
 
         ;level based enemy-levels

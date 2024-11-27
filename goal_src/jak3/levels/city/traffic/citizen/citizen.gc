@@ -91,8 +91,8 @@
   (logior! (-> this enemy-flags) (enemy-flag dangerous-backup))
   (logior! (-> this enemy-flags) (enemy-flag trackable trackable-backup))
   (logior! (-> this enemy-flags) (enemy-flag attackable attackable-backup))
-  (set! (-> this enemy-noto) (+ enemy-noto (rand-vu-int-range 0 2)))
-  (set! (-> this hit-points) (+ (-> this enemy-info default-hit-points) (* (the float (-> this enemy-noto)) 3)))
+  ;(set! (-> this enemy-info enemy-noto) (+ enemy-noto (rand-vu-int-range 0 2)))
+  (set! (-> this hit-points) (+ (-> this enemy-info default-hit-points) (* (the float enemy-noto) 3)))
   (set! (-> this fated-time) 0)
   (set! (-> this probe-counter) (the-as uint 0))
   (set! (-> this hit-by-player-count) 0)
@@ -296,6 +296,17 @@
 ;; WARN: disable def twice: 164. This may happen when a cond (no else) is nested inside of another conditional, but it should be rare.
 (defmethod event-handler ((this citizen) (arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
   (local-vars (v0-3 object))
+  (cond 
+  ((= arg2 'attack)
+    (if (logtest? (-> *game-info* secrets) (game-secrets hero-mode))
+        (set! hpbar-max-hit-points (+ (* 2.0 (-> self enemy-info default-hit-points)) (* (the float enemy-noto) 3)))
+        (set! hpbar-max-hit-points (+ (-> self enemy-info default-hit-points) (* (the float enemy-noto) 3)))
+      )
+      (set! hpbar-hit-points (-> this hit-points))
+      (set! enemy-hp #t)
+      (set! draw-enemy-noto enemy-noto)
+  )
+  )
   (case arg2
     (('hit 'hit-flinch 'hit-knocked)
      (let ((v1-1 #f))

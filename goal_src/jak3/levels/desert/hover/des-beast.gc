@@ -1465,7 +1465,7 @@
     (set! (-> self oomass) 1.0)
     (set-time! (-> self next-shoot))
     (set-time! (-> self state-time))
-    (set! (-> self enemy-noto) 7)
+    ;(set! (-> self enemy-noto) 7)
     )
   :exit (behavior ()
     '()

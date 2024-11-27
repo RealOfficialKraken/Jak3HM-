@@ -1435,7 +1435,7 @@
   )
 
 (defun activate-hud ((arg0 target))
-  (process-spawn hud-health :init hud-init-by-other :name "hud-health" :to arg0)
+  ;(process-spawn hud-health :init hud-init-by-other :name "hud-health" :to arg0)
   (process-spawn hud-map :init hud-init-by-other :name "hud-map" :to arg0)
   (set! *hud-skullgem* (process-spawn hud-skullgem :init hud-init-by-other :name "hud-skullgem" :to arg0))
   (process-spawn hud-skill :init hud-init-by-other :name "hud-skill" :to arg0)
