@@ -915,7 +915,7 @@
     (set! (-> this eco-pickup-time) (-> *display* game-clock frame-counter))
     )
   (when (or (not arg0) (= arg0 'health))
-    (set! (-> this health-max) (+ (-> *FACT-bank* health-max-default) (/ notoriety-level 3)))
+    (set! (-> this health-max) (+ 8.0 (/ notoriety-level 3)))
     (set! (-> this health) (-> this health-max))
     (set! (-> this health-pickup-time) (seconds -100))
     )

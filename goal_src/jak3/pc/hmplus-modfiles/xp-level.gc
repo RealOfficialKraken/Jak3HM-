@@ -173,8 +173,8 @@
     (set! draw-levelup-noto #t)
     (set! noto-string "<COLOR_ORANGE>Notoriety<COLOR_YELLOW>")
     (set! draw-levelup-int (-> *game-info* total-trys))
-    (when (!= (-> *target* fact health-max) (+ (-> *FACT-bank* health-max-default) (/ (-> *game-info* total-trys) 5)))
-        (set! (-> *target* fact health-max) (+ (-> *FACT-bank* health-max-default) (/ (-> *game-info* total-trys) 5)))
+    (when (!= (-> *target* fact health-max) (+ (-> *FACT-bank* health-max-default) (/ (-> *game-info* total-trys) 3)))
+        (set! (-> *target* fact health-max) (+ (-> *FACT-bank* health-max-default) (/ (-> *game-info* total-trys) 3)))
     )
     (set! (-> *target* fact health) (-> *target* fact health-max))
     (auto-save-user)
@@ -262,6 +262,18 @@
     (none)
 )
 
+(defun boss-killed? ((xp-gain float))
+    (let ((xp-gain2 (/ (* xp-gain draw-enemy-noto) 1.5))
+          (xp-gain3 (/ (* xp-gain draw-enemy-noto) 4)))
+    (+! (-> *game-info* karma) xp-gain2)
+    (set! xp-string "Boss Killed")
+    (set! *xp-gain* xp-gain2)
+    (set! xp-draw #t)
+    (set! xpi 0)
+    )
+    (none)
+)
+
 (defun side-enemy-killed? ()
     (+! (-> *game-info* side-enemies-killed?) 1)
     (set! xp-string "Current Quest")
@@ -280,9 +292,9 @@
 )
 
 (defun delayed-heal ()
-     (set! (-> *target* fact health-max) (+ (-> *FACT-bank* health-max-default) (/ notoriety-level 3)))
-     (set! delayed-heal-full #t)
-     (set! del-i 0)
+     (set! (-> *target* fact health-max) (+ 8.0 (/ notoriety-level 3)))
+     ;(set! delayed-heal-full #t)
+     ;(set! del-i 0)
     (none)
 )
 
@@ -727,10 +739,12 @@
                 (not *scene-player*)
                 *target*
                 (not (focus-test? *target* pilot))
+                (= (pause-allowed?) #t)
+                (= in-pre-tutorial? #f)
             )
                 (draw-targbar-hp)
                 (draw-targbar-dark)
-                (when (task-node-closed? (game-task-node temple-oracle-meeting))
+                (when (logtest? (-> *game-info* features) (game-feature lightjak))
                     (draw-targbar-light)
                 )
                 (when (!= (-> *target* fact health-max) (+ (-> *FACT-bank* health-max-default) (/ (-> *game-info* total-trys) 3)))
@@ -906,6 +920,22 @@
                 )
                 (set! enemy-noto 14)
             )
+            (when ;COMBABX
+                (and
+                    (or 
+                        (= (-> (level-get-target-inside *level*) name) 'comba)
+                        (= (-> (level-get-target-inside *level*) name) 'combb)
+                        (= (-> (level-get-target-inside *level*) name) 'combx)
+                    )
+                    (and
+                        (!= enemy-noto 15)
+                        (!= enemy-noto 16)
+                        (!= enemy-noto 17)
+                        (!= enemy-noto 18)
+                    )
+                )
+                (set! enemy-noto (rand-vu-int-range 15 18))
+            )
             (when ;MINE
                 (and
                     (or 
@@ -921,6 +951,14 @@
                     )
                 )
                 (set! enemy-noto (rand-vu-int-range 15 18))
+            )
+            (when ;CTYGENB
+                (and
+                    (= (-> (level-get-target-inside *level*) name) 'ctygenb)
+                    (task-node-open? (game-task-node mine-boss-resolution))
+                    (!= enemy-noto 20)
+                )
+                (set! enemy-noto 20)
             )
             (when ;CTYGENB
                 (and

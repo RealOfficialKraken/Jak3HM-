@@ -443,7 +443,7 @@
    (the-as uint 5)
    (joint-mod-base-flags attached)
    )
-   (set! (-> this enemy-noto) (+ enemy-noto (rand-vu-int-range 0 3)))
+   ;(set! (-> this enemy-noto) (+ enemy-noto (rand-vu-int-range 0 3)))
    (if (logtest? (-> *game-info* secrets) (game-secrets hero-mode))
           (set! (-> this hit-points) (+ 2.0 (/ (the float enemy-noto) 3)))
           (set! (-> this hit-points) (+ 1.0 (/ (the float enemy-noto) 3)))

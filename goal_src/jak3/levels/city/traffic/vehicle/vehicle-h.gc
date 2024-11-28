@@ -612,7 +612,6 @@
    (exhaust-part-accum        sparticle-launch-control      2)
    (smoke-part-accum          sparticle-launch-control      2)
    (section-array             vehicle-section               4 :inline)
-   (enemy-noto                int)
    )
   (:state-methods
     inactive

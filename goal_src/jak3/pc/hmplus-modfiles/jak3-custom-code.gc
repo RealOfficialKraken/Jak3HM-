@@ -684,6 +684,19 @@ BUGS:
         )
 )
 
+(when
+    (and
+        *target*
+        (= (pause-allowed?) #t)
+        (not *scene-player*)
+        (= (paused?) #f)
+        (= mine-boss-fireball? #t)
+    )
+        (when (rand-vu-percent? 0.02)
+            (spawn-mine-fireball)
+        )
+    )
+
 (when 
     (and
         (= in-tutorial? #t)
@@ -2678,6 +2691,53 @@ BUGS:
             (send-event *target* 'end-mode 'pilot)
         )
 
+    (when
+        (and
+            (= in-mine-level? #t)
+            (= mine-boss-killed? #f)
+            (not *scene-player*)
+            (= (paused?) #f)
+            (= (pause-allowed?) #t)
+            (task-node-open? (game-task-node mine-boss-extra))
+            (or
+                (= (-> (level-get-target-inside *level*) name) 'mined)
+                (= (-> (level-get-target-inside *level*) name) 'minea)
+            )
+            (<= (vector-vector-distance (target-pos 0)
+                    (new 'static 'vector
+                    :x (meters 315.9410)
+                    :y (meters 61.8098)
+                    :z (meters -217.9078)
+                    :w 1.0))
+                    65000.0)
+        )
+            (task-node-close! (game-task-node mine-boss-extra) #t)
+        )
+    (when
+        (and
+            (= in-mine-level? #t)
+            (= mine-boss-killed? #t)
+            (not *scene-player*)
+            (= (paused?) #f)
+            (= (pause-allowed?) #t)
+            (task-node-closed? (game-task-node mine-boss-extra-resolution))
+            (or
+                (= (-> (level-get-target-inside *level*) name) 'mined)
+                (= (-> (level-get-target-inside *level*) name) 'minea)
+            )
+            (> (vector-vector-distance (target-pos 0)
+                    (new 'static 'vector
+                    :x (meters 315.9410)
+                    :y (meters 61.8098)
+                    :z (meters -217.9078)
+                    :w 1.0))
+                    65000.0)
+        )
+            (task-node-open! (game-task-node mine-boss-extra) #t)
+            (kill-by-name "prebot-2" *active-pool*)
+            (set! mine-boss-killed? #f)
+        )
+
 (none)
 )
 
@@ -3067,9 +3127,16 @@ BUGS:
     (kill-by-name "marauder-c" *default-pool*)
     (kill-by-name "goredrinker" *default-pool*)
     (kill-by-name "vin-effect" *default-pool*)
-    (delayed-heal)
+    (set! mine-boss-fireball? #f)
     (task-node-open! (game-task-node desert-spawn-task-oasis-goto-artifact) #t)
     (task-node-open! (game-task-node desert-spawn-task-deserta-goto-artifact) #t)
+    (when (or
+            (task-node-open? (game-task-node mine-boss-extra-resolution))
+            (task-node-closed? (game-task-node mine-boss-extra-resolution))
+          )
+        (task-node-open! (game-task-node mine-boss-extra) #t)
+        (set! in-mine-boss? #f)
+    )
     (set! desert-spawn-mission-oasis #f)
     (set! desert-spawn-mission-deserta #f)
     (set! desert-spawn-mission-brute #f)

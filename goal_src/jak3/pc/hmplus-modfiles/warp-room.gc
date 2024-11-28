@@ -86,10 +86,19 @@
             *target*
             (= test-level-loaded-mine? #f)
             (= in-pre-tutorial? #f)
-            (= (-> (level-get-target-inside *level*) name) 'minec)
+            (or
+                (= (-> (level-get-target-inside *level*) name) 'minea)
+                (= (-> (level-get-target-inside *level*) name) 'mineb)
+                (= (-> (level-get-target-inside *level*) name) 'minec)
+            )
         )
-            (let ((minea (new 'static 'vector :x (meters 248.4198) :y (meters 97.9794) :z (meters -6.5898) :w 1.0)))
-                (spawn-warp-gate-dark minea "warp-gate-mine" 90)
+            (let ((minea (new 'static 'vector :x (meters 248.4198) :y (meters 97.9794) :z (meters -6.5898) :w 1.0))
+                  (mine-ele (new 'static 'vector :x (meters -102.5881) :y (meters 84.5088) :z (meters -107.8329) :w 1.0))
+                  (mine-bossroom (new 'static 'vector :x (meters 326.6486) :y (meters 59.9986) :z (meters -174.3170) :w 1.0))
+                 )
+                (spawn-warp-gate minea "warp-gate-mine" 90)
+                (spawn-warp-gate mine-ele "warp-gate-mine" 0)
+                (spawn-warp-gate mine-bossroom "warp-gate-mine" 55)
         )
         (set! test-level-loaded-mine? #t)
     )
@@ -98,6 +107,8 @@
         (and ;minea gate despawn
             (= (pause-allowed?) #t)
             *target*
+            (!= (-> (level-get-target-inside *level*) name) 'minea)
+            (!= (-> (level-get-target-inside *level*) name) 'mineb)
             (!= (-> (level-get-target-inside *level*) name) 'minec)
             (= test-level-loaded-mine? #t)
         )

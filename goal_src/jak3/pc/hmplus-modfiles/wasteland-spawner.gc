@@ -752,6 +752,7 @@
             (= (pause-allowed?) #t)
             (= in-satbattle? #f)
             (= cdr-satbattle #f)
+            (= (-> (level-get-target-inside *level*) name) 'desert)
             (or
                 (task-node-closed? (game-task-node desert-rescue-hold-doors))
                 (logtest? (-> *game-info* secrets) (game-secrets hero-mode))
