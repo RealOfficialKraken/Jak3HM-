@@ -313,6 +313,9 @@ void extract_common(const ObjectFileDB& db,
   extract_single_ag("TOWB.DGO", "neo-wasp-b-ag", db, tex_db, tfrag_level);
   extract_single_ag("MIC.DGO", "manta-ag", db, tex_db, tfrag_level);
   extract_single_ag("LJKDXVIN.DGO", "vin-effect-ag", db, tex_db, tfrag_level);
+  extract_single_ag("DESHOVER.DGO", "eco-crystal-dark-ag", db, tex_db, tfrag_level);
+  extract_single_ag("CWI.DGO", "ctycrate-ag", db, tex_db, tfrag_level);
+  extract_single_ag("TEMA.DGO", "urn-a-ag", db, tex_db, tfrag_level);
 
   add_all_textures_from_level(tfrag_level, "ARTSPOOL", tex_db);
   extract_art_groups_from_level(db, tex_db, {}, "ARTSPOOL", tfrag_level, art_group_data);

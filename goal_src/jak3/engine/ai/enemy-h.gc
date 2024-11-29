@@ -190,7 +190,6 @@
    (gem-no-seg                           uint32)
    (gem-offset                           sphere  :inline)
    (knocked-off                          symbol)
-   (enemy-noto                           int)
    )
   (:methods
     (copy-enemy-info! (_type_ _type_) none)

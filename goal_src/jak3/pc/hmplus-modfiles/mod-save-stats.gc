@@ -10,7 +10,7 @@
 
 (defun stat-tracker! ()
 ;;Good Modifiers
-
+#|
 (when 
 (and 
 (= (/ (mod (-> *game-info* continue-deaths) 100000000) 10000000) 1) ;modifier boost-tap
@@ -149,7 +149,7 @@
 )
 (set! has-more-enemies? #f)
 )
-
+|#
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;has weapon?;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when 
 (and 

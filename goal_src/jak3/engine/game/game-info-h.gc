@@ -285,6 +285,12 @@
   (defun-extern side-enemy-killed? (none))
   (defun-extern boss-killed? float none)
 
+  (defun-extern drop-crate vector int none)
+
+  (defun-extern birth-drop1 vector none)
+  (defun-extern birth-drop2 vector none)
+  (defun-extern birth-drop3 vector none)
+
   (defun-extern runs-on-blackout (none))
   (define desert-spawn-mission-oasis #f)
   (define desert-spawn-mission-deserta #f)
@@ -422,6 +428,7 @@
   (ammo-light-random 48)
   (ammo-dark-light-random 49)
   (light-random 50)
+  (eco-crystal-dark-c 51)
   )
 ;; ---pickup-type
 
