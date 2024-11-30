@@ -2627,6 +2627,7 @@ BUGS:
             (and
                 (= weather-dark-mode #f)
                 (= white-mode #f)
+                (= onfoot-battle? #f)
                 (or
                     (= (-> *time-of-day-context* overide-enable) #t)
                     (= (-> *mood-control* overide-weather-flag) #t)
@@ -2737,6 +2738,41 @@ BUGS:
             (kill-by-name "prebot-2" *active-pool*)
             (set! mine-boss-killed? #f)
         )
+
+    (when 
+        (and
+            (>= (-> *time-of-day-context* time) 8.0)
+            (< (-> *time-of-day-context* time) (+ 8.0 5.0))
+            (= in-desertf-anchor? #f)
+        )
+            (set! in-desertf-anchor? #t)
+        )
+
+    (when 
+        (and
+            (not *scene-player*)
+            (= (paused?) #f)
+            (= (pause-allowed?) #t)
+            *target*
+            (= in-desertf-anchor? #t)
+            (not (task-node-open? (game-task-node desertf-anchor-resolution)))
+        )
+            (task-node-open! (game-task-node desertf-anchor-resolution) #t)
+    )
+
+    (when 
+        (and
+            (not *scene-player*)
+            (= (paused?) #f)
+            (= (pause-allowed?) #t)
+            *target*
+            (= in-desertf-anchor? #f)
+            (not (task-node-open? (game-task-node desertf-anchor-resolution)))
+            (= *waste-ship-anchor* #t)
+        )
+            (kill-by-name "dm-ship" *default-pool*)
+            (set! *waste-ship-anchor* #f)
+    )
 
 (none)
 )
@@ -2856,6 +2892,11 @@ BUGS:
         (reset-actors 'life)
         (set-continue! *game-info* "wasdoors-city" #t)
         (set! *force-stop-pilot* #f)
+        (when (or
+                (= in-desertf-anchor? #t)
+              )
+            (set! in-desertf-anchor? #f)
+        )
         (set! weather-dark-mode #f)
       )
       ((= weather-dark-mode #f)
@@ -3236,6 +3277,38 @@ BUGS:
     (none)
   )
 
+  (define in-cfreeze? #f)
+
+  (defun toggle-freeze ()
+    #|(cond
+        ((= in-cfreeze? #f)
+            (set! (-> *target* lightjak freeze-control) (ppointer->handle (process-spawn
+                freeze-control
+                :init freeze-control-init
+                (-> *target* lightjak freeze-sound)
+                :name "freeze-control"
+                :to *target*
+                )
+                )
+            )
+            (set! in-cfreeze? #t)
+        )
+        ((= in-cfreeze? #t)
+            (set! in-cfreeze? #f)
+        )
+    )|#
+    (set! (-> *target* lightjak freeze-control) (ppointer->handle (process-spawn
+                freeze-control
+                :init freeze-control-init
+                (-> *target* lightjak freeze-sound)
+                :name "freeze-control"
+                :to *target*
+                )
+                )
+            )
+    (none)
+  )
+
   
 (defskelgroup skel-dm-skyship dm-ship dm-ship-lod0-jg dm-ship-idle-ja
               ((dm-ship-lod0-mg (meters 999999)))
@@ -3272,13 +3345,17 @@ BUGS:
 (defun runs-on-blackout ()
     (kill-by-name "Fallen Satellite" *default-pool*)
     (kill-by-name "manipy-sat" *default-pool*)
-    (kill-by-name "dp-bipedal" *default-pool*)
+    (kill-by-name "dp-bipedal-c" *default-pool*)
     (kill-by-name "marauder-c" *default-pool*)
     (kill-by-name "goredrinker" *default-pool*)
     (kill-by-name "vin-effect" *default-pool*)
     (set! mine-boss-fireball? #f)
+    (set! onfoot-battle? #f)
     (task-node-open! (game-task-node desert-spawn-task-oasis-goto-artifact) #t)
     (task-node-open! (game-task-node desert-spawn-task-deserta-goto-artifact) #t)
+    (when (= in-desertf-anchor? #t)
+        (set! anchor-target-dead? #t)
+    )
     (when (or
             (task-node-open? (game-task-node mine-boss-extra-resolution))
             (task-node-closed? (game-task-node mine-boss-extra-resolution))

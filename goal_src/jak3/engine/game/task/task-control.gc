@@ -2384,6 +2384,7 @@
          (suspend)
          )
        (hide-hud 'hud-health)
+       (hide-hud 'hut-crystal)
        )
       ((= (-> self params message) (resetter-message mission-fail-or-retry))
        (while (not (process-grab? *target* 'dead))

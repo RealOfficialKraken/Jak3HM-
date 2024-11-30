@@ -289,18 +289,13 @@
     (kill-by-name "manipy-sat-desertc2" *default-pool*)
     (kill-by-name "manipy-sat-desertd1" *default-pool*)
     (kill-by-name "manipy-sat-desertd2" *default-pool*)
-    (kill-by-name "dp-bipedal" *default-pool*)
+    (kill-by-name "dp-bipedal-c" *default-pool*)
     (kill-by-name "task-arrow-satellite" *default-pool*)
     (when (= (-> (level-get-target-inside *level*) name) 'desert)
         (set! enemy-noto (+ notoriety-level 1))
     )
     (none)
 )
-
-(define *waste-town-spawners* #f)
-(define *waste-ship-anchor* #f)
-(define in-desertf-anchor? #f)
-(define preanchor-town #f)
 
 (defun dm-dark-ship ((vec vector))
     (let ((veccy (new 'stack-no-clear 'vector))
@@ -1202,25 +1197,6 @@
                         )
                     )
             )|#
-            (when 
-                (and
-                    (or 
-                        (= (-> (level-get-target-inside *level*) name) 'desert)
-                        (= (-> (level-get-target-inside *level*) name) 'desertg)
-                        (= (-> (level-get-target-inside *level*) name) 'wasdoors)
-                    )
-                    (not *waste-ship-anchor*)
-                )
-                (set! *waste-ship-anchor* #t)
-                (let ((vec (new 'static 'vector 
-                        :x (meters 1983.4888) 
-                        :y (meters 314.2753) 
-                        :z (meters 2685.8525) 
-                        :w 1.0
-                    )))
-                (dm-dark-ship vec)
-                )
-            )
             (when 
                 (and
                     (!= (-> (level-get-target-inside *level*) name) 'desert)

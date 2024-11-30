@@ -1532,7 +1532,7 @@
             :when-open #f
             :flags (game-task-node-flag no-percent act1)
             :parent-node (new 'static 'array game-task-node 4
-              (game-task-node desert-interceptors-attack-exclude)
+              (game-task-node none)
               (game-task-node none)
               (game-task-node none)
               (game-task-node none)
@@ -1552,9 +1552,9 @@
             :task (game-task desert-interceptors)
             :name "desertf-anchor-resolution"
             :when-open #f
-            :flags (game-task-node-flag bbush act1 exclusive set-task-mask)
+            :flags (game-task-node-flag act1 no-percent)
             :parent-node (new 'static 'array game-task-node 4
-              (game-task-node desert-interceptors-attack-exclude)
+              (game-task-node desertf-anchor-introduction)
               (game-task-node none)
               (game-task-node none)
               (game-task-node none)

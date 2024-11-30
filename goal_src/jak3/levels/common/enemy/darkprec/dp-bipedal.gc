@@ -1489,6 +1489,9 @@
     (logior! (-> self fact enemy-options) (enemy-option ambush))
     )
   :trans (behavior ()
+    (when (string= (-> self name) "dp-bipedal-c")
+      (go-virtual die-fast)
+    )
     (let ((t9-0 (-> (method-of-type nav-enemy dormant-aware) trans)))
       (if t9-0
           (t9-0)
@@ -3257,6 +3260,6 @@
 )
 
 (defun spawn-dark-maker ((vec vector))
-  (process-spawn dp-bipedal vec :name "dp-bipedal")
+  (process-spawn dp-bipedal vec :name "dp-bipedal-c")
   (none)
 )

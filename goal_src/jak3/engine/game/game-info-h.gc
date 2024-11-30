@@ -266,6 +266,13 @@
   (define spawned-desertc2-poi? #f)
   (define spawned-desertd1-poi? #f)
   (define spawned-desertd2-poi? #f)
+  (define anchor-target-dead? #f)
+  (define *waste-town-spawners* #f)
+  (define *waste-ship-anchor* #f)
+  (define in-desertf-anchor? #f)
+  (define preanchor-town #f)
+  (define anchor-float-time 0.0)
+  (define onfoot-battle? #f)
 
   (define has-boost-tap? #f)
   (define has-fast-attacks? #f)
