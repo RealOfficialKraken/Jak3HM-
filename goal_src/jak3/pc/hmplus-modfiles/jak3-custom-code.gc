@@ -733,10 +733,10 @@ BUGS:
                 (task-arrow-custom tut-pos1 #t)
             )
         )
-        (when (and (>= tutorial-freeze 100) (< tutorial-freeze 900))
+        (when (and (>= tutorial-freeze 119) (< tutorial-freeze 900))
             (clear matt-str)
             (clear *pc-encoded-matt-str*)
-            (format matt-str "<COLOR_ORANGE>Gun Upgrades aren't obtained by regular means~%<COLOR_YELLOW>You'll get the red and yellow gun at the start~%But thats it~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_ORANGE>You collect weapons in drops from minibosses, which are found everywhere in the desert!"
+            (format matt-str "<COLOR_ORANGE>Gun Upgrades aren't obtained by regular means~%<COLOR_YELLOW>You'll get the red and yellow gun at the start~%But thats it~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_ORANGE>Weapons are collected by fighting powerful monsters and bosses, found from~%enemy dropped crates"
             )
             (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
             (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -746,36 +746,45 @@ BUGS:
             (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
         )
         (when (= tutorial-freeze 899)
-            (kill-by-name "upgrade-collectable" *entity-pool*)
+            (kill-by-name "upgrade-collectable" *active-pool*)
             (kill-by-name "task-arrow-custom" *default-pool*)
         )
         (when (= tutorial-freeze 925)
-            (let ((man-neo-sat (the manipy
-                (ppointer->process (process-spawn manipy
-                 :init
-                 manipy-init
-                 (new 'static 'vector
+            (let ((vec11 (new 'static 'vector
                  :x (meters 2302.5278) 
                  :y (meters 37.5870)
                  :z (meters -492.3220)
-                 :w 1.0)
-                 #f
-                 (art-group-get-by-name *level* "skel-neo-sat" (the (pointer level) #f))
-                 #f
-                 0
-                 #f
-                 :name "manipy-tutorial1"
-                 :from *default-dead-pool*
-                 :stack-size #x18000
-                 )))))
-                 ;(send-event man-neo-sat 'anim-mode 'loop)
-                 ;(send-event man-neo-sat 'art-joint-anim "dp-bipedal-shield-out-idle-ja")
+                 :w 1.0))
+            )
+                 (drop-crate vec11 1)
+                 )
+        )
+        (when (= tutorial-freeze 1300)
+            (kill-by-name "crate-tier1" *active-pool*)
+            (let ((vec11 (new 'static 'vector
+                 :x (meters 2302.5278) 
+                 :y (meters 37.5870)
+                 :z (meters -492.3220)
+                 :w 1.0))
+            )
+                 (drop-crate vec11 2)
+                 )
+        )
+        (when (= tutorial-freeze 1725)
+            (kill-by-name "crate-tier2" *active-pool*)
+            (let ((vec11 (new 'static 'vector
+                 :x (meters 2302.5278) 
+                 :y (meters 37.5870)
+                 :z (meters -492.3220)
+                 :w 1.0))
+            )
+                 (drop-crate vec11 3)
                  )
         )
         (when (and (>= tutorial-freeze 925) (< tutorial-freeze 2025))
             (clear matt-str)
             (clear *pc-encoded-matt-str*)
-            (format matt-str "<COLOR_ORANGE>Minibosses are found in the desert when <COLOR_RED>no mission is active~%<COLOR_YELLOW>Most of them will not spawn until after they first appear~%~%For example, after the <COLOR_PINK>Satellite<COLOR_ORANGE> miniboss, you'll~%be able to find them across the desert"
+            (format matt-str "<COLOR_ORANGE>Crates are dropped from <COLOR_YELLOW>enemies, civilians, and bosses~%<COLOR_ORANGE>The urns are the lowest, and the black crates are the highest~%<COLOR_YELLOW>These crates can also drop weapons and gun mods"
             )
             (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
             (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -787,8 +796,11 @@ BUGS:
         (when (or (>= tutorial-freeze 2025)(and (cpad-pressed? 0 x) (>= tutorial-freeze 400)))
             (process-release? *target*)
             (kill-by-name "manipy-tutorial1" *default-pool*)
-            (kill-by-name "upgrade-collectable" *entity-pool*)
+            (kill-by-name "upgrade-collectable" *active-pool*)
             (kill-by-name "task-arrow-custom" *default-pool*)
+            (kill-by-name "crate-tier3" *active-pool*)
+            (kill-by-name "crate-tier2" *active-pool*)
+            (kill-by-name "crate-tier1" *active-pool*)
             (set! tutorial-freeze 0)
             (set! in-tutorial? #f)
         )
@@ -1505,7 +1517,7 @@ BUGS:
 (when (and (= (-> *game-info* total-deaths) 0)(= menu-unlocked? #t)(= on-vehicle? #f)(not *scene-player*)(= in-menu? #t))
     (clear matt-str)
     (clear *pc-encoded-matt-str*)
-    (format matt-str "<COLOR_WHITE>Welcome to <COLOR_BLUE>Hero<COLOR_RED>Mode<COLOR_CYAN>+~%<COLOR_GREEN>Made by Kraken~%~%<COLOR_CYAN>RPG Elements have been added!~%Information about your levels can be accessed in the <COLOR_ORANGE>Skills<COLOR_CYAN> tab~%~%Weapons are not obtained the traditional way! You only get these two guns to start.~%The new way to get weapons is to find artifacts in the wasteland~%~%Gun Mods are new additions that are incredibly rare, and each one has its own function.~%Good luck finding one of those~%~%Enemies also have a level, so be careful treading into certain areas~%Farming enemies is definitely recommended as the game accelerates enemy levels drastically~%The Desert Wasteland starts enemies 2 levels below, but gradually increases with time, infinitely~%Don't take too long on desert missions!~%~%<COLOR_GREEN>Good Luck!"
+    (format matt-str "<COLOR_WHITE>Welcome to <COLOR_BLUE>Hero<COLOR_RED>Mode<COLOR_CYAN>+~%<COLOR_GREEN>Made by Kraken~%~%<COLOR_CYAN>RPG Elements have been added!~%Information about your levels can be accessed in the <COLOR_ORANGE>Skills<COLOR_CYAN> tab~%~%Weapons are not obtained the traditional way! You only get these two guns to start.~%The new way to get weapons is to fight powerful enemies and bosses~%~%Gun Mods are new additions that are incredibly rare, and each one has its own function.~%Good luck finding one of those~%~%Enemies also have a level, so be careful treading into certain areas~%Farming enemies is definitely recommended as the game accelerates enemy levels drastically~%The Desert Wasteland starts enemies 2 levels below, but gradually increases with time, infinitely~%Don't take too long on desert missions!~%~%<COLOR_GREEN>Good Luck!"
     )
     (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
     (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -2743,7 +2755,9 @@ BUGS:
         (and
             (>= (-> *time-of-day-context* time) 8.0)
             (< (-> *time-of-day-context* time) (+ 8.0 5.0))
+            (= anchor-cooldown #f)
             (= in-desertf-anchor? #f)
+            (task-node-closed? (game-task-node wascity-gungame-resolution))
         )
             (set! in-desertf-anchor? #t)
         )
@@ -2755,6 +2769,8 @@ BUGS:
             (= (pause-allowed?) #t)
             *target*
             (= in-desertf-anchor? #t)
+            (= anchor-cooldown #f)
+            (task-node-closed? (game-task-node wascity-gungame-resolution))
             (not (task-node-open? (game-task-node desertf-anchor-resolution)))
         )
             (task-node-open! (game-task-node desertf-anchor-resolution) #t)
@@ -2768,10 +2784,19 @@ BUGS:
             *target*
             (= in-desertf-anchor? #f)
             (not (task-node-open? (game-task-node desertf-anchor-resolution)))
+            (task-node-closed? (game-task-node wascity-gungame-resolution))
             (= *waste-ship-anchor* #t)
         )
             (kill-by-name "dm-ship" *default-pool*)
             (set! *waste-ship-anchor* #f)
+    )
+
+    (when (= anchor-cooldown #t)
+        (+! anchor-cdr 1)
+        (when (>= anchor-cdr 12200)
+            (set! anchor-cdr 0)
+            (set! anchor-cooldown #f)
+        )
     )
 
 (none)
@@ -3346,6 +3371,7 @@ BUGS:
     (kill-by-name "Fallen Satellite" *default-pool*)
     (kill-by-name "manipy-sat" *default-pool*)
     (kill-by-name "dp-bipedal-c" *default-pool*)
+    (kill-by-name "Bipedal Boss" *default-pool*)
     (kill-by-name "marauder-c" *default-pool*)
     (kill-by-name "goredrinker" *default-pool*)
     (kill-by-name "vin-effect" *default-pool*)

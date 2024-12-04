@@ -24,6 +24,8 @@
 (define-extern roboguard-level type)
 (define-extern roboguard-city type)
 (define-extern dp-bipedal type)
+(define-extern dp-bipedal-c type)
+(define-extern bipedal-boss type)
 (define-extern kanga-lizard type)
 (define-extern dogat type)
 (define-extern marauder type)
@@ -111,6 +113,8 @@
     ((type-type? en-type roboguard-city) 'roboguard)
     ((type-type? en-type bombbot) 'bombbot)
     ((type-type? en-type spydroid-orig) 'spydroid)
+    ((type-type? en-type dp-bipedal-c) 'dp-bipedal-c)
+    ((type-type? en-type bipedal-boss) 'bipedal-boss)
     (else (-> en-type symbol)))
   )
 
@@ -273,6 +277,8 @@
   (define preanchor-town #f)
   (define anchor-float-time 0.0)
   (define onfoot-battle? #f)
+  (define anchor-cooldown #f)
+  (define anchor-cdr 0)
 
   (define has-boost-tap? #f)
   (define has-fast-attacks? #f)

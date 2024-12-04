@@ -21,6 +21,7 @@
 
 (deftype tm-desertf-anchor (task-manager)
   ((wave                           int)
+   (wave-max                       int)
    (max-count                      int)
    (ship-inside?                 symbol)
    (blast-i                        int)
@@ -35,6 +36,8 @@
    (spawn-pos                   vector)
    (getoff-bounds               vector)
    (spawn-count                    int)
+   (waiting?                    symbol)
+   (wait-i                         int)
    (wave-sp      (inline-array vector))
    (spawn-points (inline-array vector))
    (fireball-sp  (inline-array vector))
@@ -50,6 +53,7 @@
  lightning-blast
  spawn-wave
  dead
+ dead-win
  )
 )
   
@@ -76,13 +80,18 @@
             (set! (-> self ship-inside?) #f)
             (set! (-> self hit-points) 4000.0)
             (set! (-> self general-i) 0)
+            (set! (-> self wave-max) (+ enemy-noto (/ enemy-noto 4)))
+            (set! (-> self max-count) 7)
+            (set! (-> self waiting?) #f)
+            (when (>= (-> *time-of-day-context* time) 13.0)
+                (go-virtual flash-out-battle)
+            )
             (when (or
                     (= in-debug? #t)
                     (= anchor-target-dead? #t)
                   )
                 (set! (-> self general-i) 1179)
             )
-            (set! (-> self max-count) 7)
             (loop
                 (+! (-> self general-i) 1)
                 (cond 
@@ -94,7 +103,7 @@
                         (let ((i-i (-> self general-i)))
                             (when (= i-i 1200)
                                 (set! in-desertf-anchor? #t)
-                                (set! enemy-noto 54)
+                                (set! enemy-noto (rand-vu-int-range 42 61))
                             )
                             (when (= i-i 1190)
                                 (when (= white-mode #f)
@@ -179,7 +188,7 @@
 
 (defstate idle (tm-desertf-anchor) ;jak is inside of desert, but far away from battle
     :virtual #t
-    :enter
+    :code
     (behavior ()
         (set! *waste-ship-anchor* #t)
         (let ((vec (new 'static 'vector 
@@ -190,9 +199,6 @@
             )))
         (dm-dark-ship vec)
         )
-    )
-    :code
-    (behavior ()
         (loop 
             (format *stdcon* "~%tm-desertf-anchor is idle~%~%")
             (when (= in-desert-game-task? #t)
@@ -300,22 +306,6 @@
         (set! (-> self blast-i) 0)
         (set! (-> self fling-i) 0)
         (set! (-> self fling-max) 15)
-        (set! (-> self spawn-points)
-          (new 'static
-               'inline-array
-               vector
-               8
-               (static-vectorm 1459.8339 26.78 -372.99)
-               (static-vectorm 1463.6805 26.78 -376.08)
-               (static-vectorm 1492.99 26.8 -367.22)
-               (static-vectorm 1487.64 28.06 -346.1145)
-               (static-vectorm 1465.36 27.78 -345.94)
-               (static-vectorm 1463.6805 26.78 -376.08)
-               (static-vectorm 1492.99 26.8 -367.22)
-               (static-vectorm 1487.64 28.06 -346.1145)
-               (static-vectorm 1465.36 27.78 -345.94)
-            )
-        )
         (set! (-> self fireball-sp)
           (new 'static
                'inline-array
@@ -388,9 +378,6 @@
                 (+! (-> self blast-i) 1)
             )
             (+! (-> self fling-i) 1)
-            (when (!= enemy-noto 54)
-                (set! enemy-noto 54)
-            )
             (when (>= (-> self blast-i) 800)
                 (go-virtual lightning-blast)
             )
@@ -427,6 +414,7 @@
                     (not (search-process-tree *active-pool* (lambda ((p process)) (type? p neo-wasp))))
                   )
                   (set! (-> self spawn-count) 0)
+                  (+! (-> self wave) 1)
                   (go-virtual spawn-wave)
             )
             (when 
@@ -439,7 +427,7 @@
                 )
                 (set-continue! *game-info* "wasdoors-city" #t)
             )
-            (format *stdcon* "~%general-handler: blast-i = ~D/800~%general-handler: fling-i = ~D/~D~%" (-> self blast-i) (-> self fling-i) (-> self fling-max))
+            (format *stdcon* "~%general-handler: blast-i = ~D/800~%general-handler: fling-i = ~D/~D~%~%general-handler: wave = ~D/7~%" (-> self blast-i) (-> self fling-i) (-> self fling-max) (-> self wave))
             (suspend)
         )
     )
@@ -452,13 +440,13 @@
     :code
     (behavior ()
         (set! (-> self general-i) 0)
+        (set! (-> self lightning-pos) (target-pos 0))
         ;put particle setup here
         (loop
             (let ((a2-2 (new 'static 'vector :x (meters 1983.4888) :y (meters 314.2753) :z (meters 2685.8525) :w 1.0))
                 (a2-3 (new 'static 'vector :x (meters 1983.4888) :y (meters 0.2753) :z (meters 2685.8525) :w 1.0)))
-            (set! (-> self lightning-pos) (-> *target* root trans))
             ;(set! (-> *part-id-table* 1763 init-specs 4 initial-valuef) (vector-length a2-2))
-            (draw-beam (-> *part-id-table* 9163) a2-3 a2-2 #t)
+            (draw-beam (-> *part-id-table* 9163) a2-3 (-> self lightning-pos) #t)
             )
             (+! (-> self general-i) 1)
             (when (>= (-> self general-i) 300)
@@ -519,21 +507,69 @@
     :virtual #t
     :code
     (behavior ()
-        (+! (-> self wave) 1)
         (set! (-> self max-count) 7);(set! (-> self max-count) (rand-vu-int-range 4 12))
         (loop
-            (let ((vec (new-stack-vector0))
-                 )
-                (set! vec (-> self wave-sp (rand-vu-int-range 1 14)))
-                #|
-                (when (<= (vector-vector-distance (target-pos 0) vec) 130000.0)
-                    (spawn-dark-maker vec)
-                    (+! (-> self spawn-count) 1)
-                )|#
-                (spawn-dark-maker vec)
-                (+! (-> self spawn-count) 1)
-                (when (>= (-> self spawn-count) (-> self max-count))
-                    (go-virtual general-handler)
+            (when (= (-> self waiting?) #t)
+                    (+! (-> self wait-i) 1)
+                    (when (>= (-> self wait-i) 14)
+                        (set! (-> self waiting?) #f)
+                        (set! (-> self wait-i) 0)
+                    )
+                )
+            (when (= (-> self waiting?) #f)
+                (let ((vec (new-stack-vector0))
+                    )
+                    (set! vec (-> self wave-sp (rand-vu-int-range 0 13)))
+                    #|(when (<= (vector-vector-distance (target-pos 0) vec) 270000.0)
+                        (spawn-dark-maker vec)
+                        (+! (-> self spawn-count) 1)
+                    )|#
+                    (when (and (= (-> self wave) 3) (= (-> self spawn-count) 3))
+                        (spawn-dark-boss vec)
+                        (+! (-> self spawn-count) 1)
+                        (suspend)
+                    )
+                    (when (and (= (-> self wave) 6) (= (-> self spawn-count) 3))
+                        (spawn-dark-boss vec)
+                        (+! (-> self spawn-count) 1)
+                    )
+                    (when (and (= (-> self wave) 8) (= (-> self spawn-count) 3))
+                        (spawn-dark-boss vec)
+                        (+! (-> self spawn-count) 1)
+                    )
+                    (when (and (= (-> self wave) 8) (= (-> self spawn-count) 5))
+                        (spawn-dark-boss vec)
+                        (+! (-> self spawn-count) 1)
+                    )
+                    (when (and (= (-> self wave) 10) (= (-> self spawn-count) 3))
+                        (spawn-dark-boss vec)
+                        (+! (-> self spawn-count) 1)
+                    )
+                    (when (and (= (-> self wave) 10) (= (-> self spawn-count) 4))
+                        (spawn-dark-boss vec)
+                        (+! (-> self spawn-count) 1)
+                    )
+                    (when (and (= (-> self wave) 10) (= (-> self spawn-count) 5))
+                        (spawn-dark-boss vec)
+                        (+! (-> self spawn-count) 1)
+                    )
+                    (when
+                        (and
+                            (!= (-> self wave) 3)
+                            (!= (-> self wave) 6)
+                            (!= (-> self wave) 8)
+                            (!= (-> self wave) 10)
+                        )
+                        (spawn-dark-maker vec)
+                        (+! (-> self spawn-count) 1)
+                        )
+                    (when (>= (-> self spawn-count) (-> self max-count))
+                        (when (>= (-> self wave) 11)
+                            (go-virtual flash-out-battle)
+                        )
+                        (go-virtual general-handler)
+                    )
+                    (set! (-> self waiting?) #t)
                 )
             )
             (suspend)
@@ -547,6 +583,7 @@
     (behavior ()
         (set! *force-stop-pilot* #f)
         (kill-by-name "dp-bipedal-c" *default-pool*)
+        (kill-by-name "Bipedal Boss" *default-pool*)
         (kill-by-name "v-catapult-shot" *active-pool*)
         (set! (-> self general-f) 0.0)
         (loop
@@ -562,7 +599,48 @@
                 )
                 (set! onfoot-battle? #f)
                 (send-event (ppointer->process *time-of-day*) 'change 'ratio 1.0)
-                (go-virtual idle)
+                (if (or
+                        (>= (-> self wave) 11)
+                        (>= anchor-float-time 13.0)
+                    )
+                    (go-virtual dead-win)
+                    (go-virtual idle)
+                )
+            )
+            (suspend)
+        )
+    )
+)
+
+(defstate dead-win (tm-desertf-anchor)
+    :virtual #t
+    :code
+    (behavior ()
+        (set! (-> self general-i) 0)
+        (loop
+            (+! (-> self general-i) 1)
+            (when (= (-> self general-i) 1)
+                (toggle-white-mode)
+            )
+            (when (= (-> self general-i) 10)
+                (toggle-white-mode)
+                (kill-by-name "dm-ship" *default-pool*)
+                (set! in-desertf-anchor? #f)
+                (set! *force-stop-pilot* #f)
+                (task-node-open! (game-task-node desertf-anchor-introduction) #t)
+                (let ((vec (new 'static 'vector :x (meters 1960.3009) :y (meters 27.3126) :z (meters 2778.7351) :w 1.0))
+                  (rnd 1))
+                (when (rand-vu-percent? 0.3)
+                    (set! rnd 2)
+                )
+                (when (rand-vu-percent? 0.12)
+                    (set! rnd 3)
+                )
+                (drop-crate vec rnd)
+                (set! anchor-cdr 0)
+                (set! anchor-cooldown #t)
+                (go-virtual dead)
+            )
             )
             (suspend)
         )
@@ -577,6 +655,7 @@
         (set! *force-stop-pilot* #f)
         (kill-by-name "dp-bipedal-c" *default-pool*)
         (kill-by-name "v-catapult-shot" *active-pool*)
+        (kill-by-name "Bipedal Boss" *default-pool*)
         (kill-by-name "dm-ship" *default-pool*)
         (suspend)
     )

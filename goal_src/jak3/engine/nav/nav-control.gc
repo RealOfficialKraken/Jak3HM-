@@ -172,6 +172,13 @@
     (add-process-drawable-to-nav-mesh arg1 arg0 #t)
     (add-process-drawable-to-nav-mesh *default-nav-mesh* arg0 #t)
     )
+  (when (not *default-nav-mesh*)
+    (if (-> arg0 entity)
+        (logior! (-> arg0 entity extra perm status) (entity-perm-status error))
+        )
+    (go process-drawable-art-error "no nav-mesh")
+    (return 0)
+    )
   (none)
   )
 #|
