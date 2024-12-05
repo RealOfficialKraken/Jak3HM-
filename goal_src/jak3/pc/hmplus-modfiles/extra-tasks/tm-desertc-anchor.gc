@@ -1,144 +1,71 @@
 (in-package goal)
 
-;name: tm-desertf-anchor.gc
+;name: tm-desertc-anchor.gc
 
-(defun-extern spawn-fireball vector vector float none)
-
-#|
-ANCHORS
-Each anchor is toggled on by its own game-task-node.
-All the anchor needs to be spawned is something to close the introduction task.
-The parameters for spawning it should only have to be set in the "active" state
-Finally, the tasks get opened again after dying, or the process goes dead
-|#
-
-(defpart 9163
-  :init-specs ((:texture (pal-lightning level-default-sprite))
-    (:birth-func 'birth-func-set-quat)
-    (:num 1.0)
-    (:scale-x (meters 1))
-    (:scale-y (meters 700))
-    (:r 128.0 64.0)
-    (:g 128.0 64.0)
-    (:b 128.0 64.0)
-    (:a 128.0)
-    (:timer (seconds 0.017))
-    (:flags (sp-cpuinfo-flag-2 sp-cpuinfo-flag-3 sp-cpuinfo-flag-14 left-multiply-quat))
-    )
-  )
-
-  (defpart 9164
-  :init-specs ((:texture (pal-lightning-red level-default-sprite))
-    (:birth-func 'birth-func-set-quat)
-    (:num 1.0)
-    (:scale-x (meters 3) (meters 1))
-    (:scale-y (meters 1))
-    (:r 128.0 64.0)
-    (:g 128.0 64.0)
-    (:b 128.0 64.0)
-    (:a 80.0 128.0)
-    (:timer (seconds 0.017))
-    (:flags (sp-cpuinfo-flag-2 sp-cpuinfo-flag-3 left-multiply-quat))
-    )
-  )
-
-(defpart 9165
-  :init-specs ((:texture (radial-gradient-yellow level-default-sprite))
-    (:num 1.0)
-    (:scale-x (meters 15))
-    (:rot-x (degrees 22.5))
-    (:scale-y :copy scale-x)
-    (:r 128.0 64.0)
-    (:g 80.0 20.0)
-    (:b 128.0 64.0)
-    (:a 128.0)
-    (:omega (degrees 9011.25))
-    (:rotvel-z (degrees 0.3))
-    (:timer (seconds 0.017))
-    (:flags (sp-cpuinfo-flag-2 sp-cpuinfo-flag-3 glow))
-    (:userdata 4096.0)
-    )
-  )
-
-(defpart 9166
-  :init-specs ((:texture (starflash level-default-sprite))
-    (:num 1.0)
-    (:scale-x (meters 3) (meters 1))
-    (:rot-z (degrees 0) (degrees 3600))
-    (:scale-y :copy scale-x)
-    (:r 255.0)
-    (:g 180.0)
-    (:b 100.0)
-    (:a 200.0 55.0)
-    (:timer (seconds 0.017))
-    (:flags (sp-cpuinfo-flag-2 sp-cpuinfo-flag-3))
-    )
-  )
-
-(deftype tm-desertf-anchor (task-manager)
-  ((wave                           int) ;current wave
-   (wave-max                       int) ;max wave
-   (max-count                      int) ;max number of enemies per wave
-   (ship-inside?                symbol) ;check for ship spawn
-   (boss-spawned?               symbol) ;check for boss spawn
-   (blast-i                        int) ;time-frame for lightning spawn
-   (fling-i                        int) ;time-frame for fireball spawns
-   (fling-max                      int) ;max time for fireball spawn for a random set
-   (general-i                      int) ;used as a general time-frame
-   (general-f                    float) ;used as a general time-frame to fit float values
-   (fog-i                        float) ;used as a time-frame for fog's float value
-   (lightning-pos               vector) ;ground pos for beam
-   (fireball-pos                vector) ;gets set back toward target after the fling-fireball state
-   (spawn-pos                   vector) ;dark ship pos
-   (reward-box                  vector) ;loot reward pos
-   (getoff-bounds               vector) ;vehicle getoff pos
-   (spawn-count                    int) ;keeps track of spawn amounts
-   (waiting?                    symbol) ;check if waiting in between enemy spawns
-   (wait-i                         int) ;time-frame in between enemy spawns
-   (wave-sp      (inline-array vector)) ;enemy spawn point vectors
+(deftype tm-desertc-anchor (task-manager)
+  ((wave                           int)
+   (wave-max                       int)
+   (max-count                      int)
+   (ship-inside?                 symbol)
+   (boss-spawned?                symbol)
+   (blast-i                        int)
+   (fling-i                        int)
+   (fling-max                      int)
+   (general-i                      int)
+   (general-f                    float)
+   (fog-i                        float)
+   (lightning-pos               vector)
+   (fireball-pos                vector)
+   (spawn-pos                   vector)
+   (reward-box                  vector)
+   (getoff-bounds               vector)
+   (spawn-count                    int)
+   (waiting?                    symbol)
+   (wait-i                         int)
+   (wave-sp      (inline-array vector))
   )
  (:state-methods
- active ;set all the prerequisites
- idle ;target not in range, but in level
- dormant ;target not in range, not in level
- start-battle ;target in range, and in level
- general-handler ;loop checks all of the different things it does
- flash-out-battle ;target has gone out of range, is dead, or won the battle
- fling-fireball ;cast a firebolt spell from the ship
- lightning-blast ;send down a laser and explode at its base
- spawn-wave ;spawns all the enemies
- dead ;ship is dormant, and the time-window for battle is passed
- dead-win ;ship is active, and player beats the challenge
+ active
+ idle
+ dormant
+ start-battle
+ general-handler
+ flash-out-battle
+ fling-fireball
+ lightning-blast
+ spawn-wave
+ dead
+ dead-win
  )
 )
   
 
-(defstate active (tm-desertf-anchor)
+(defstate active (tm-desertc-anchor)
     :virtual #t
     :code 
     (behavior ()
         (let ((vec (new 'static 'vector 
-                :x (meters 1983.4888) 
+                :x (meters 764.6093) 
                 :y (meters 314.2753) 
-                :z (meters 2685.8525) 
+                :z (meters 1212.6389) 
                 :w 1.0
               ))
               (vec2 (new 'static 'vector 
-                :x (meters 1980.4888) 
+                :x (meters 764.6093) 
                 :y (meters 26.2753) 
-                :z (meters 2844.3520) 
+                :z (meters 1212.6389) 
                 :w 1.0
               ))
               (vec3 (new 'static 'vector 
-                :x (meters 1960.3009) 
-                :y (meters 27.3126) 
-                :z (meters 2778.7351) 
+                :x (meters 764.6093) 
+                :y (meters 59.7179) 
+                :z (meters 1212.6389) 
                 :w 1.0
               ))
               (vec4 (new 'static 'vector 
-                :x (meters 1922.9963) 
-                :y (meters 23.4870) 
-                :z (meters 2717.9418) 
+                :x (meters 786.2686) 
+                :y (meters 64.1297) 
+                :z (meters 1202.4191) 
                 :w 1.0
               ))
               )
@@ -153,7 +80,7 @@ Finally, the tasks get opened again after dying, or the process goes dead
             (set! (-> self waiting?) #f)
             (set! (-> self wave-sp)
                 (new 'static
-                    'inline-array
+                    'inline-array ;NOT SET YET
                     vector
                     12
                     (static-vectorm 1916.65 23.62 2701.48)
@@ -190,7 +117,7 @@ Finally, the tasks get opened again after dying, or the process goes dead
                         )
                         (let ((i-i (-> self general-i)))
                             (when (= i-i 1200)
-                                (set! in-desertf-anchor? #t)
+                                (set! in-desertc-anchor? #t)
                                 (set! enemy-noto (rand-vu-int-range 42 61))
                             )
                             (when (= i-i 1190)
@@ -237,7 +164,7 @@ Finally, the tasks get opened again after dying, or the process goes dead
     )
 )
 
-(defstate dormant (tm-desertf-anchor) ;jak is not in desert, but the battle occurs
+(defstate dormant (tm-desertc-anchor) ;jak is not in desert, but the battle occurs
     :virtual #t
     :code
     (behavior ()
@@ -254,11 +181,11 @@ Finally, the tasks get opened again after dying, or the process goes dead
                     (not *scene-player*)
                 )
                     (print "~%~%dm-ship SPAWNED~%~%")
-                    (set! in-desertf-anchor? #t)
+                    (set! in-desertc-anchor? #t)
                     (go-virtual idle)
                 )
                 (else
-                    (when (= in-desertf-anchor? #t)
+                    (when (= in-desertc-anchor? #t)
                         (set! *waste-ship-anchor* #f)
                         (kill-by-name "dm-ship" *default-pool*)
                     )
@@ -268,20 +195,20 @@ Finally, the tasks get opened again after dying, or the process goes dead
                 (>= (-> *time-of-day-context* time) 13.0)
                 (go-virtual dead)
             )
-            (format *stdcon* "~%tm-desertf-anchor is dormant~%~%")
+            (format *stdcon* "~%tm-desertc-anchor is dormant~%~%")
             (suspend)
         )
     )
 )
 
-(defstate idle (tm-desertf-anchor) ;jak is inside of desert, but far away from battle
+(defstate idle (tm-desertc-anchor) ;jak is inside of desert, but far away from battle
     :virtual #t
     :code
     (behavior ()
         (set! *waste-ship-anchor* #t)
         (dm-dark-ship (-> self spawn-pos))
         (loop 
-            (format *stdcon* "~%tm-desertf-anchor is idle~%~%")
+            (format *stdcon* "~%tm-desertc-anchor is idle~%~%")
             (when (= in-desert-game-task? #t)
                 (go-virtual dormant)
             )
@@ -357,7 +284,7 @@ Finally, the tasks get opened again after dying, or the process goes dead
                                     )
                                     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                     (set! enemy-noto 54)
-                    (format *stdcon* "~%tm-desertf-anchor battle started")
+                    (format *stdcon* "~%tm-desertc-anchor battle started")
                     (go-virtual start-battle)
             )
             (cond 
@@ -378,7 +305,7 @@ Finally, the tasks get opened again after dying, or the process goes dead
     )
 )
 
-(defstate start-battle (tm-desertf-anchor)
+(defstate start-battle (tm-desertc-anchor)
     :virtual #t
     :code
     (behavior ()
@@ -396,7 +323,7 @@ Finally, the tasks get opened again after dying, or the process goes dead
     )
 )
 
-(defstate general-handler (tm-desertf-anchor)
+(defstate general-handler (tm-desertc-anchor)
     :virtual #t
     :code
     (behavior ()
@@ -462,9 +389,7 @@ Finally, the tasks get opened again after dying, or the process goes dead
     )
 )
 
-
-
-(defstate lightning-blast (tm-desertf-anchor)
+(defstate lightning-blast (tm-desertc-anchor)
     :virtual #t
     :code
     (behavior ()
@@ -520,7 +445,7 @@ Finally, the tasks get opened again after dying, or the process goes dead
     )
 )
 
-(defstate fling-fireball (tm-desertf-anchor)
+(defstate fling-fireball (tm-desertc-anchor)
     :virtual #t
     :code
     (behavior ()
@@ -537,8 +462,8 @@ Finally, the tasks get opened again after dying, or the process goes dead
                       (off (new 'static 'vector :x (meters 0.0) :y (meters 0.0) :z (meters 0.0) :w 1.0))  
                      )
                     (set! off (new 'static 'vector :x (meters 0.0) :y (meters 0.0) :z (meters 0.0) :w 1.0))
-                    (set! plusvec (new 'static 'vector))
-                    (set! vec (new 'static 'vector))
+                    (set! plusvec (new 'static 'vector :x (meters 0.0) :y (meters 0.0) :z (meters 0.0) :w 1.0))
+                    (set! vec (new 'static 'vector :x (meters 0.0) :y (meters 0.0) :z (meters 0.0) :w 1.0))
                     (set! startpos (-> self fireball-pos))
                     (if (rand-vu-percent? 0.5)
                         (+! (-> off x) (* (rand-vu-float-range 0.0 100.0) 4096.0))
@@ -552,7 +477,7 @@ Finally, the tasks get opened again after dying, or the process goes dead
                     (vector-copy! plusvec (vector+! plusvec off vec))
                     (set! startpos plusvec)
                     (set! (-> startpos y) -200000.0)
-                    (spawn-fireball vec startpos (rand-vu-float-range 123000.0 255000.0))
+                    (spawn-fireball vec startpos (rand-vu-float-range -255000.0 255000.0))
                 )
                 (set! (-> self fling-i) 0)
                 (set! (-> self fling-max) (rand-vu-int-range 7 30))
@@ -562,7 +487,7 @@ Finally, the tasks get opened again after dying, or the process goes dead
     )
 )
 
-(defstate spawn-wave (tm-desertf-anchor)
+(defstate spawn-wave (tm-desertc-anchor)
     :virtual #t
     :code
     (behavior ()
@@ -615,7 +540,7 @@ Finally, the tasks get opened again after dying, or the process goes dead
     )
 )
 
-(defstate flash-out-battle (tm-desertf-anchor)
+(defstate flash-out-battle (tm-desertc-anchor)
     :virtual #t
     :code
     (behavior ()
@@ -650,7 +575,7 @@ Finally, the tasks get opened again after dying, or the process goes dead
     )
 )
 
-(defstate dead-win (tm-desertf-anchor)
+(defstate dead-win (tm-desertc-anchor)
     :virtual #t
     :code
     (behavior ()
@@ -663,17 +588,18 @@ Finally, the tasks get opened again after dying, or the process goes dead
             (when (= (-> self general-i) 10)
                 (toggle-white-mode)
                 (kill-by-name "dm-ship" *default-pool*)
-                (set! in-desertf-anchor? #f)
+                (set! in-desertc-anchor? #f)
                 (set! *force-stop-pilot* #f)
                 (task-node-open! (game-task-node desertf-anchor-introduction) #t)
-                (let ((rnd 1))
-                (when (rand-vu-percent? 0.70)
+                (let ((vec (new 'static 'vector :x (meters 1960.3009) :y (meters 27.3126) :z (meters 2778.7351) :w 1.0))
+                  (rnd 1))
+                (when (rand-vu-percent? 0.3)
                     (set! rnd 2)
                 )
-                (when (rand-vu-percent? 0.40)
+                (when (rand-vu-percent? 0.12)
                     (set! rnd 3)
                 )
-                (drop-crate (-> self reward-box) rnd)
+                (drop-crate vec rnd)
                 (set! anchor-cdr 0)
                 (set! anchor-cooldown #t)
                 (go-virtual dead)
@@ -684,7 +610,7 @@ Finally, the tasks get opened again after dying, or the process goes dead
     )
 )
 
-(defstate dead (tm-desertf-anchor)
+(defstate dead (tm-desertc-anchor)
     :virtual #t
     :code
     (behavior ()
@@ -697,59 +623,3 @@ Finally, the tasks get opened again after dying, or the process goes dead
         (suspend)
     )
 )
-
-
-#|(case rnd
-                    ((1)
-                    (spawn-dark-maker vec)
-                    )
-                    ((2)
-                    (spawn-dark-maker vec)
-                    )
-                    ((3)
-                    (spawn-dark-maker vec)
-                    ;(+! (-> vec y) 135000.0)
-                    ;(process-spawn neo-wasp vec :name "neo-wasp")
-                    )
-                )
-                
-                (set-vector! (-> *target* control trans) (meters 2011.1099) (meters 29.8269) (meters 2855.8701) 1.0)
-                
-                
-                ;;used to have this, when I did all of the fireball vectors manually
-
-                        (set! (-> self fireball-sp)
-          (new 'static
-               'inline-array
-               vector
-               27
-               (static-vectorm 1960.6270 26.78 2963.3300)
-               (static-vectorm 2047.1525 26.78 3026.7756)
-               (static-vectorm 1991.6225 26.78 2935.8791)
-               (static-vectorm 2058.5498 26.78 2760.7683)
-               (static-vectorm 2060.6682 26.78 2683.8244)
-               (static-vectorm 1969.8875 26.78 2645.7346)
-               (static-vectorm 1939.8687 26.78 2681.7270)
-               (static-vectorm 1903.5489 26.78 2646.2697)
-               (static-vectorm 1941.5935 26.78 2722.9638)
-               (static-vectorm 1947.8621 26.78 2779.0361)
-               (static-vectorm 2006.4748 26.78 2790.4409)
-               (static-vectorm 2026.6580 26.78 2721.3125)
-               (static-vectorm 1906.4324 26.78 2584.0651)
-               (static-vectorm 1862.9023 26.78 2599.0007)
-               (static-vectorm 1991.8981 26.78 2588.6503)
-               (static-vectorm 1870.5859 28.71 2646.9987)
-               (static-vectorm 1935.6380 28.71 2416.9560)
-               (static-vectorm 1944.0841 28.71 2491.1970)
-               (static-vectorm 1827.1391 28.71 2585.9370)
-               (static-vectorm 1828.8286 28.71 2698.2343)
-               (static-vectorm 1919.8422 28.71 2829.7145)
-               (static-vectorm 2037.8553 28.71 2921.2331)
-               (static-vectorm 1967.0367 28.71 3028.0673)
-               (static-vectorm 2063.0974 28.71 3079.4370)
-               (static-vectorm 2091.9807 28.71 3175.7692)
-               (static-vectorm 2000.0195 28.71 3167.6311)
-               (static-vectorm 1974.5571 28.71 3219.3796)
-            )
-        )
-                #

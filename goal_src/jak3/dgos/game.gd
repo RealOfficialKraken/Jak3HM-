@@ -517,6 +517,7 @@
   "brute-dagger.o"
   "look-for-warpgate.o"
   "tm-desertf-anchor.o"
+  "tm-desertc-anchor.o"
   "tm-vin-intro.o"
   "warp-room.o"
  ))

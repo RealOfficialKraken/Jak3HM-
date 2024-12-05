@@ -118,6 +118,10 @@
     (else (-> en-type symbol)))
   )
 
+  (define anchor-day? (if (rand-vu-percent? 0.5)
+                        #t
+                        #f
+                      ))
   (define in-mine-boss? #f)
   (define mine-boss-fireball? #f)
   (define mine-boss-killed? #f)
@@ -274,6 +278,7 @@
   (define *waste-town-spawners* #f)
   (define *waste-ship-anchor* #f)
   (define in-desertf-anchor? #f)
+  (define in-desertc-anchor? #f)
   (define preanchor-town #f)
   (define anchor-float-time 0.0)
   (define onfoot-battle? #f)
