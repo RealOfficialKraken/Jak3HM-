@@ -107,8 +107,16 @@
     (set! (-> *part-id-table* 1707 init-specs 8 initial-valuef) 0.0) ;b
     
 ;
-    (set! (-> *launch-matrix* trans quad) (-> (target-pos 0) quad))
-    (part-tracker-spawn part-tracker :to *entity-pool* :group (-> *part-group-id-table* 999999))
+    (cond
+      ((logtest? (-> *part-group-id-table* 999999 flags) (sp-group-flag sp13))
+       (set! (-> *launch-matrix* trans quad) (-> (target-pos 0) quad))
+       (part-tracker-spawn part-tracker-subsampler :to *active-pool* :group (-> *part-group-id-table* 999999))
+       )
+      (else
+        (set! (-> *launch-matrix* trans quad) (-> (target-pos 0) quad))
+        (part-tracker-spawn part-tracker :to *active-pool* :group (-> *part-group-id-table* 999999))
+        )
+      )
     (set! kill-eco-delay #t)
     (set! killeci 0)
     (none)
@@ -149,8 +157,16 @@
     (set! (-> *part-id-table* 1707 init-specs 7 initial-valuef) 0.0) ;g
     (set! (-> *part-id-table* 1707 init-specs 8 initial-valuef) 0.0) ;b    
 ;
-    (set! (-> *launch-matrix* trans quad) (-> (target-pos 0) quad))
-    (part-tracker-spawn part-tracker :to *entity-pool* :group (-> *part-group-id-table* 999999))
+    (cond
+      ((logtest? (-> *part-group-id-table* 999999 flags) (sp-group-flag sp13))
+       (set! (-> *launch-matrix* trans quad) (-> (target-pos 0) quad))
+       (part-tracker-spawn part-tracker-subsampler :to *active-pool* :group (-> *part-group-id-table* 999999))
+       )
+      (else
+        (set! (-> *launch-matrix* trans quad) (-> (target-pos 0) quad))
+        (part-tracker-spawn part-tracker :to *active-pool* :group (-> *part-group-id-table* 999999))
+        )
+      )    
     (set! kill-eco-delay #t)
     (set! killeci 0)
     (none)
@@ -160,9 +176,16 @@
 
 (defun levelup-glow-dark ()
     (levelup-reset-color)
-    (set! (-> *launch-matrix* trans quad) (-> (target-pos 0) quad))
-    (part-tracker-spawn part-tracker :to *entity-pool* :group (-> *part-group-id-table* 999999))
-    (none)
+    (cond
+      ((logtest? (-> *part-group-id-table* 999999 flags) (sp-group-flag sp13))
+       (set! (-> *launch-matrix* trans quad) (-> (target-pos 0) quad))
+       (part-tracker-spawn part-tracker-subsampler :to *active-pool* :group (-> *part-group-id-table* 999999))
+       )
+      (else
+        (set! (-> *launch-matrix* trans quad) (-> (target-pos 0) quad))
+        (part-tracker-spawn part-tracker :to *active-pool* :group (-> *part-group-id-table* 999999))
+        )
+      )    (none)
 )
 
 ;level-up skill
@@ -233,10 +256,12 @@
 
 (defun mod-killed? ((xp-gain float))
     (+! (-> *game-info* fuel) (* xp-gain enemy-noto))
-    (set! xp-string "Duplicate Gunmod turned to Vehicle XP")
+    (+! (-> *game-info* karma) (/ (* xp-gain enemy-noto) 2))
+    (+! (-> *game-info* buzzer-total) (* xp-gain enemy-noto))
+    (set! xp-string "<COLOR_RED>Level too low for new weapon~%<COLOR_YELLOW>Rewarded XP to all levels instead")
     (set! *xp-gain* (* xp-gain enemy-noto))
-    (set! xp-draw #t)
-    (set! xpi 0)
+    (set! xp-draw-gun #t)
+    (set! xp-i 0)
     (none)
 )
 
@@ -950,14 +975,30 @@
                         (= (-> (level-get-target-inside *level*) name) 'mineb)
                         (= (-> (level-get-target-inside *level*) name) 'minec)
                     )
+                )
+                (when
                     (and
                         (!= enemy-noto 15)
                         (!= enemy-noto 16)
                         (!= enemy-noto 17)
                         (!= enemy-noto 18)
+                        (not (task-node-closed? (game-task-node mine-boss-resolution)))
                     )
+                    (set! enemy-noto (rand-vu-int-range 15 18))
                 )
-                (set! enemy-noto (rand-vu-int-range 15 18))
+                (when
+                    (and
+                        (!= enemy-noto 32)
+                        (!= enemy-noto 33)
+                        (!= enemy-noto 34)
+                        (!= enemy-noto 35)
+                        (!= enemy-noto 36)
+                        (!= enemy-noto 37)
+                        (!= enemy-noto 38)
+                        (task-node-closed? (game-task-node mine-boss-resolution))
+                    )
+                    (set! enemy-noto (rand-vu-int-range 32 38))
+                )
             )
             (when ;CTYGENB
                 (and
@@ -1079,6 +1120,41 @@
         (when (= xpi 45)
             (set! xpi 0)
             (set! xp-draw #f)
+        )
+        (let ((y 50))
+            (when (= hud-timer-on? #f)
+                        (set! y 50)
+                    )
+                    (when (or (= hud-timer-on? #t) (= r3-noto #t))
+                        (set! y 120)
+                    )
+            (clear matt-str)
+            (clear *pc-encoded-matt-str*)
+            (format matt-str "~s~%<COLOR_CYAN>+~d"
+            xp-string
+            (the int *xp-gain*)
+            )
+            (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+            (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+            (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+            (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 255 y 0.0 (font-color default) (font-flags middle shadow kerning large))))
+            (set! (-> font-ctx scale) 0.325)
+            (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+        )
+    )
+
+    (when 
+        (and 
+            (= xp-draw-gun #t)
+            *target*
+            (not *scene-player*)
+            (= (paused?) #f)
+            (= (pause-allowed?) #t)
+        ) ;gain XP
+        (+! xp-i 1)
+        (when (= xp-i 600)
+            (set! xp-i 0)
+            (set! xp-draw-gun #f)
         )
         (let ((y 50))
             (when (= hud-timer-on? #f)

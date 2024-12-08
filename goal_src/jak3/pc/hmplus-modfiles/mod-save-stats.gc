@@ -9,6 +9,10 @@
 
 
 (defun stat-tracker! ()
+
+;;GREEN SECTION BELOW IS DEPRACATED
+;;kept in case I, or someone, wants to add modifiers
+
 ;;Good Modifiers
 #|
 (when 
@@ -577,8 +581,8 @@
           (item-pool (+ 1 (the int (/ enemy-noto 8))))
         )
         (set! rnd (rand-vu-int-range 1 item-pool))
-        (when (> rnd 10)
-            (set! rnd (rand-vu-int-range 1 10))
+        (when (> rnd 7)
+            (set! rnd (rand-vu-int-range 1 7))
         )
         (when (= rnd 1)
             (give-weapon! "blue-1" 1)
@@ -596,19 +600,9 @@
             (give-weapon! "blue-2" 1)
         )
         (when (= rnd 6)
-            (give-weapon! "dark-1" 1)
-        )
-        (when (= rnd 7)
             (give-weapon! "blue-3" 1)
         )
-        (when (= rnd 8)
-            (give-weapon! "dark-2" 1)
-        )
-        (when (= rnd 9)
-            (give-weapon! "dark-3" 1)
-        )
-        (when (= rnd 10
-        )
+        (when (= rnd 7)
             (give-weapon! "yellow-2" 1)
         )
         (auto-save-user)

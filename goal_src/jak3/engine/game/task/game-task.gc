@@ -1571,7 +1571,7 @@
               :on-complete #f
               :on-fail #f
               )
-            :borrow '((desert-game alias desert copy deschase special))
+            :borrow '()
             :open? #f
             :on-close #f
             :reset #f
@@ -1625,7 +1625,115 @@
               :on-complete #f
               :on-fail #f
               )
-            :borrow '((desert-game alias desert copy deschase special))
+            :borrow '()
+            :open? #f
+            :on-close #f
+            :reset #f
+            :suck-death-count #xa5
+            :command-index #x4
+            :faction-commands '()
+            )
+            (new 'static 'game-task-node-info
+            :level 'desert
+            :task (game-task desert-interceptors)
+            :name "desertg-anchor-introduction"
+            :when-open #f
+            :flags (game-task-node-flag no-percent act1)
+            :parent-node (new 'static 'array game-task-node 4
+              (game-task-node none)
+              (game-task-node none)
+              (game-task-node none)
+              (game-task-node none)
+              )
+            :on-open #f
+            :manager #f
+            :borrow '()
+            :open? #f
+            :on-close #f
+            :reset #f
+            :suck-death-count #xa5
+            :command-index #x4
+            :faction-commands '()
+            )
+            (new 'static 'game-task-node-info
+            :level 'desert
+            :task (game-task desert-interceptors)
+            :name "desertg-anchor-resolution"
+            :when-open #f
+            :flags (game-task-node-flag act1 no-percent)
+            :parent-node (new 'static 'array game-task-node 4
+              (game-task-node desertg-anchor-introduction)
+              (game-task-node none)
+              (game-task-node none)
+              (game-task-node none)
+              )
+            :on-open #f
+            :manager (new 'static 'task-manager-info
+              :level #f
+              :type-to-spawn 'tm-desertg-anchor
+              :intro-scene #f
+              :resolution-scene #f
+              :resolution-scene-continue #f
+              :final-node (game-task-node desertg-anchor-resolution)
+              :vehicle-type #x1b
+              :on-complete #f
+              :on-fail #f
+              )
+            :borrow '()
+            :open? #f
+            :on-close #f
+            :reset #f
+            :suck-death-count #xa5
+            :command-index #x4
+            :faction-commands '()
+            )
+            (new 'static 'game-task-node-info
+            :level 'city
+            :task (game-task desert-interceptors)
+            :name "ctyinda-anchor-introduction"
+            :when-open #f
+            :flags (game-task-node-flag no-percent act1)
+            :parent-node (new 'static 'array game-task-node 4
+              (game-task-node none)
+              (game-task-node none)
+              (game-task-node none)
+              (game-task-node none)
+              )
+            :on-open #f
+            :manager #f
+            :borrow '()
+            :open? #f
+            :on-close #f
+            :reset #f
+            :suck-death-count #xa5
+            :command-index #x4
+            :faction-commands '()
+            )
+            (new 'static 'game-task-node-info
+            :level 'city
+            :task (game-task desert-interceptors)
+            :name "ctyinda-anchor-resolution"
+            :when-open #f
+            :flags (game-task-node-flag act1 no-percent)
+            :parent-node (new 'static 'array game-task-node 4
+              (game-task-node ctyinda-anchor-introduction)
+              (game-task-node none)
+              (game-task-node none)
+              (game-task-node none)
+              )
+            :on-open #f
+            :manager (new 'static 'task-manager-info
+              :level #f
+              :type-to-spawn 'tm-ctyinda-anchor
+              :intro-scene #f
+              :resolution-scene #f
+              :resolution-scene-continue #f
+              :final-node (game-task-node ctyinda-anchor-resolution)
+              :vehicle-type #x1b
+              :on-complete #f
+              :on-fail #f
+              )
+            :borrow '()
             :open? #f
             :on-close #f
             :reset #f

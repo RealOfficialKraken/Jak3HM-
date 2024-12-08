@@ -484,6 +484,7 @@
   "squad-control-h.o"
   "squad-control.o"
   "was-squad-control.o"
+  "forest-part.o"
   "actor-def.o" ;;vvv hmplus-modfiles vvv
   "desertspawn-oasis.o"
   "desertspawn-deserta.o"
@@ -518,6 +519,8 @@
   "look-for-warpgate.o"
   "tm-desertf-anchor.o"
   "tm-desertc-anchor.o"
+  "tm-desertg-anchor.o"
+  "tm-ctyinda-anchor.o"
   "tm-vin-intro.o"
   "warp-room.o"
  ))

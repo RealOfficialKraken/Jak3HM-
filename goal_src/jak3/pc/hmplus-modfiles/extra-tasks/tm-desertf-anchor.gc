@@ -87,7 +87,9 @@ Finally, the tasks get opened again after dying, or the process goes dead
    (general-i                      int) ;used as a general time-frame
    (general-f                    float) ;used as a general time-frame to fit float values
    (fog-i                        float) ;used as a time-frame for fog's float value
+   (laser-bank   (inline-array vector)) ;inline array for locations of laser explosion
    (lightning-pos               vector) ;ground pos for beam
+   (default-lightning-pos       vector) ;default ground pos for beam if target is far
    (fireball-pos                vector) ;gets set back toward target after the fling-fireball state
    (spawn-pos                   vector) ;dark ship pos
    (reward-box                  vector) ;loot reward pos
@@ -151,6 +153,18 @@ Finally, the tasks get opened again after dying, or the process goes dead
             (set! (-> self wave-max) 11)
             (set! (-> self max-count) 0)
             (set! (-> self waiting?) #f)
+            (set! (-> self laser-bank)
+                (new 'static
+                    'inline-array
+                    vector
+                    5
+                    (static-vectorm 2006.1486 30.5638 2706.9541)
+                    (static-vectorm 2026.7478 29.0740 2817.4016)
+                    (static-vectorm 1908.2493 22.2660 2766.2316)
+                    (static-vectorm 2108.2353 39.1147 2737.9838)
+                    (static-vectorm 2005.8693 30.2832 2732.6713)
+                )
+            )
             (set! (-> self wave-sp)
                 (new 'static
                     'inline-array
@@ -406,6 +420,14 @@ Finally, the tasks get opened again after dying, or the process goes dead
             )
             (+! (-> self fling-i) 1)
             (when (>= (-> self blast-i) 800)
+                (cond 
+                    ((<= (vector-vector-distance (-> self spawn-pos) (target-pos 0)) 4000000.0)
+                        (set! (-> self lightning-pos) (-> self laser-bank (rand-vu-int-range 0 4)))
+                    )
+                    (else
+                        (set! (-> self lightning-pos) (-> self default-lightning-pos))
+                    )
+                )
                 (go-virtual lightning-blast)
             )
             (when (>= (-> self fling-i) (-> self fling-max))
@@ -434,18 +456,21 @@ Finally, the tasks get opened again after dying, or the process goes dead
                     )
                 )
             )
-            #|(when (and ;spawn enemies below ship
+            (when (and ;spawn enemies below ship
                     (< (vector-vector-distance (-> self getoff-bounds) (target-pos 0)) 900000.0)
                     (not (search-process-tree *active-pool* (lambda ((p process)) (type? p dp-bipedal))))
                     (not (search-process-tree *active-pool* (lambda ((p process)) (type? p marauder))))
                     (not (search-process-tree *active-pool* (lambda ((p process)) (type? p neo-wasp))))
+                  )
+                  (when (>= (-> self wave) (-> self wave-max))
+                    (go-virtual flash-out-battle)
                   )
                   (set! (-> self spawn-count) 0)
                   (set! (-> self boss-spawned?) #f)
                   (+! (-> self wave) 1)
                   (format #t "~%~%NEW WAVE~%~%~D" (-> self wave))
                   (go-virtual spawn-wave)
-            )|#
+            )
             (when 
                 (and 
                     (= weather-dark-mode #t)
@@ -471,27 +496,6 @@ Finally, the tasks get opened again after dying, or the process goes dead
         (set! (-> self general-i) 0)
         (loop
             (let ((gp-0 (-> self spawn-pos)))
-            (let ((a1-2 (new 'stack-no-clear 'projectile-init-by-other-params)))
-                (set! (-> a1-2 ent) (the-as entity #f))
-                (set! (-> a1-2 charge) 1.0)
-                (set! (-> a1-2 options) (projectile-options))
-                (logclear! (-> a1-2 options) (projectile-options po14 po15 po16))
-                (set! (-> a1-2 pos quad) (-> self spawn-pos quad))
-                (set! (-> a1-2 vel quad) (-> (new 'static 'vector :x 1.0) quad))
-                (set! (-> a1-2 notify-handle) (the-as handle #f))
-                (set! (-> a1-2 owner-handle) (the-as handle #f))
-                (set! (-> a1-2 target-handle) (the-as handle #f))
-                (set! (-> a1-2 target-pos quad) (the-as uint128 0))
-                (set! (-> a1-2 ignore-handle) (the-as handle #f))
-                (let* ((v1-15 *game-info*)
-                    (a0-17 (+ (-> v1-15 attack-id) 1))
-                    )
-                (set! (-> v1-15 attack-id) a0-17)
-                (set! (-> a1-2 attack-id) a0-17)
-                )
-                (set! (-> a1-2 timeout) (seconds 4))
-                (spawn-projectile terraformer-head-laser-projectile a1-2 self *default-dead-pool*)
-            )
             (let ((a2-2 (new 'stack-no-clear 'vector)))
             (vector-! a2-2 (-> self lightning-pos) gp-0)
             (set! (-> *part-id-table* 9164 init-specs 4 initial-valuef) (vector-length a2-2))
@@ -512,6 +516,26 @@ Finally, the tasks get opened again after dying, or the process goes dead
                 (set! (-> self fireball-pos) (target-pos 0))
                 (set! (-> self blast-i) 0)
                 ;put explosion and damage-sphere here
+                (set! (-> *part-id-table* 2280 init-specs 8 initial-valuef) 255.0) ;a
+                (set! (-> *part-id-table* 2281 init-specs 8 initial-valuef) 64.0) ;a
+                (set! (-> *part-id-table* 2280 init-specs 1 initial-valuef) 1600.0) ;scalex
+                (set! (-> *part-id-table* 2280 init-specs 2 initial-valuef) (meters 98)) ;scalex
+                (let ((gp-0 (new 'stack-no-clear 'explosion-init-params)))
+                    (set! (-> gp-0 spawn-point quad) (-> self lightning-pos quad))
+                    (quaternion-identity! (-> gp-0 spawn-quat))
+                    (set! (-> gp-0 radius) 293200.0)
+                    ;(set! (-> gp-0 scale) 1.0)
+                    (set! (-> gp-0 group) (-> *part-group-id-table* 585))
+                    (set! (-> gp-0 collide-with)
+                            (collide-spec backgnd jak crate civilian obstacle vehicle-sphere hit-by-others-list player-list pusher)
+                            )
+                    (set! (-> gp-0 damage) 6.0)
+                    (set! (-> gp-0 damage-scale) 1.0)
+                    (set! (-> gp-0 vehicle-damage-factor) 1.0)
+                    (set! (-> gp-0 vehicle-impulse-factor) 1.0)
+                    (set! (-> gp-0 ignore-proc) (process->handle #f))
+                    (explosion-spawn gp-0 (the-as process-drawable *default-pool*))
+                )
                 (go-virtual general-handler)
             )
             (format *stdcon* "~%lightning-blast: general-i = ~D/300~%~%" (-> self general-i))
@@ -602,10 +626,14 @@ Finally, the tasks get opened again after dying, or the process goes dead
                         (+! (-> self spawn-count) 1)
                     )
                     (when (>= (-> self spawn-count) (-> self max-count))
-                        (when (>= (-> self wave) (-> self wave-max))
-                            (go-virtual flash-out-battle)
-                        )
                         (go-virtual general-handler)
+                    )
+                    (when (and 
+                            (< (-> self spawn-count) (-> self max-count))
+                            (= (-> self wave) 11)
+                          )
+                        (spawn-dark-boss vec)
+                        (+! (-> self spawn-count) (/ (-> self max-count) 2))
                     )
                     (set! (-> self waiting?) #t)
                 )
@@ -623,6 +651,9 @@ Finally, the tasks get opened again after dying, or the process goes dead
         (kill-by-name "dp-bipedal-c" *default-pool*)
         (kill-by-name "Bipedal Boss" *default-pool*)
         (kill-by-name "v-catapult-shot" *active-pool*)
+        (set! (-> *part-id-table* 2280 init-specs 8 initial-valuef) 128.0) ;a
+        (set! (-> *part-id-table* 2283 init-specs 8 initial-valuef) 64.0) ;a
+        (set! (-> *part-id-table* 2280 init-specs 1 initial-valuef) 1.0) ;scalex
         (set! (-> self general-f) 0.0)
         (loop
             (+! (-> self general-f) 0.1)
@@ -666,18 +697,10 @@ Finally, the tasks get opened again after dying, or the process goes dead
                 (set! in-desertf-anchor? #f)
                 (set! *force-stop-pilot* #f)
                 (task-node-open! (game-task-node desertf-anchor-introduction) #t)
-                (let ((rnd 1))
-                (when (rand-vu-percent? 0.70)
-                    (set! rnd 2)
-                )
-                (when (rand-vu-percent? 0.40)
-                    (set! rnd 3)
-                )
-                (drop-crate (-> self reward-box) rnd)
+                (group-drop! (-> self reward-box) 0.34 0.12)
                 (set! anchor-cdr 0)
                 (set! anchor-cooldown #t)
                 (go-virtual dead)
-            )
             )
             (suspend)
         )

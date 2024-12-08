@@ -2,7 +2,6 @@
  ("jump-pad.o"
   "forest-obs-h.o"
   "eco-green-collider.o"
-  "forest-part.o"
   "forest-mood.o"
   "foresta-obs.o"
   "forest-bridges.o"
