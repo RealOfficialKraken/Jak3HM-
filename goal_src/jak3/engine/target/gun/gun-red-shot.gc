@@ -266,19 +266,39 @@
                                 (f1-1 (-> this blast-radius))
                                 )
                             (if (>= (* f1-1 f1-1) f0-4)
-                                (send-event
-                                  s1-1
-                                  'attack
-                                  #f
-                                  (static-attack-info :mask (vehicle-impulse-factor) ((id (-> this attack-id))
-                                                                                      (damage (+ (* (/ (* (the float guns-level) 18.85) 3.0) 2.0) (/ notoriety-level 1.2)))
-                                                                                      (vehicle-damage-factor 3.0)
-                                                                                      (vehicle-impulse-factor 1.0)
-                                                                                      (mode 'explode)
-                                                                                      (attacker-velocity s0-2)
-                                                                                      (penetrate-using (penetrate explode))
-                                                                                      )
-                                                      )
+                                  (cond
+                                    ((>= notoriety-level 25)
+                                      (send-event
+                                        s1-1
+                                        'attack
+                                        #f
+                                        (static-attack-info :mask (vehicle-impulse-factor) ((id (-> this attack-id))
+                                                                                            (damage (+ (* (/ (* (the float guns-level) 18.85) 3.0) 2.0) (/ notoriety-level 1.2)))
+                                                                                            (vehicle-damage-factor 3.0)
+                                                                                            (vehicle-impulse-factor 1.0)
+                                                                                            (mode 'explode)
+                                                                                            (attacker-velocity s0-2)
+                                                                                            (penetrate-using (penetrate explode))
+                                                                                            )
+                                                            )
+                                        )
+                                    )
+                                    (else
+                                      (send-event
+                                      s1-1
+                                      'attack
+                                      #f
+                                      (static-attack-info :mask (vehicle-impulse-factor) ((id (-> this attack-id))
+                                                                                          (damage (+ (* (/ (the float guns-level) 18.85) 3.0) 2.0))
+                                                                                          (vehicle-damage-factor 3.0)
+                                                                                          (vehicle-impulse-factor 1.0)
+                                                                                          (mode 'explode)
+                                                                                          (attacker-velocity s0-2)
+                                                                                          (penetrate-using (penetrate explode))
+                                                                                          )
+                                                          )
+                                      )
+                                    )
                                   )
                                 )
                             )
@@ -330,6 +350,40 @@
                                                                               (penetrate-using (penetrate explode))
                                                                               )
                                               )
+                          )
+                          (cond
+                            ((>= notoriety-level 25)
+                              (send-event
+                              s3-1
+                              'attack
+                              #f
+                              (static-attack-info :mask (vehicle-impulse-factor) ((id (-> this attack-id))
+                                                                                  (damage (+ (+ (/ (* (the float guns-level) 1.85) 2.0) 12.0) (/ notoriety-level 1.2)))
+                                                                                  (vehicle-damage-factor 3.0)
+                                                                                  (vehicle-impulse-factor 1.0)
+                                                                                  (mode 'explode)
+                                                                                  (attacker-velocity s5-2)
+                                                                                  (penetrate-using (penetrate explode))
+                                                                                  )
+                                                  )
+                              )
+                            )
+                            (else
+                              (send-event
+                              s3-1
+                              'attack
+                              #f
+                              (static-attack-info :mask (vehicle-impulse-factor) ((id (-> this attack-id))
+                                                                                  (damage (+ (+ (/ (the float guns-level) 1.85) 2.0) 12.0))
+                                                                                  (vehicle-damage-factor 3.0)
+                                                                                  (vehicle-impulse-factor 1.0)
+                                                                                  (mode 'explode)
+                                                                                  (attacker-velocity s5-2)
+                                                                                  (penetrate-using (penetrate explode))
+                                                                                  )
+                                                  )
+                              )
+                            )
                           )
                         )
                     )
@@ -590,7 +644,14 @@
   (set! (-> self min-charge-radius) 12288.0)
   (set! (-> self max-charge-radius) 73728.0)
   (set! (-> self total-charge-time) (seconds 1))
-  (set! (-> self base-damage) (+ (+ (/ (* (the float guns-level) 1.85) 2.0) 2.0) (/ notoriety-level 1.2)))
+  (cond
+    ((>= notoriety-level 25)
+      (set! (-> self base-damage) (+ (+ (/ (* (the float guns-level) 1.85) 2.0) 2.0) (/ notoriety-level 1.2)))
+    )
+    (else
+      (set! (-> self base-damage) (+ (+ (/ (the float guns-level) 1.85) 2.0) 2.0))
+    )
+  )
   (set! (-> self ring-expansion-time) (seconds 0.35))
   (set! (-> self burst-expansion-time) (seconds 0.3))
   (set! (-> self warp-expansion-time) (seconds 0.4))
@@ -763,7 +824,9 @@
           (set! a0-4 'eco-red-shove)
           )
       (+! (-> *game-info* shots-hit 1) 1.0)
-      (send-event arg0 'attack #f (static-attack-info
+        (cond
+          ((>= notoriety-level 25)
+            (send-event arg0 'attack #f (static-attack-info
                                     :mask (vehicle-impulse-factor)
                                     ((id (new-attack-id))
                                      (damage (+ (+ (/ (* (the float guns-level) 1.85) 2.0) 2.0) (/ notoriety-level 1.2)))
@@ -776,6 +839,23 @@
                                      )
                                     )
                   )
+          )
+          (else
+            (send-event arg0 'attack #f (static-attack-info
+                                    :mask (vehicle-impulse-factor)
+                                    ((id (new-attack-id))
+                                     (damage (+ (+ (/ (the float guns-level) 1.85) 2.0) 2.0))
+                                     (vehicle-damage-factor 1.0)
+                                     (vehicle-impulse-factor 1.0)
+                                     (mode a0-4)
+                                     (attacker-velocity v1-2)
+                                     (control (-> this current-intensity))
+                                     (penetrate-using (penetrate jak-red-shot jak-red-shockwave))
+                                     )
+                                    )
+                  )
+          )
+        )
       )
     )
   0
@@ -1868,7 +1948,14 @@
       (set! (-> gp-0 scale) 1.0)
       (set! (-> gp-0 group) (-> *part-group-id-table* 104))
       (set! (-> gp-0 collide-with) (collide-spec))
-      (set! (-> gp-0 damage) (+ (/ (* (the float guns-level) 1.85) 2.0) 2.0))
+      (cond
+        ((>= notoriety-level 25)
+          (set! (-> gp-0 damage) (+ (+ (/ (* (the float guns-level) 1.85) 2.0) 2.0) (/ notoriety-level 1.2)))
+        )
+        (else
+          (set! (-> gp-0 damage) (+ (+ (/ (the float guns-level) 1.85) 2.0) 2.0))
+        )
+      )
       (set! (-> gp-0 damage-scale) 1.0)
       (set! (-> gp-0 vehicle-damage-factor) 1.0)
       (set! (-> gp-0 vehicle-impulse-factor) 1.0)
@@ -2144,7 +2231,9 @@
             )
           )
         (+! (-> *game-info* shots-hit 1) 1.0)
-        (send-event
+          (cond
+            ((>= notoriety-level 25)
+              (send-event
           arg0
           'attack
           arg1
@@ -2157,6 +2246,24 @@
                                                               (attacker (process->handle *target*))
                                                               )
                               )
+          )
+            )
+            (else
+              (send-event
+          arg0
+          'attack
+          arg1
+          (static-attack-info :mask (vehicle-impulse-factor) ((id (-> this attack-id))
+                                                              (damage (+ (+ (/ (the float guns-level) 1.85) 2.0) 2.0))
+                                                              (vehicle-damage-factor 1.0)
+                                                              (vehicle-impulse-factor 1.0)
+                                                              (mode 'eco-red)
+                                                              (attacker-velocity s5-2)
+                                                              (attacker (process->handle *target*))
+                                                              )
+                              )
+          )
+            )
           )
         )
       )

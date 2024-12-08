@@ -20,44 +20,42 @@
     (set! (-> *part-id-table* 1701 init-specs 4 initial-valuef) 160.0) ;r 1
     (set! (-> *part-id-table* 1701 init-specs 5 initial-valuef) 0.0) ;g 1
     (set! (-> *part-id-table* 1701 init-specs 6 initial-valuef) 255.0) ;b 1
-    (set! (-> *part-id-table* 1701 init-specs 8 initial-valuef) 64.0) ;a
+;    (set! (-> *part-id-table* 1701 init-specs 8 initial-valuef) 64.0) ;a
 ;
     (set! (-> *part-id-table* 1702 init-specs 5 initial-valuef) 160.0) ;r 2
     (set! (-> *part-id-table* 1702 init-specs 6 initial-valuef) 30.0) ;g 2
     (set! (-> *part-id-table* 1702 init-specs 7 initial-valuef) 255.0) ;b 2
     (set! (-> *part-id-table* 1702 init-specs 8 initial-valuef) 128.0) ;a
 ;
-    (set! (-> *part-id-table* 1703 init-specs 5 initial-valuef) 80.0) ;r 3
+    (set! (-> *part-id-table* 1703 init-specs 5 initial-valuef) 20.0) ;r 3
     (set! (-> *part-id-table* 1703 init-specs 6 initial-valuef) 40.0) ;g 3
     (set! (-> *part-id-table* 1703 init-specs 7 initial-valuef) 128.0) ;b 3
-    (set! (-> *part-id-table* 1703 init-specs 8 initial-valuef) 128.0) ;a
+;    (set! (-> *part-id-table* 1703 init-specs 8 initial-valuef) 128.0) ;a
 ;
     (set! (-> *part-id-table* 1704 init-specs 5 initial-valuef) 160.0) ;r 4
     (set! (-> *part-id-table* 1704 init-specs 6 initial-valuef) 30.0) ;g 4 
     (set! (-> *part-id-table* 1704 init-specs 7 initial-valuef) 128.0) ;b 4
-    (set! (-> *part-id-table* 1704 init-specs 8 initial-valuef) 128.0) ;a
+;    (set! (-> *part-id-table* 1704 init-specs 8 initial-valuef) 128.0) ;a
 ;
     (set! (-> *part-id-table* 1705 init-specs 8 initial-valuef) 128.0) ;r 5
     (set! (-> *part-id-table* 1705 init-specs 9 initial-valuef) 128.0) ;g 5
     (set! (-> *part-id-table* 1705 init-specs 10 initial-valuef) 128.0) ;b 5
-    (set! (-> *part-id-table* 1705 init-specs 11 initial-valuef) 128.0) ;a
+;    (set! (-> *part-id-table* 1705 init-specs 11 initial-valuef) 128.0) ;a
 ;
     (set! (-> *part-id-table* 1706 init-specs 7 initial-valuef) 128.0) ;r 6
     (set! (-> *part-id-table* 1706 init-specs 8 initial-valuef) 32.0) ;g 6
     (set! (-> *part-id-table* 1706 init-specs 9 initial-valuef) 255.0) ;b 6
-    (set! (-> *part-id-table* 1706 init-specs 10 initial-valuef) 120.0) ;a
+;    (set! (-> *part-id-table* 1706 init-specs 10 initial-valuef) 120.0) ;a
 ;
     (set! (-> *part-id-table* 1707 init-specs 6 initial-valuef) 255.0) ;r 7
     (set! (-> *part-id-table* 1707 init-specs 7 initial-valuef) 255.0) ;g 7
     (set! (-> *part-id-table* 1707 init-specs 8 initial-valuef) 255.0) ;b 7
-    (set! (-> *part-id-table* 1707 init-specs 9 initial-valuef) 255.0) ;a
+;    (set! (-> *part-id-table* 1707 init-specs 9 initial-valuef) 255.0) ;a
 ;
-    ;(set! (-> *launch-matrix* trans quad) (-> (target-pos 0) quad))
-    ;(part-tracker-spawn part-tracker :to *entity-pool* :group (-> *part-group-id-table* 426))
     (none)
 )
 
-(defpartgroup group-neo-satellite-explode
+(defpartgroup group-level-explode
   :id 999999
   :flags (sp0 sp4)
   :bounds (static-bspherem 0 0 0 20)
@@ -75,7 +73,7 @@
     (set! (-> *part-id-table* 1701 init-specs 5 initial-valuef) 255.0) ;r
     (set! (-> *part-id-table* 1701 init-specs 6 initial-valuef) 255.0) ;g
     (set! (-> *part-id-table* 1701 init-specs 7 initial-valuef) 0.0) ;b
-    (set! (-> *part-id-table* 1701 init-specs 8 initial-valuef) (the float notoriety-level)) ;a
+;    (set! (-> *part-id-table* 1701 init-specs 8 initial-valuef) (the float notoriety-level)) ;a
 ;
     (set! (-> *part-id-table* 1702 init-specs 5 initial-valuef) 255.0) ;r
     (set! (-> *part-id-table* 1702 init-specs 6 initial-valuef) 255.0) ;g
@@ -85,22 +83,22 @@
     (set! (-> *part-id-table* 1703 init-specs 5 initial-valuef) 255.0) ;r
     (set! (-> *part-id-table* 1703 init-specs 6 initial-valuef) 255.0) ;g
     (set! (-> *part-id-table* 1703 init-specs 7 initial-valuef) 0.0) ;b
-    (set! (-> *part-id-table* 1703 init-specs 8 initial-valuef) (the float notoriety-level)) ;a
+;    (set! (-> *part-id-table* 1703 init-specs 8 initial-valuef) (the float notoriety-level)) ;a
 ;
     (set! (-> *part-id-table* 1704 init-specs 5 initial-valuef) 255.0) ;r
     (set! (-> *part-id-table* 1704 init-specs 6 initial-valuef) 255.0) ;g
     (set! (-> *part-id-table* 1704 init-specs 7 initial-valuef) 0.0) ;b
-    (set! (-> *part-id-table* 1704 init-specs 8 initial-valuef) (the float notoriety-level)) ;a
+;    (set! (-> *part-id-table* 1704 init-specs 8 initial-valuef) (the float notoriety-level)) ;a
 ;
     (set! (-> *part-id-table* 1705 init-specs 8 initial-valuef) 255.0) ;r
     (set! (-> *part-id-table* 1705 init-specs 9 initial-valuef) 255.0) ;g
     (set! (-> *part-id-table* 1705 init-specs 10 initial-valuef) 0.0) ;b
-    (set! (-> *part-id-table* 1705 init-specs 11 initial-valuef) (the float notoriety-level)) ;a
+;    (set! (-> *part-id-table* 1705 init-specs 11 initial-valuef) (the float notoriety-level)) ;a
 ;
     (set! (-> *part-id-table* 1706 init-specs 7 initial-valuef) 255.0) ;r
     (set! (-> *part-id-table* 1706 init-specs 8 initial-valuef) 255.0) ;g
     (set! (-> *part-id-table* 1706 init-specs 9 initial-valuef) 0.0) ;b
-    (set! (-> *part-id-table* 1706 init-specs 10 initial-valuef) (the float notoriety-level)) ;a
+;    (set! (-> *part-id-table* 1706 init-specs 10 initial-valuef) (the float notoriety-level)) ;a
 ;
     (set! (-> *part-id-table* 1707 init-specs 6 initial-valuef) 255.0) ;r
     (set! (-> *part-id-table* 1707 init-specs 7 initial-valuef) 255.0) ;g
@@ -126,32 +124,32 @@
     (set! (-> *part-id-table* 1701 init-specs 5 initial-valuef) 255.0) ;r
     (set! (-> *part-id-table* 1701 init-specs 6 initial-valuef) 0.0) ;g
     (set! (-> *part-id-table* 1701 init-specs 7 initial-valuef) 0.0) ;b
-    (set! (-> *part-id-table* 1701 init-specs 8 initial-valuef) (* (the float guns-level) 8.0)) ;a
+;    (set! (-> *part-id-table* 1701 init-specs 8 initial-valuef) (* (the float guns-level) 8.0)) ;a
 ;
     (set! (-> *part-id-table* 1702 init-specs 5 initial-valuef) 255.0) ;r
     (set! (-> *part-id-table* 1702 init-specs 6 initial-valuef) 0.0) ;g
     (set! (-> *part-id-table* 1702 init-specs 7 initial-valuef) 0.0) ;b
-    (set! (-> *part-id-table* 1702 init-specs 8 initial-valuef) (* (the float guns-level) 8.0)) ;a
+;    (set! (-> *part-id-table* 1702 init-specs 8 initial-valuef) (* (the float guns-level) 8.0)) ;a
 ;
     (set! (-> *part-id-table* 1703 init-specs 5 initial-valuef) 255.0) ;r
     (set! (-> *part-id-table* 1703 init-specs 6 initial-valuef) 0.0) ;g
     (set! (-> *part-id-table* 1703 init-specs 7 initial-valuef) 0.0) ;b
-    (set! (-> *part-id-table* 1703 init-specs 8 initial-valuef) (* (the float guns-level) 8.0)) ;a
+;    (set! (-> *part-id-table* 1703 init-specs 8 initial-valuef) (* (the float guns-level) 8.0)) ;a
 ;
     (set! (-> *part-id-table* 1704 init-specs 5 initial-valuef) 255.0) ;r
     (set! (-> *part-id-table* 1704 init-specs 6 initial-valuef) 0.0) ;g
     (set! (-> *part-id-table* 1704 init-specs 7 initial-valuef) 0.0) ;b
-    (set! (-> *part-id-table* 1704 init-specs 8 initial-valuef) (* (the float guns-level) 8.0)) ;a
+;    (set! (-> *part-id-table* 1704 init-specs 8 initial-valuef) (* (the float guns-level) 8.0)) ;a
 ;
     (set! (-> *part-id-table* 1705 init-specs 8 initial-valuef) 255.0) ;r
     (set! (-> *part-id-table* 1705 init-specs 9 initial-valuef) 0.0) ;g
     (set! (-> *part-id-table* 1705 init-specs 10 initial-valuef) 0.0) ;b
-    (set! (-> *part-id-table* 1705 init-specs 11 initial-valuef) (* (the float guns-level) 8.0)) ;a
+;    (set! (-> *part-id-table* 1705 init-specs 11 initial-valuef) (* (the float guns-level) 8.0)) ;a
 ;
     (set! (-> *part-id-table* 1706 init-specs 7 initial-valuef) 255.0) ;r
     (set! (-> *part-id-table* 1706 init-specs 8 initial-valuef) 0.0) ;g
     (set! (-> *part-id-table* 1706 init-specs 9 initial-valuef) 0.0) ;b
-    (set! (-> *part-id-table* 1706 init-specs 10 initial-valuef) (* (the float guns-level) 8.0)) ;a
+;    (set! (-> *part-id-table* 1706 init-specs 10 initial-valuef) (* (the float guns-level) 8.0)) ;a
 ;
     (set! (-> *part-id-table* 1707 init-specs 6 initial-valuef) 255.0) ;r
     (set! (-> *part-id-table* 1707 init-specs 7 initial-valuef) 0.0) ;g
@@ -185,7 +183,8 @@
         (set! (-> *launch-matrix* trans quad) (-> (target-pos 0) quad))
         (part-tracker-spawn part-tracker :to *active-pool* :group (-> *part-group-id-table* 999999))
         )
-      )    (none)
+      )
+    (none)
 )
 
 ;level-up skill
@@ -196,8 +195,15 @@
     (set! draw-levelup-noto #t)
     (set! noto-string "<COLOR_ORANGE>Notoriety<COLOR_YELLOW>")
     (set! draw-levelup-int (-> *game-info* total-trys))
-    (when (!= (-> *target* fact health-max) (+ (-> *FACT-bank* health-max-default) (/ (-> *game-info* total-trys) 3)))
-        (set! (-> *target* fact health-max) (+ (-> *FACT-bank* health-max-default) (/ (-> *game-info* total-trys) 3)))
+    (cond
+        ((>= notoriety-level 10)
+            (when (!= (-> *target* fact health-max) (+ (-> *FACT-bank* health-max-default) (/ (-> *game-info* total-trys) 3)))
+                (set! (-> *target* fact health-max) (+ (-> *FACT-bank* health-max-default) (/ (-> *game-info* total-trys) 3)))
+            )
+        )
+        (else
+            (set! (-> *target* fact health-max) (-> *FACT-bank* health-max-default))
+        )
     )
     (set! (-> *target* fact health) (-> *target* fact health-max))
     (auto-save-user)
@@ -779,8 +785,10 @@
                 (when (logtest? (-> *game-info* features) (game-feature lightjak))
                     (draw-targbar-light)
                 )
-                (when (!= (-> *target* fact health-max) (+ (-> *FACT-bank* health-max-default) (/ (-> *game-info* total-trys) 3)))
-                    (set! (-> *target* fact health-max) (+ (-> *FACT-bank* health-max-default) (/ (-> *game-info* total-trys) 3)))
+                (when (>= notoriety-level 10)
+                    (when (!= (-> *target* fact health-max) (+ (-> *FACT-bank* health-max-default) (/ (-> *game-info* total-trys) 3)))
+                        (set! (-> *target* fact health-max) (+ (-> *FACT-bank* health-max-default) (/ (-> *game-info* total-trys) 3)))
+                    )
                 )
             )
 

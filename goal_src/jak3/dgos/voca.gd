@@ -29,7 +29,6 @@
   "spiky-frog.o"
   "mantis.o"
   "flut-wild.o"
-  "flamer-lava.o"
   "tpage-1632.go"
   "tpage-1635.go"
   "tpage-1633.go"

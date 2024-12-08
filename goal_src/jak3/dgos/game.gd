@@ -490,10 +490,17 @@
   "desertspawn-deserta.o"
   "mod-save-stats.o"
   "dm-mine-spider.o" ;enemy modfiles
+  "hover-formation-h.o"
   "hover-nav-control-h.o"
   "hover-enemy-h.o"
+  "hover-nav-control.o"
+  "hover-enemy.o"
+  "hover-formation.o"
+  "hover-nav-edit.o"
   "neo-wasp.o"
+  "flamer-lava.o"
   "manta.o"
+  "spiky-frog.o"
   "jak3-custom-code.o" ;custom-mod
   "xp-level.o"
   "wasteland-spawner.o"

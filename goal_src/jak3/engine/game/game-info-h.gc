@@ -287,6 +287,19 @@
   (define anchor-cooldown #f)
   (define anchor-cdr 0)
 
+  (define skill-noto-string1 "")
+  (define skill-noto-string2 "")
+  (define skill-noto-string3 "")
+  (define skill-noto-string4 "")
+  (define skill-guns-string1 "")
+  (define skill-guns-string2 "")
+  (define skill-guns-string3 "")
+  (define skill-guns-string4 "")
+  (define skill-cars-string1 "")
+  (define skill-cars-string2 "")
+  (define skill-cars-string3 "")
+  (define skill-cars-string4 "")
+
   (defun-extern group-drop! vector float float none)
 
   (defun-extern custom-intro (none))

@@ -433,7 +433,9 @@
   (logior! (-> this draw status) (draw-control-status no-draw))
   (logior! (-> this focus-status) (focus-status disable))
   (cond 
-    ((and (not (string= (-> this name) "Bipedal Boss")))
+    ((and (not (string= (-> this name) "Bipedal Boss"))
+          (not (string= (-> this name) "toad-boss"))
+      )
       (go (method-of-object this dormant))
     )
     (else
@@ -1692,7 +1694,10 @@
                 )
               )
             (send-event (ppointer->process (-> this parent)) 'child-hit)
-            (when (not (string= (-> this name) "Bipedal Boss"))
+            (when (and
+                    (not (string= (-> this name) "Bipedal Boss"))
+                    (not (string= (-> this name) "toad-boss"))
+                  )
               (if (logtest? (-> *game-info* secrets) (game-secrets hero-mode))
                 (set! hpbar-max-hit-points (+ (* 2.0 (-> self enemy-info default-hit-points)) (* (the float enemy-noto) 3)))
                 (set! hpbar-max-hit-points (+ (-> self enemy-info default-hit-points) (* (the float enemy-noto) 3)))

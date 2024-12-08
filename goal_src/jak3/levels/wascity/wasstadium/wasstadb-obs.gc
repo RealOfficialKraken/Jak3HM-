@@ -412,7 +412,7 @@
         (set! tutorial-msg 1)
         (set! in-tutorial? #t)
        )
-       (when (= arena-token-count 26)
+       (when (= arena-token-count 24)
         (set! tutorial-msg 2)
         (set! in-tutorial? #t)
        )

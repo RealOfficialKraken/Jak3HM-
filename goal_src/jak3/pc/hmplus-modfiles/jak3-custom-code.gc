@@ -1372,14 +1372,50 @@ BUGS:
     (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
                                         (bucket-id particles)
                                         )
-(draw-sprite2d-xy s2-0 0 5 700 148 (new 'static 'rgba :a #x40) #x3fffff)
+(draw-sprite2d-xy s2-0 0 5 700 348 (new 'static 'rgba :a #x40) #x3fffff)
 )
+    (cond
+        ((>= notoriety-level 10)
+            (set! skill-noto-string1 "<COLOR_GREEN>Jak gets 3 percent increased HP per level")
+        )
+        (else
+            (set! skill-noto-string1 "<COLOR_RED>LOCKED")
+        )
+    )
+    (cond
+        ((>= notoriety-level 25)
+            (set! skill-noto-string2 "<COLOR_GREEN>Notoriety level now affects the damage of weapons")
+        )
+        (else
+            (set! skill-noto-string2 "<COLOR_RED>LOCKED")
+        )
+    )
+    (cond
+        ((>= notoriety-level 40)
+            (set! skill-noto-string3 "<COLOR_GREEN>300 percent increased melee damage")
+        )
+        (else
+            (set! skill-noto-string3 "<COLOR_RED>LOCKED")
+        )
+    )
+    (cond
+        ((>= notoriety-level 60)
+            (set! skill-noto-string4 "<COLOR_GREEN>Melee attacks can make time slow down for a second")
+        )
+        (else
+            (set! skill-noto-string4 "<COLOR_RED>LOCKED")
+        )
+    )
     (when
     (= menu-slot 0)
         (clear matt-str)
         (clear *pc-encoded-matt-str*)
-        (format matt-str "<COLOR_ORANGE>Notoriety Level:<COLOR_CYAN> ~d ~%~%<COLOR_GREEN>Your Notoriety Level controls your gun damage, vehicle damage,~%and how much eco Jak can hold of light and dark~%~%Enemies will also have a level for themselves, all tied to the areas they're in~%~%<COLOR_YELLOW>Complete Main-Line/Side Missions, and level other skills to earn XP"
+        (format matt-str "<COLOR_ORANGE>Notoriety Level:<COLOR_CYAN> ~d ~%~%<COLOR_GREEN>Your Notoriety Level controls your gun damage, vehicle damage,~%and how much eco Jak can hold of light and dark~%~%Enemies will also have a level for themselves, all tied to the areas they're in~%~%<COLOR_YELLOW>Complete Main-Line/Side Missions, and level other skills to earn XP~%~%~%<COLOR_ORANGE>At Level 10~%~s~%<COLOR_ORANGE>At Level 25~%~s~%<COLOR_ORANGE>At Level 40~%~s~%<COLOR_ORANGE>At Level 60~%~S"
         notoriety-level
+        skill-noto-string1
+        skill-noto-string2
+        skill-noto-string3
+        skill-noto-string4
         )
         (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
         (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -1404,13 +1440,49 @@ BUGS:
                 (set! car-draw-x 190)
                 (set! car-draw-y 60)
             )
+    )
+    (cond
+        ((>= guns-level 5)
+            (set! skill-guns-string1 "<COLOR_GREEN>Bombs do 12 percent increased damage")
+        )
+        (else
+            (set! skill-guns-string1 "<COLOR_RED>LOCKED")
+        )
+    )
+    (cond
+        ((>= guns-level 8)
+            (set! skill-guns-string2 "<COLOR_GREEN>Fire rate increased per level on semi auto weapons")
+        )
+        (else
+            (set! skill-guns-string2 "<COLOR_RED>LOCKED")
+        )
+    )
+    (cond
+        ((>= guns-level 16)
+            (set! skill-guns-string3 "<COLOR_GREEN>Projectiles have a 6 percent chance to explode on impact")
+        )
+        (else
+            (set! skill-guns-string3 "<COLOR_RED>LOCKED")
+        )
+    )
+    (cond
+        ((>= guns-level 24)
+            (set! skill-guns-string4 "<COLOR_GREEN>Huge ammo bags")
+        )
+        (else
+            (set! skill-guns-string4 "<COLOR_RED>LOCKED")
+        )
     )
     (when
     (= menu-slot 1)
         (clear matt-str)
         (clear *pc-encoded-matt-str*)
-        (format matt-str "<COLOR_RED>Guns:<COLOR_CYAN> ~d ~%~%<COLOR_ORANGE>Jak's guns can be upgraded to fire faster, bigger, and stronger.~%~%<COLOR_YELLOW>Deplete ammo to earn XP"
+        (format matt-str "<COLOR_RED>Guns:<COLOR_CYAN> ~d ~%~%<COLOR_ORANGE>Jak's guns can be upgraded to fire faster, bigger, and stronger.~%~%<COLOR_YELLOW>Deplete ammo to earn XP~%~%~%<COLOR_ORANGE>At Level 5~%~s~%<COLOR_ORANGE>At Level 8~%~s~%<COLOR_ORANGE>At Level 16~%~s~%<COLOR_ORANGE>At Level 24~%~S"
         guns-level
+        skill-guns-string1
+        skill-guns-string2
+        skill-guns-string3
+        skill-guns-string4
         )
         (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
         (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -1436,12 +1508,39 @@ BUGS:
                 (set! car-draw-y 60)
             )
     )
+    (cond
+        ((>= cars-level 2)
+            (set! skill-cars-string1 "<COLOR_GREEN>Increased vehicle turbo per level")
+        )
+        (else
+            (set! skill-cars-string1 "<COLOR_RED>LOCKED")
+        )
+    )
+    (cond
+        ((>= cars-level 6)
+            (set! skill-cars-string2 "<COLOR_GREEN>Flat 34 percent vehicle boost recharge")
+        )
+        (else
+            (set! skill-cars-string2 "<COLOR_RED>LOCKED")
+        )
+    )
+    (cond
+        ((>= cars-level 12)
+            (set! skill-cars-string3 "<COLOR_GREEN>Flat 12 percent increased vehicle boost strength")
+        )
+        (else
+            (set! skill-cars-string3 "<COLOR_RED>LOCKED")
+        )
+    )
     (when
     (= menu-slot 2)
         (clear matt-str)
         (clear *pc-encoded-matt-str*)
-        (format matt-str "<COLOR_PINK>Vehicles:<COLOR_CYAN> ~d ~%~%<COLOR_ORANGE>Wasteland cars can have better output damage on guns, alongside bigger boost times.~%~%<COLOR_YELLOW>Destroy other Marauder Cars to earn XP"
+        (format matt-str "<COLOR_PINK>Vehicles:<COLOR_CYAN> ~d ~%~%<COLOR_ORANGE>Wasteland cars can have better output damage on guns~%~%<COLOR_YELLOW>Destroy other Marauder Cars to earn XP~%~%~%<COLOR_ORANGE>At Level 2~%~s~%<COLOR_ORANGE>At Level 6~%~s~%<COLOR_ORANGE>At Level 12~%~s"
         cars-level
+        skill-cars-string1
+        skill-cars-string2
+        skill-cars-string3
         )
         (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
         (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -1517,7 +1616,7 @@ BUGS:
 (when (and (= (-> *game-info* total-deaths) 0)(= menu-unlocked? #t)(= on-vehicle? #f)(not *scene-player*)(= in-menu? #t))
     (clear matt-str)
     (clear *pc-encoded-matt-str*)
-    (format matt-str "<COLOR_WHITE>Welcome to <COLOR_BLUE>Hero<COLOR_RED>Mode<COLOR_CYAN>+~%<COLOR_GREEN>Made by Kraken~%~%<COLOR_CYAN>RPG Elements have been added!~%Information about your levels can be accessed in the <COLOR_ORANGE>Skills<COLOR_CYAN> tab~%~%Weapons are not obtained the traditional way! You only get these two guns to start.~%The new way to get weapons is to fight powerful enemies and bosses~%~%Gun Mods are new additions that are incredibly rare, and each one has its own function.~%Good luck finding one of those~%~%Enemies also have a level, so be careful treading into certain areas~%Farming enemies is definitely recommended as the game accelerates enemy levels drastically~%The Desert Wasteland starts enemies 2 levels below, but gradually increases with time, infinitely~%Don't take too long on desert missions!~%~%<COLOR_GREEN>Good Luck!"
+    (format matt-str "<COLOR_WHITE>Welcome to <COLOR_BLUE>Hero<COLOR_RED>Mode<COLOR_CYAN>+~%<COLOR_GREEN>Made by Kraken~%~%<COLOR_CYAN>RPG Elements have been added!~%Information about your levels can be accessed in the <COLOR_ORANGE>Skills<COLOR_CYAN> tab~%~%Weapons are not obtained the traditional way!~%The new way to get weapons is to find them in enemy-dropped~%crates, which can be found in any tier.~%Black crates yield higher chances!~%~%Gun Mods are new additions that are incredibly rare, and each one is unique.~%These are found in crates and from special events.~%Different loot varies from enemy to enemy,~%some have higher chances of dropping black crates.~%~%Enemies also have a level, so be careful treading into certain areas~%You can backtrack into certain levels to fight~%custom enemies, bosses, and complete quests~%for varying rewards.~%~%<COLOR_GREEN>Good Luck!"
     )
     (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
     (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -3201,6 +3300,11 @@ BUGS:
                 :y (meters 2.4700)
                 :z (meters -63.0167)
                 :w 1.0))
+            (toad-boss (new 'static 'vector 
+                :x (meters 38.5190)
+                :y (meters 33.5731)
+                :z (meters 211.3394)
+                :w 1.0))
                 )
         (process-spawn manta ray1 :name "manta")
         (process-spawn manta ray2 :name "manta")
@@ -3211,6 +3315,7 @@ BUGS:
         (process-spawn manta ray7 :name "manta")
         (process-spawn manta ray8 :name "manta")
         (process-spawn manta ray9 :name "manta")
+        (process-spawn steamroller toad-boss :name "toad-boss")
         (spawn-manipy-sat vsat "manipy-sat" #f)
         ;(process-spawn dm-mine-spider-spawner vspwnr1 :name "dm-spawner")
         (process-spawn dm-mine-spider-spawner vspwnr2 :name "dm-spawner")
@@ -3563,6 +3668,7 @@ BUGS:
     (kill-by-name "marauder-c" *default-pool*)
     (kill-by-name "goredrinker" *default-pool*)
     (kill-by-name "vin-effect" *default-pool*)
+    (kill-by-name "toad-boss" *default-pool*)
     (set! mine-boss-fireball? #f)
     (set! onfoot-battle? #f)
     (task-node-open! (game-task-node desert-spawn-task-oasis-goto-artifact) #t)
