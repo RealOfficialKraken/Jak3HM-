@@ -125,6 +125,14 @@ BUGS:
 (none)
 )
 
+(defun turn-to-scene-camera ((vec vector) (tpos vector) (lockedup? symbol))
+    (send-event *camera* 'teleport-to-vector-start-string vec)
+    (set-vector! (-> *target* control trans) (-> tpos x) (-> tpos y) (-> tpos z) 1.0)
+    (when lockedup?
+        (camera-locked #f #f #t)
+    )
+)
+
 (defun disable-hudmap ()
   (kill-by-type hud-map *active-pool*)
   (none)
@@ -784,7 +792,7 @@ BUGS:
         (when (and (>= tutorial-freeze 925) (< tutorial-freeze 2025))
             (clear matt-str)
             (clear *pc-encoded-matt-str*)
-            (format matt-str "<COLOR_ORANGE>Crates are dropped from <COLOR_YELLOW>enemies, civilians, and bosses~%<COLOR_ORANGE>The urns are the lowest, and the black crates are the highest~%<COLOR_YELLOW>These crates can also drop weapons and gun mods"
+            (format matt-str "<COLOR_ORANGE>Crates are dropped from <COLOR_YELLOW>enemies, civilians, and bosses~%<COLOR_ORANGE>There are three tiers, an urn, a crate, and black crates being highest~%<COLOR_YELLOW>They can also drop weapons and gun mods, but mainly collectables"
             )
             (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
             (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -2757,6 +2765,8 @@ BUGS:
             (not *scene-player*)
             (= weather-dark-mode #t)
             (= in-pre-tutorial? #t)
+            (= tutorial-prologue #f)
+            (= completed-tutorial? #t)
             (= (-> (level-get-target-inside *level*) name) 'waspala)
         )
             (intro-play)
@@ -2764,7 +2774,12 @@ BUGS:
             (set! weather-dark-mode #f)
         )
 
-        (when (= in-pre-tutorial? #t)
+        (when 
+            (and 
+                (= in-pre-tutorial? #t)
+                (= tutorial-prologue #f)
+                (= completed-tutorial? #t)
+            )
             (let ((vec (new 'static 'vector :x (meters 2387.7595) :y (meters 36.5880) :z (meters 539.4780) :w 1.0)))
             (when (>= (vector-vector-distance (target-pos 0) vec) 8200000.0)
                 (intro-play)
@@ -2780,7 +2795,169 @@ BUGS:
                 (= in-pre-tutorial? #t)
             )
             (set! weather-dark-mode #t)
+        )
+
+        (when
+            (and
+                (not *scene-player*)
+                (= (paused?) #f)
+                (= (pause-allowed?) #t)
+                *target*
+                (= in-pre-tutorial? #t)
+                (= tutorial-prologue #t)
             )
+            (let ((draw-x 250)
+                  (draw-y 250)
+                 )
+                    (+! pro-i 1)
+                    (when (= pro-i 1)
+                        (disable-hudmap)
+                        (task-node-close! (game-task-node desert-turtle-training-resolution) #t)
+                    )
+            (when (and (>= pro-i 1) (< pro-i 600))
+                (let ((camera-loc (new 'static 'vector
+                            :x (meters 2717.8078)
+                            :y (meters 39.5143)
+                            :z (meters 436.8793)
+                            :w 1.0
+                           ))
+                        (tpos (new 'static 'vector
+                            :x (meters 2817.4040)
+                            :y (meters 47.1295)
+                            :z (meters 508.9389)
+                            :w 1.0
+                           ))
+                    )
+                (turn-to-scene-camera camera-loc tpos #t)
+                )
+            )
+            (when (and (>= pro-i 120) (< pro-i 600))
+                (clear matt-str)
+                (clear *pc-encoded-matt-str*)
+                (format matt-str "<COLOR_WHITE>In an alternate reality, dark eco infests and~%devours the world, at the hands of an unknown force"
+                )
+                (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+                (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+                (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+                (let ((font-ctx (new 'stack 'font-context *font-default-matrix* draw-x draw-y 0.0 (font-color default) (font-flags middle shadow kerning large))))
+                (set! (-> font-ctx scale) 0.325)
+                (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+            )
+            (when (and (>= pro-i 600) (< pro-i 1200))
+                (let ((camera-loc (new 'static 'vector
+                            :x (meters 2755.3664)
+                            :y (meters 59.2170)
+                            :z (meters 940.2514)
+                            :w 1.0
+                           ))
+                        (tpos (new 'static 'vector
+                            :x (meters 2778.8229)
+                            :y (meters 67.1788)
+                            :z (meters 1148.0726)
+                            :w 1.0
+                           ))
+                    )
+                (turn-to-scene-camera camera-loc tpos #t)
+                (clear matt-str)
+                (clear *pc-encoded-matt-str*)
+                (format matt-str "<COLOR_WHITE>Samos~%Keira~%Ashelin~%Damos~%Kliever~%and everyone else~%...are all missing"
+                )
+                (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+                (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+                (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+                (let ((font-ctx (new 'stack 'font-context *font-default-matrix* draw-x draw-y 0.0 (font-color default) (font-flags middle shadow kerning large))))
+                (set! (-> font-ctx scale) 0.325)
+                (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+                )
+            )
+            (when (and (>= pro-i 1200) (< pro-i 2400))
+                (let ((camera-loc (new 'static 'vector
+                            :x (meters 3193.6091)
+                            :y (meters 63.6295)
+                            :z (meters 84.2434)
+                            :w 1.0
+                           ))
+                        (tpos (new 'static 'vector
+                            :x (meters 3219.9699)
+                            :y (meters 62.7780)
+                            :z (meters 104.1262)
+                            :w 1.0
+                           ))
+                    )
+                (turn-to-scene-camera camera-loc tpos #t)
+                )
+            )
+            (when (and (>= pro-i 1220) (< pro-i 1800))
+                (clear matt-str)
+                (clear *pc-encoded-matt-str*)
+                (format matt-str "<COLOR_WHITE>With the time loop restored, there lay only one dimension that's~%covered in darkness, and the void persists"
+                )
+                (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+                (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+                (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+                (let ((font-ctx (new 'stack 'font-context *font-default-matrix* draw-x draw-y 0.0 (font-color default) (font-flags middle shadow kerning large))))
+                (set! (-> font-ctx scale) 0.325)
+                (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+            )
+            (when (and (>= pro-i 1820) (< pro-i 2400))
+                (clear matt-str)
+                (clear *pc-encoded-matt-str*)
+                (format matt-str "<COLOR_WHITE>Jak had only the Entity to speak with, the unknown force that caused this.~%But now all has fallen silent for far too long"
+                )
+                (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+                (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+                (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+                (let ((font-ctx (new 'stack 'font-context *font-default-matrix* draw-x draw-y 0.0 (font-color default) (font-flags middle shadow kerning large))))
+                (set! (-> font-ctx scale) 0.325)
+                (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+            )
+            (when (= pro-i 2400)
+                (let ((vec (new 'static 'vector :x (meters 2387.7595) :y (meters 36.5880) :z (meters 539.4780) :w 1.0)))
+                    (spawn-warp-gate vec "warp-gate-intro" 45)
+                )
+            )
+            (when (and (>= pro-i 2400) (< pro-i 2750))
+                (let ((camera-loc (new 'static 'vector
+                            :x (meters 2484.9660)
+                            :y (meters 30.2250)
+                            :z (meters 457.0697)
+                            :w 1.0
+                           ))
+                        (tpos (new 'static 'vector
+                            :x (meters 2471.7338)
+                            :y (meters 32.0317)
+                            :z (meters 464.1085)
+                            :w 1.0
+                           ))
+                    )
+                (turn-to-scene-camera camera-loc tpos #t)
+                (clear matt-str)
+                (clear *pc-encoded-matt-str*)
+                (format matt-str "<COLOR_WHITE>Until... a rift gate opens~%in the dark..."
+                )
+                (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+                (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+                (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+                (let ((font-ctx (new 'stack 'font-context *font-default-matrix* draw-x draw-y 0.0 (font-color default) (font-flags middle shadow kerning large))))
+                (set! (-> font-ctx scale) 0.325)
+                (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+                )
+            )
+            (when (>= pro-i 2755)
+                (set-vector! (-> *target* control trans) (meters 2565.8823) (meters 35.8801) (meters 619.5244) 1.0)
+                (camera-unlocked)
+                (process-spawn hud-map :init hud-init-by-other :name "hud-map" :to *target*)
+                (let ((vec (new 'static 'vector :x (meters 2387.7595) :y (meters 36.5880) :z (meters 539.4780) :w 1.0)))
+                    (task-arrow-custom vec #t)
+                )
+                (set! pro-i 0)
+                (set! completed-tutorial? #t)
+                (set! tutorial-prologue #f)
+                (task-node-open! (game-task-node desert-turtle-training-resolution) #t)
+            )
+                 )
+        )
+
 
         (when 
                 (and 
@@ -3593,6 +3770,27 @@ BUGS:
         )
     )
     (none)
+  )
+
+  (defun drop-loot-crate! ((vec vector) (tier2-chance float) (tier3-chance float))
+    (let ((rnd 1))
+          (when 
+            (and 
+              (rand-vu-percent? tier2-chance)
+              (>= notoriety-level 10)
+            )
+            (set! rnd 2)
+          )
+          (when 
+            (and 
+              (rand-vu-percent? tier2-chance)
+              (>= notoriety-level 18)
+            )
+            (set! rnd 3)
+          )
+          (drop-crate vec rnd)
+        )
+        (none)
   )
 
   (define in-cfreeze? #f)

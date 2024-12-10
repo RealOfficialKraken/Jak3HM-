@@ -231,10 +231,7 @@
   (initialize! *game-info* 'game (the-as game-save #f) "desert-bd-start" (the-as resetter-spec #f))
   (set! in-pre-tutorial? #t)
   (set! weather-dark-mode #t)
-  (let ((vec (new 'static 'vector :x (meters 2387.7595) :y (meters 36.5880) :z (meters 539.4780) :w 1.0)))
-    (spawn-warp-gate vec "warp-gate-intro" 45)
-    (task-arrow-custom vec #t)
-  )
+  (set! tutorial-prologue #t)
   (set-master-mode 'game)
   0
   )
