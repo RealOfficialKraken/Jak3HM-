@@ -824,6 +824,7 @@
         (when
             (and 
                 (not (logtest? (-> *game-info* secrets) (game-secrets hero-mode)))
+                (task-node-closed? (game-task-node arena-training-1-introduction))
                 (= weather-dark-mode #t)
             )
             (when ;DARK-WORLD

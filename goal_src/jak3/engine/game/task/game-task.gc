@@ -4363,7 +4363,7 @@
             :when-open #f
             :flags (game-task-node-flag bbush act1 exclusive set-task-mask)
             :parent-node (new 'static 'array game-task-node 4
-              (game-task-node desert-artifact-race-1-resolution)
+              (game-task-node desert-course-race-resolution)
               (game-task-node none)
               (game-task-node none)
               (game-task-node none)
@@ -4431,7 +4431,7 @@
             :flags (game-task-node-flag save-on-life act1)
             :parent-node (new 'static 'array game-task-node 4
               (game-task-node desert-vin-quest-resolution)
-              (game-task-node desert-rescue-hold-doors)
+              (game-task-node volcano-darkeco-resolution)
               (game-task-node none)
               (game-task-node none)
               )

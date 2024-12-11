@@ -91,6 +91,33 @@ BUGS:
                         :z (meters -134.4601)
                         :w 1.0))
 
+(defun spawn-vin-circle ((vec vector))
+    (let ((vin (the manipy 
+                (ppointer->process
+                    (process-spawn manipy
+                    :init
+                    manipy-init
+                    vec
+                    #f
+                    (art-group-get-by-name *level* "skel-vin-effect" (the (pointer level) #f))
+                    #f
+                    0
+                    #f
+                    :name "vin-effect"))
+                    )
+                )
+            (vscale (new 'static 'vector))
+            (qscale (new 'static 'quaternion))
+            )
+            (set! (-> vscale x) 20.0)
+            (set! (-> vscale y) 20.0)
+            (set! (-> vscale z) 20.0)
+            (send-event vin 'scale vscale)
+        )
+    (set! spawned-vin-circle? #t)
+    (none)
+)
+
 (define menu-unlocked? #f)
 
 (define *force-stop-pilot* #f)
@@ -996,7 +1023,7 @@ BUGS:
     (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
                                         (bucket-id particles)
                                         )
-(draw-sprite2d-xy s2-0 0 5 700 88 (new 'static 'rgba :a #x40) #x3fffff)
+(draw-sprite2d-xy s2-0 0 5 730 88 (new 'static 'rgba :a #x40) #x3fffff)
 )
 )
 (when 
@@ -1276,7 +1303,7 @@ BUGS:
     (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
                                         (bucket-id particles)
                                         )
-(draw-sprite2d-xy s2-0 0 5 700 108 (new 'static 'rgba :a #x40) #x3fffff)
+(draw-sprite2d-xy s2-0 0 5 730 108 (new 'static 'rgba :a #x40) #x3fffff)
 )
     (when
     (= menu-slot 0)
@@ -1317,7 +1344,7 @@ BUGS:
     (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
                                         (bucket-id particles)
                                         )
-(draw-sprite2d-xy s2-0 0 5 700 108 (new 'static 'rgba :a #x40) #x3fffff)
+(draw-sprite2d-xy s2-0 0 5 730 108 (new 'static 'rgba :a #x40) #x3fffff)
 )
     (when
     (= menu-slot 0)
@@ -1380,7 +1407,7 @@ BUGS:
     (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
                                         (bucket-id particles)
                                         )
-(draw-sprite2d-xy s2-0 0 5 700 348 (new 'static 'rgba :a #x40) #x3fffff)
+(draw-sprite2d-xy s2-0 0 5 730 348 (new 'static 'rgba :a #x40) #x3fffff)
 )
     (cond
         ((>= notoriety-level 10)
@@ -1635,7 +1662,7 @@ BUGS:
     (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
                                         (bucket-id particles)
                                         )
-(draw-sprite2d-xy s2-0 0 93 700 238 (new 'static 'rgba :a #x40) #x3fffff)
+(draw-sprite2d-xy s2-0 0 93 730 238 (new 'static 'rgba :a #x40) #x3fffff)
 )
 )
 
@@ -2441,7 +2468,7 @@ BUGS:
             (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
                                         (bucket-id particles)
                                         )
-            (draw-sprite2d-xy s2-0 0 120 700 58 (new 'static 'rgba :a #x40) #x3fffff)
+            (draw-sprite2d-xy s2-0 0 120 730 58 (new 'static 'rgba :a #x40) #x3fffff)
         )
     )
     ((task-node-open? (game-task-node wascity-kleeverquest-mantaray))
@@ -2461,7 +2488,7 @@ BUGS:
             (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
                                         (bucket-id particles)
                                         )
-            (draw-sprite2d-xy s2-0 0 120 700 58 (new 'static 'rgba :a #x40) #x3fffff)
+            (draw-sprite2d-xy s2-0 0 120 730 58 (new 'static 'rgba :a #x40) #x3fffff)
         )
     )
     ((task-node-open? (game-task-node wascity-kleeverquest-marauders))
@@ -2480,7 +2507,7 @@ BUGS:
             (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
                                         (bucket-id particles)
                                         )
-            (draw-sprite2d-xy s2-0 0 120 700 58 (new 'static 'rgba :a #x40) #x3fffff)
+            (draw-sprite2d-xy s2-0 0 120 730 58 (new 'static 'rgba :a #x40) #x3fffff)
         )
     )
     ((task-node-open? (game-task-node wascity-kleeverquest-bruteboss))
@@ -2500,7 +2527,7 @@ BUGS:
             (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
                                         (bucket-id particles)
                                         )
-            (draw-sprite2d-xy s2-0 0 120 700 58 (new 'static 'rgba :a #x40) #x3fffff)
+            (draw-sprite2d-xy s2-0 0 120 730 58 (new 'static 'rgba :a #x40) #x3fffff)
         )
     )
     (else
@@ -2520,7 +2547,7 @@ BUGS:
             (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
                                         (bucket-id particles)
                                         )
-            (draw-sprite2d-xy s2-0 0 120 700 58 (new 'static 'rgba :a #x40) #x3fffff)
+            (draw-sprite2d-xy s2-0 0 120 730 58 (new 'static 'rgba :a #x40) #x3fffff)
         )
     )
 
@@ -2551,7 +2578,7 @@ BUGS:
         (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
                                     (bucket-id particles)
                                     )
-        (draw-sprite2d-xy s2-0 0 290 700 88 (new 'static 'rgba :a #x40) #x3fffff)
+        (draw-sprite2d-xy s2-0 0 290 730 88 (new 'static 'rgba :a #x40) #x3fffff)
         )
 )
 
@@ -2579,7 +2606,7 @@ BUGS:
         (with-dma-buffer-add-bucket ((s2-0 (-> *display* frames (-> *display* on-screen) global-buf))
                                     (bucket-id particles)
                                     )
-        (draw-sprite2d-xy s2-0 0 290 700 88 (new 'static 'rgba :a #x40) #x3fffff)
+        (draw-sprite2d-xy s2-0 0 290 730 88 (new 'static 'rgba :a #x40) #x3fffff)
         )
 )
 
@@ -2933,7 +2960,7 @@ BUGS:
                 (turn-to-scene-camera camera-loc tpos #t)
                 (clear matt-str)
                 (clear *pc-encoded-matt-str*)
-                (format matt-str "<COLOR_WHITE>Until... a rift gate opens~%in the dark..."
+                (format matt-str "<COLOR_WHITE>Then suddenly... a rift gate opens~%in the dark..."
                 )
                 (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
                 (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
@@ -2957,6 +2984,32 @@ BUGS:
             )
                  )
         )
+
+
+
+        ;vin circle
+
+        (when
+            (and
+                (not *scene-player*)
+                (= (paused?) #f)
+                (= (pause-allowed?) #t)
+                *target*
+                (= weather-dark-mode #t)
+                (= spawned-vin-circle? #f)
+                (task-node-closed? (game-task-node desert-vin-quest-resolution))
+            )
+                (let ((vec 
+                        (new 'static 'vector 
+                        :x (meters 2239.8217) 
+                        :y (meters 25.3490) 
+                        :z (meters 68.1253) 
+                        :w 1.0)
+                            )
+                        )
+                    (spawn-vin-circle vec)
+                    )
+                )
 
 
         (when 
@@ -3867,8 +3920,10 @@ BUGS:
     (kill-by-name "goredrinker" *default-pool*)
     (kill-by-name "vin-effect" *default-pool*)
     (kill-by-name "toad-boss" *default-pool*)
+    (kill-by-name "task-arrow-custom" *default-pool*)
     (set! mine-boss-fireball? #f)
     (set! onfoot-battle? #f)
+    (set! spawned-vin-circle? #f)
     (task-node-open! (game-task-node desert-spawn-task-oasis-goto-artifact) #t)
     (task-node-open! (game-task-node desert-spawn-task-deserta-goto-artifact) #t)
     (when (= in-desertf-anchor? #t)
