@@ -1,6 +1,6 @@
 (in-package goal)
 
-;name: desert-storm.gc
+;name: warp-room.gc
 
 (defun run-warp-room ()
     (when ;wasdoors gates spawn
@@ -9,7 +9,10 @@
             *target*
             (= test-level-loaded? #f)
             (= weather-dark-mode #f)
-            (= (-> (level-get-target-inside *level*) name) 'wasdoors)
+            (or
+                (= (-> (level-get-target-inside *level*) name) 'wasdoors)
+                (= (-> (level-get-target-inside *level*) name) 'desert)
+            )
         )
             (let ((dark-v (new 'static 'vector  :x (meters 2254.46)  :y (meters 30.70)  :z (meters 149.23)  :w 1.0)))
                 (spawn-warp-gate dark-v "warp-gate-dark" 90)
@@ -20,8 +23,8 @@
             (let ((level-volcano (new 'static 'vector  :x (meters 2231.6354)  :y (meters 31.86)  :z (meters 158.30)  :w 1.0)))
                 (spawn-warp-gate level-volcano "warp-gate-volcano-overworld" 125)
             )
-            (let ((level-unnamed (new 'static 'vector  :x (meters 2213.6794)  :y (meters 33.5)  :z (meters 172.2017)  :w 1.0)))
-                (spawn-warp-gate level-unnamed "warp-gate-unnamed" 125)
+            (let ((level-factory (new 'static 'vector  :x (meters 2213.6794)  :y (meters 33.5)  :z (meters 172.2017)  :w 1.0)))
+                (spawn-warp-gate level-factory "warp-gate-factory-overworld" 125)
             )
             (let ((level-unnamed (new 'static 'vector  :x (meters 2311.4011)  :y (meters 33.06)  :z (meters 176.9639)  :w 1.0)))
                 (spawn-warp-gate level-unnamed "warp-gate-unnamed" 50)
@@ -38,7 +41,10 @@
             *target*
             (= test-level-loaded? #t)
             (or 
-                (!= (-> (level-get-target-inside *level*) name) 'wasdoors)
+                (and
+                    (!= (-> (level-get-target-inside *level*) name) 'wasdoors)
+                    (!= (-> (level-get-target-inside *level*) name) 'desert)
+                )
                 (= weather-dark-mode #t)
             )
         )
@@ -47,6 +53,7 @@
         (kill-by-name "warp-gate-dark" *default-pool*)
         (kill-by-name "warp-gate-mine-overworld" *default-pool*)
         (kill-by-name "warp-gate-volcano-overworld" *default-pool*)
+        (kill-by-name "warp-gate-factory-overworld" *default-pool*)
         (kill-by-name "warp-gate-darkship" *default-pool*)
         (kill-by-name "warp-gate-unnamed" *default-pool*)
     )
@@ -61,7 +68,7 @@
             (= (-> (level-get-target-inside *level*) name) 'desert)
         )
             (let ((dark-v (new 'static 'vector  :x (meters 2384.7390)  :y (meters 36.5538)  :z (meters 537.5184)  :w 1.0)))
-                (spawn-warp-gate-dark dark-v "warp-gate-overworld" 90)
+                (spawn-warp-gate dark-v "warp-gate-overworld" 90)
         )
         (set! test-level-loaded-dark? #t)
     )
@@ -132,7 +139,7 @@
             )
         )
             (let ((volcano (new 'static 'vector :x (meters -16.2419) :y (meters 5.7) :z (meters -245.2322) :w 1.0)))
-                (spawn-warp-gate-dark volcano "warp-gate-volcano" 90)
+                (spawn-warp-gate volcano "warp-gate-volcano" 90)
         )
         (set! test-level-loaded-volcano? #t)
     )
@@ -151,6 +158,41 @@
         )
             (set! test-level-loaded-volcano? #f)
             (kill-by-name "warp-gate-volcano" *default-pool*)
+    )
+
+    (when ;factory gate spawn
+        (and
+            (= (pause-allowed?) #t)
+            *target*
+            (= test-level-loaded-factory? #f)
+            (= in-pre-tutorial? #f)
+            (or 
+                (= (-> (level-get-target-inside *level*) name) 'factoryc)
+                (= (-> (level-get-target-inside *level*) name) 'factoryb)
+                (= (-> (level-get-target-inside *level*) name) 'factorya)
+                (= (-> (level-get-target-inside *level*) name) 'lfacrm2)
+            )
+        )
+            (let ((factoryc (new 'static 'vector :x (meters 244.6092) :y (meters 426.1227) :z (meters 121.7341) :w 1.0)))
+                (spawn-warp-gate factoryc "warp-gate-factory" 90)
+        )
+        (set! test-level-loaded-factory? #t)
+    )
+
+    (when 
+        (and ;factory gate despawn
+            (= (pause-allowed?) #t)
+            *target*
+            (and 
+                (!= (-> (level-get-target-inside *level*) name) 'factoryc)
+                (!= (-> (level-get-target-inside *level*) name) 'factoryb)
+                (!= (-> (level-get-target-inside *level*) name) 'factorya)
+                (!= (-> (level-get-target-inside *level*) name) 'lfacrm2)
+            )
+            (= test-level-loaded-factory? #t)
+        )
+            (set! test-level-loaded-factory? #f)
+            (kill-by-name "warp-gate-factory" *default-pool*)
     )
 
 

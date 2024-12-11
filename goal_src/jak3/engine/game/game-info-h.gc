@@ -248,6 +248,7 @@
   (define test-level-loaded-dark? #f)
   (define test-level-loaded-mine? #f)
   (define test-level-loaded-volcano? #f)
+  (define test-level-loaded-factory? #f)
 
   (define warp-room-spawned? #f)
   (define warp-room-tutorial? #f)
@@ -364,6 +365,9 @@
   (declare-type warp-gate process-drawable)
   (define *warp-gate-dark* (the-as entity warp-gate))
   (defun-extern toggle-dark-mode none)
+
+  (define in-factory-level? #f)
+  (defun-extern factory-level (none))
 
   (define in-mine-level? #f)
   (defun-extern mine-level (none))

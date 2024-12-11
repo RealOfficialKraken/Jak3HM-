@@ -3450,6 +3450,20 @@ BUGS:
     (none)
   )
 
+  (defun factory-level ()
+    (cond 
+        ((= in-factory-level? #f)
+            (reset-actors 'life)
+            (set! in-factory-level? #t)
+        )
+        ((= in-factory-level? #t)
+            (set! in-factory-level? #f)
+            (reset-actors 'life)
+        )
+    )
+    (none)
+  )
+
   (defun mine-level ()
     (cond 
         ((= in-mine-level? #f)

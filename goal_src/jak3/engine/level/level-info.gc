@@ -19087,6 +19087,42 @@
         :want-sound (new 'static 'array symbol 3 'factory4 'factory5 'factory6)
         )
       (new 'static 'continue-point
+        :name "factoryc-warp"
+        :level 'factoryc
+        :flags (continue-flags no-auto warp-gate)
+        :trans (new 'static 'vector :x (meters 244.6092) :y (meters 426.1227) :z (meters 121.7341) :w 1.0)
+        :camera-trans (new 'static 'vector :x (meters 244.9255) :y (meters 439.8080) :z (meters 95.6464) :w 1.0)
+        :quat (new 'static 'vector4h :data (new 'static 'array int16 4 0 #x161 0 #x7ffb))
+        :camera-rot (new 'static 'array int16 9 #x7feb 0 -1107 #xde #x7d4b #x1a19 #x439 -6684 #x7d3b)
+        :on-goto #f
+        :vis-nick 'factoryc
+        :vehicle-type #x1b
+        :want-count 2
+        :want (new 'static 'inline-array level-buffer-state-small 2
+          (new 'static 'level-buffer-state-small :name 'factorya :display? 'display)
+          (new 'static 'level-buffer-state-small :name 'factoryc :display? 'display)
+          )
+        :want-sound (new 'static 'array symbol 3 'factory4 'factory5 'factory6)
+        )
+      (new 'static 'continue-point
+        :name "factorys-start"
+        :level 'factoryc
+        :flags (continue-flags no-auto)
+        :trans (new 'static 'vector :x (meters 246.6229) :y (meters 425.9964) :z (meters 82.1528) :w 1.0)
+        :camera-trans (new 'static 'vector :x (meters 247.8389) :y (meters 425.9964) :z (meters 82.1528) :w 1.0)
+        :quat (new 'static 'vector4h :data (new 'static 'array int16 4 0 #x161 0 #x7ffb))
+        :camera-rot (new 'static 'array int16 9 #x7feb 0 -1107 #xde #x7d4b #x1a19 #x439 -6684 #x7d3b)
+        :on-goto #f
+        :vis-nick 'factoryc
+        :vehicle-type #x1b
+        :want-count 2
+        :want (new 'static 'inline-array level-buffer-state-small 2
+          (new 'static 'level-buffer-state-small :name 'factorya :display? 'display)
+          (new 'static 'level-buffer-state-small :name 'factoryc :display? 'display)
+          )
+        :want-sound (new 'static 'array symbol 3 'factory4 'factory5 'factory6)
+        )
+      (new 'static 'continue-point
         :name "factory-pre-indax-1"
         :level 'factoryc
         :flags (continue-flags no-auto)
