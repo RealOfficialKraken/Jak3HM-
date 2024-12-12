@@ -19016,9 +19016,27 @@
                    :continues '((new 'static 'continue-point
                        :name "factoryb-start"
                        :level 'factoryb
-                       :flags (continue-flags race)
+                       :flags (continue-flags no-auto race)
                        :trans (new 'static 'vector :x 2412732.8 :y 1672502.9 :z 1152467.0 :w 1.0)
                        :camera-trans (new 'static 'vector :x 2467814.5 :y 1699122.8 :z 1153842.0 :w 1.0)
+                       :quat (new 'static 'vector4h :data (new 'static 'array int16 4 0 -23457 0 #x595a))
+                       :camera-rot (new 'static 'array int16 9 -812 0 #x7ff1 -14243 #x733f -353 -29496 -14247 -730)
+                       :on-goto #f
+                       :vis-nick 'factoryb
+                       :vehicle-type #x8
+                       :want-count 2
+                       :want (new 'static 'inline-array level-buffer-state-small 2
+                         (new 'static 'level-buffer-state-small :name 'factorya :display? 'display)
+                         (new 'static 'level-buffer-state-small :name 'factoryb :display? 'display)
+                         )
+                       :want-sound (new 'static 'array symbol 3 'factory1 'factory2 'factory3)
+                       )
+                       (new 'static 'continue-point
+                       :name "factoryo-warp"
+                       :level 'factoryb
+                       :flags (continue-flags no-auto warp-gate)
+                       :trans (new 'static 'vector :x (meters 128.3453) :y (meters 325.0596) :z (meters 338.3203) :w 1.0)
+                       :camera-trans (new 'static 'vector :x (meters 140.3165) :y (meters 330.1256) :z (meters 335.9107) :w 1.0)
                        :quat (new 'static 'vector4h :data (new 'static 'array int16 4 0 -23457 0 #x595a))
                        :camera-rot (new 'static 'array int16 9 -812 0 #x7ff1 -14243 #x733f -353 -29496 -14247 -730)
                        :on-goto #f

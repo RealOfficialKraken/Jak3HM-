@@ -73,6 +73,7 @@
            (wgv-vec (new 'static 'vector  :x (meters -16.2419) :y (meters 5.7) :z (meters -245.2322)  :w 1.0))
            (wgov-vec (new 'static 'vector  :x (meters 2231.6354)  :y (meters 31.86)  :z (meters 158.30)  :w 1.0))
            (wgf-vec (new 'static 'vector :x (meters 244.6092) :y (meters 426.1227) :z (meters 121.7341) :w 1.0))
+           (wgfo-vec (new 'static 'vector :x (meters 128.3453) :y (meters 325.0596) :z (meters 338.3203) :w 1.0))
            (wg (search-process-tree *active-pool* (lambda ((p process)) (type? p warp-gate))))
            )
        (when (and
@@ -83,6 +84,7 @@
                 (not (string= (-> arg0 name) "wasdoors-warp-mine"))
                 (not (string= (-> arg0 name) "volcanos-warp"))
                 (not (string= (-> arg0 name) "factoryc-warp"))
+                (not (string= (-> arg0 name) "factoryo-warp"))
               )
          (set! (-> s5-1 quad) (-> a2-0 extra trans quad))
          (+! (-> s5-1 y) 9011.2)
@@ -123,6 +125,17 @@
          ;factoryc
          (when (string= (-> arg0 name) "factoryc-warp")
           (set! (-> s5-1 quad) (-> wgf-vec quad))
+          (+! (-> s5-1 y) 9011.2)
+          (set-continue! *game-info* "factorys-start" #t)
+          (when (= in-factory-level? #f)
+            (factory-level)
+          )
+          (auto-save-user)
+          (go target-warp-in s5-1 (-> arg0 trans) (the-as object #f))
+         )
+         ;factory-outside
+         (when (string= (-> arg0 name) "factoryo-warp")
+          (set! (-> s5-1 quad) (-> wgfo-vec quad))
           (+! (-> s5-1 y) 9011.2)
           (set-continue! *game-info* "factorys-start" #t)
           (when (= in-factory-level? #f)

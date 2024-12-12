@@ -168,13 +168,15 @@
             (= in-pre-tutorial? #f)
             (or 
                 (= (-> (level-get-target-inside *level*) name) 'factoryc)
-                (= (-> (level-get-target-inside *level*) name) 'factoryb)
                 (= (-> (level-get-target-inside *level*) name) 'factorya)
                 (= (-> (level-get-target-inside *level*) name) 'lfacrm2)
             )
         )
             (let ((factoryc (new 'static 'vector :x (meters 244.6092) :y (meters 426.1227) :z (meters 121.7341) :w 1.0)))
                 (spawn-warp-gate factoryc "warp-gate-factory" 90)
+        )
+        (let ((factory-to-outside (new 'static 'vector :x (meters 157.1914) :y (meters 435.9988) :z (meters 30.8293) :w 1.0)))
+                (spawn-warp-gate factory-to-outside "warp-gate-factory-outside" 0)
         )
         (set! test-level-loaded-factory? #t)
     )
@@ -185,7 +187,6 @@
             *target*
             (and 
                 (!= (-> (level-get-target-inside *level*) name) 'factoryc)
-                (!= (-> (level-get-target-inside *level*) name) 'factoryb)
                 (!= (-> (level-get-target-inside *level*) name) 'factorya)
                 (!= (-> (level-get-target-inside *level*) name) 'lfacrm2)
             )
@@ -193,7 +194,39 @@
         )
             (set! test-level-loaded-factory? #f)
             (kill-by-name "warp-gate-factory" *default-pool*)
+            (kill-by-name "warp-gate-factory-outside" *default-pool*)
     )
+
+    (when ;outside factory spawn
+        (and
+            (= (pause-allowed?) #t)
+            *target*
+            (= test-level-loaded-factory-outside? #f)
+            (= in-pre-tutorial? #f)
+            (or 
+                (= (-> (level-get-target-inside *level*) name) 'factoryb)
+            )
+        )
+        (let ((factory-outside (new 'static 'vector :x (meters 128.3453) :y (meters 325.0596) :z (meters 338.3203) :w 1.0)))
+                (spawn-warp-gate factory-outside "warp-gate-factory2" 0)
+        )
+        (set! test-level-loaded-factory-outside? #t)
+    )
+
+    (when 
+        (and ;outside factory despawn
+            (= (pause-allowed?) #t)
+            *target*
+            (and 
+                (!= (-> (level-get-target-inside *level*) name) 'factoryb)
+            )
+            (= test-level-loaded-factory-outside? #t)
+        )
+            (set! test-level-loaded-factory-outside? #f)
+            (kill-by-name "warp-gate-factory2" *default-pool*)
+    )
+
+
 
 
     #|(when 

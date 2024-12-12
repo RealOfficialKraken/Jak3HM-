@@ -961,6 +961,13 @@
                 )
                 (set! enemy-noto 14)
             )
+            (when ;TEMPLED
+                (and
+                    (= (-> (level-get-target-inside *level*) name) 'templeb)
+                    (!= enemy-noto 84)
+                )
+                (set! enemy-noto 84)
+            )
             (when ;COMBABX
                 (and
                     (or 
@@ -1043,22 +1050,25 @@
             (when ;ctyinda
                 (and
                     (= (-> (level-get-target-inside *level*) name) 'ctyinda)
-                    (!= enemy-noto 21)
-                    (!= enemy-noto 22)
+                    (!= enemy-noto 38)
+                    (!= enemy-noto 39)
+                    (!= enemy-noto 40)
+                    (!= enemy-noto 41)
                 )
-                (set! enemy-noto (rand-vu-int-range 21 22))
+                (set! enemy-noto (rand-vu-int-range 38 41))
             )
             (when ;ctyindb
                 (and
                     (= (-> (level-get-target-inside *level*) name) 'ctyindb)
-                    (!= enemy-noto 23)
-                    (!= enemy-noto 24)
-                    (!= enemy-noto 25)
-                    (!= enemy-noto 26)
-                    (!= enemy-noto 27)
-                    (!= enemy-noto 28)
+                    (!= enemy-noto 39)
+                    (!= enemy-noto 40)
+                    (!= enemy-noto 41)
+                    (!= enemy-noto 42)
+                    (!= enemy-noto 43)
+                    (!= enemy-noto 44)
+                    (!= enemy-noto 45)
                 )
-                (set! enemy-noto (rand-vu-int-range 23 28))
+                (set! enemy-noto (rand-vu-int-range 39 45))
             )
             (when ;ctysluma
                 (and
@@ -1080,14 +1090,40 @@
                         (= (-> (level-get-target-inside *level*) name) 'mhcitya)
                         (= (-> (level-get-target-inside *level*) name) 'mhcityb)
                     )
-                    (!= enemy-noto 23)
-                    (!= enemy-noto 24)
-                    (!= enemy-noto 25)
-                    (!= enemy-noto 26)
-                    (!= enemy-noto 27)
-                    (!= enemy-noto 28)
+                    (!= enemy-noto 63)
+                    (!= enemy-noto 64)
+                    (!= enemy-noto 65)
+                    (!= enemy-noto 66)
+                    (!= enemy-noto 67)
+                    (!= enemy-noto 68)
+                    (!= enemy-noto 69)
+                    (!= enemy-noto 70)
+                    (!= enemy-noto 71)
+                    (!= enemy-noto 72)
                 )
-                (set! enemy-noto (rand-vu-int-range 23 28))
+                (set! enemy-noto (rand-vu-int-range 63 72))
+            )
+
+            (when ;factory
+                (and
+                    (or
+                        (= (-> (level-get-target-inside *level*) name) 'factorya)
+                        (= (-> (level-get-target-inside *level*) name) 'factoryb)
+                        (= (-> (level-get-target-inside *level*) name) 'factoryc)
+                        (= (-> (level-get-target-inside *level*) name) 'lfacrm1)
+                    )
+                    (!= enemy-noto 72)
+                    (!= enemy-noto 73)
+                    (!= enemy-noto 74)
+                    (!= enemy-noto 75)
+                    (!= enemy-noto 76)
+                    (!= enemy-noto 77)
+                    (!= enemy-noto 78)
+                    (!= enemy-noto 79)
+                    (!= enemy-noto 80)
+                    (!= enemy-noto 81)
+                )
+                (set! enemy-noto (rand-vu-int-range 72 81))
             )
 
             (when 

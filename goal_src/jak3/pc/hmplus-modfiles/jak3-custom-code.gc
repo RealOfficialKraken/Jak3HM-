@@ -3082,6 +3082,18 @@ BUGS:
             (set! mine-boss-killed? #f)
         )
 
+    ;factory level
+    (when 
+        (and 
+            (= in-factory-level? #t)
+            (not *scene-player*)
+            (= (paused?) #f)
+            (= (pause-allowed?) #t)
+            (not (km-current-continue "factorys-start" (the-as debug-menu-msg #f)))
+        )
+        (set-continue! *game-info* "factorys-start" #t)
+    )
+
     ;anchor triggers
 
     (when 
@@ -3856,6 +3868,7 @@ BUGS:
             (set! rnd 3)
           )
           (drop-crate vec rnd)
+          (format #t "~%~%[][][][]~%Dropped Tier ~D Crate" rnd)
         )
         (none)
   )
