@@ -793,7 +793,7 @@
        (let ((s5-1 (the int arg1)))
          (when (not (or (task-complete? this (the-as game-task s5-1)) (>= (the-as uint 1) (the-as uint s5-1))))
            ;(set! (-> this task-deaths) 0)
-          (mission-complete? 130)
+          (mission-complete? (+ (* notoriety-level 6) 130))
            (set! (-> this task-pickup-time) (-> *display* game-clock frame-counter))
            (set! (-> this task-complete-time s5-1) (-> *display* game-clock frame-counter))
            (+! (-> this fuel) 0.0)

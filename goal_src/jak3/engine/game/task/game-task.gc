@@ -2809,7 +2809,7 @@
             :when-open #f
             :flags (game-task-node-flag close-task act1)
             :parent-node (new 'static 'array game-task-node 4
-              (game-task-node none)
+              (game-task-node wascity-pre-game-resolution)
               (game-task-node none)
               (game-task-node none)
               (game-task-node none)

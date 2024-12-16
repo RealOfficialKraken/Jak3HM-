@@ -13,6 +13,7 @@
 (defun-extern update-xp! (none))
 (defun-extern wasteland-spawn! (none))
 (defun-extern run-warp-room (none))
+(define-extern title-progress (function symbol int))
 
 ;; DECOMP BEGINS
 

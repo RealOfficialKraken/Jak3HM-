@@ -272,34 +272,7 @@
   0
   )
 
-(defun title-progress ((arg0 symbol))
-  (setup
-    *screen-filter*
-    (new 'static 'vector :w 128.0)
-    (new 'static 'vector :w 128.0)
-    (seconds-per-frame)
-    (bucket-id tex-hud-pris2)
-    #x3fffff
-    #x33001
-    #t
-    )
-  (set-setting! 'allow-progress #t 0.0 0)
-  (apply-settings *setting-control*)
-  (activate-progress *dproc* arg0)
-  (set-setting! 'allow-progress #f 0.0 0)
-  (dotimes (gp-1 5)
-    (suspend)
-    )
-  (disable *screen-filter*)
-  (remove-setting! 'allow-error)
-  (while (-> *blit-displays-work* menu-mode)
-    (suspend)
-    )
-  (set-setting! 'allow-error #f 0.0 0)
-  (apply-settings *setting-control*)
-  (set-blackout-frames (seconds 0.2))
-  0
-  )
+
 
 (defstate startup (title-control)
   :virtual #t
@@ -325,6 +298,7 @@
       )
     )
   :code (behavior ()
+    (set! mainmenu-camera #f)
     (when (zero? (-> *game-info* demo-state))
       (let ((a1-0 (new 'stack-no-clear 'array 'symbol 10)))
         (set! (-> a1-0 9) #f)

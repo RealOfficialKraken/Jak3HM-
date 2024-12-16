@@ -530,4 +530,6 @@
   "tm-ctyinda-anchor.o"
   "tm-vin-intro.o"
   "warp-room.o"
+  "credits-h.o"
+  "title-obs.o"
  ))

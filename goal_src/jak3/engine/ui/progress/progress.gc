@@ -228,7 +228,6 @@
 
 (defun progress-intro-start ()
   (set! (-> *game-info* mode) 'play)
-  (initialize! *game-info* 'game (the-as game-save #f) "desert-bd-start" (the-as resetter-spec #f))
   (set! in-pre-tutorial? #t)
   (set! weather-dark-mode #t)
   (set! tutorial-prologue #t)
@@ -1795,6 +1794,7 @@
       )
     )
   :enter (behavior ()
+    (set! mainmenu-camera #f)
     (set! (-> self menu-transition) 1.0)
     )
   :trans progress-trans

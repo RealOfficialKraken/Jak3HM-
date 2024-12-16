@@ -251,6 +251,11 @@
   (define test-level-loaded-factory? #f)
   (define test-level-loaded-factory-outside? #f)
 
+  ;mainmenu stuff
+  (defun-extern launch-mmenu (none))
+  (defun-extern disable-hudmap (none))
+  (define mainmenu-camera #f)
+
   (define warp-room-spawned? #f)
   (define warp-room-tutorial? #f)
 

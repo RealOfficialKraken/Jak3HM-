@@ -70,6 +70,36 @@ BUGS:
 (defun-extern wasseem-attack-check none)
 (defun-extern spawn-brute-artifact none)
 
+(defun title-progress ((arg0 symbol))
+  (setup
+    *screen-filter*
+    (new 'static 'vector :w 128.0)
+    (new 'static 'vector :w 128.0)
+    (seconds-per-frame)
+    (bucket-id tex-hud-pris2)
+    #x3fffff
+    #x33001
+    #t
+    )
+  (set-setting! 'allow-progress #t 0.0 0)
+  (apply-settings *setting-control*)
+  (activate-progress *dproc* arg0)
+  (set-setting! 'allow-progress #f 0.0 0)
+  (dotimes (gp-1 5)
+    (suspend)
+    )
+  (disable *screen-filter*)
+  (remove-setting! 'allow-error)
+  (while (-> *blit-displays-work* menu-mode)
+    (suspend)
+    )
+  (set-setting! 'allow-error #f 0.0 0)
+  (apply-settings *setting-control*)
+  (set-blackout-frames (seconds 0.2))
+  0
+  )
+
+
 (define spider-1-vec (new 'static 'vector 
                         :x (meters -34.6815)
                         :y (meters 2.3782)
@@ -273,7 +303,10 @@ BUGS:
 
 
 
-(when (= camera-locked? #t)
+(when (and
+        (= camera-locked? #t)
+        (not mainmenu-camera)
+      )
     (set-master-mode 'game)
 )
 
@@ -319,6 +352,7 @@ BUGS:
 (= in-superpowers? #f)
 (= on-vehicle? #f)
 (= in-dialogue? #f)
+(task-node-closed? (game-task-node arena-fight-1-resolution))
 (not (focus-test? *target* pilot))
 )
 (set! in-menu? #t)
@@ -1613,6 +1647,7 @@ BUGS:
         (= (paused?) #f)
         (= (pause-allowed?) #t)
         (not *scene-player*)
+        (task-node-closed? (game-task-node arena-fight-1-resolution))
         (= in-menu? #f)
     )
     (clear matt-str)
@@ -2774,7 +2809,8 @@ BUGS:
                 (= weather-dark-mode #f)
                 (= white-mode #f)
                 (= onfoot-battle? #f)
-                (or
+                (= mainmenu-camera #f)
+                (and
                     (= (-> *time-of-day-context* overide-enable) #t)
                     (= (-> *mood-control* overide-weather-flag) #t)
                 )
@@ -2783,19 +2819,66 @@ BUGS:
                 (set! (-> *mood-control* overide-weather-flag) #f)
             )
 
+        (when
+            (and
+                (= mainmenu-camera #t)
+                *target*
+                (not *scene-player*)
+                (= (paused?) #f)
+                (= (pause-allowed?) #t)
+            )
+            (let ((camera-loc (new 'static 'vector
+                        :x (meters 2717.8078)
+                        :y (meters 39.5143)
+                        :z (meters 436.8793)
+                        :w 1.0
+                        ))
+                    (tpos (new 'static 'vector
+                        :x (meters 2817.4040)
+                        :y (meters 47.1295)
+                        :z (meters 508.9389)
+                        :w 1.0
+                        ))
+                )
+            (turn-to-scene-camera camera-loc tpos #t)
+            (disable-hudmap)
+            )
+        (clear matt-str)
+        (clear *pc-encoded-matt-str*)
+        (format matt-str "<COLOR_PINK>Press Start"
+        di-s
+        )
+        (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+        (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+        ;; reset bucket settings prior to drawing - font won't do self for us, and
+        ;; draw-raw-image can sometimes mess them up. (intro sequence)
+        (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+        (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 255 315 0.0 (font-color default) (font-flags middle shadow kerning large))))
+        (set! (-> font-ctx scale) 0.825)
+        (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+        (when 
+            (or
+                (cpad-pressed? 0 x)
+                (cpad-pressed? 0 start)
+            )
+            (activate-progress *dproc* 'title)
+            (camera-unlocked)
+        )
+        )
+
 
         (when 
-        (and
-            (= (paused?) #f)
-            (= (pause-allowed?) #t)
-            *target*
-            (not *scene-player*)
-            (= weather-dark-mode #t)
-            (= in-pre-tutorial? #t)
-            (= tutorial-prologue #f)
-            (= completed-tutorial? #t)
-            (= (-> (level-get-target-inside *level*) name) 'waspala)
-        )
+            (and
+                (= (paused?) #f)
+                (= (pause-allowed?) #t)
+                *target*
+                (not *scene-player*)
+                (= weather-dark-mode #t)
+                (= in-pre-tutorial? #t)
+                (= tutorial-prologue #f)
+                (= completed-tutorial? #t)
+                (= (-> (level-get-target-inside *level*) name) 'waspala)
+            )
             (intro-play)
             (kill-by-name "warp-gate-intro" *default-pool*)
             (set! weather-dark-mode #f)
@@ -2827,8 +2910,6 @@ BUGS:
         (when
             (and
                 (not *scene-player*)
-                (= (paused?) #f)
-                (= (pause-allowed?) #t)
                 *target*
                 (= in-pre-tutorial? #t)
                 (= tutorial-prologue #t)
@@ -2839,7 +2920,7 @@ BUGS:
                     (+! pro-i 1)
                     (when (= pro-i 1)
                         (disable-hudmap)
-                        (task-node-close! (game-task-node desert-turtle-training-resolution) #t)
+                        ;(task-node-close! (game-task-node desert-turtle-training-resolution) #t)
                     )
             (when (and (>= pro-i 1) (< pro-i 600))
                 (let ((camera-loc (new 'static 'vector
@@ -2856,6 +2937,9 @@ BUGS:
                            ))
                     )
                 (turn-to-scene-camera camera-loc tpos #t)
+                (when (cpad-pressed? 0 triangle)
+                    (set! pro-i 595)
+                )
                 )
             )
             (when (and (>= pro-i 120) (< pro-i 600))
@@ -2885,6 +2969,9 @@ BUGS:
                            ))
                     )
                 (turn-to-scene-camera camera-loc tpos #t)
+                (when (cpad-pressed? 0 triangle)
+                    (set! pro-i 1195)
+                )
                 (clear matt-str)
                 (clear *pc-encoded-matt-str*)
                 (format matt-str "<COLOR_WHITE>Samos~%Keira~%Ashelin~%Damos~%Kliever~%and everyone else~%...are all missing"
@@ -2925,6 +3012,9 @@ BUGS:
                 (let ((font-ctx (new 'stack 'font-context *font-default-matrix* draw-x draw-y 0.0 (font-color default) (font-flags middle shadow kerning large))))
                 (set! (-> font-ctx scale) 0.325)
                 (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+                (when (cpad-pressed? 0 triangle)
+                    (set! pro-i 1795)
+                )
             )
             (when (and (>= pro-i 1820) (< pro-i 2400))
                 (clear matt-str)
@@ -2937,6 +3027,9 @@ BUGS:
                 (let ((font-ctx (new 'stack 'font-context *font-default-matrix* draw-x draw-y 0.0 (font-color default) (font-flags middle shadow kerning large))))
                 (set! (-> font-ctx scale) 0.325)
                 (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+                (when (cpad-pressed? 0 triangle)
+                    (set! pro-i 2395)
+                )
             )
             (when (= pro-i 2400)
                 (let ((vec (new 'static 'vector :x (meters 2387.7595) :y (meters 36.5880) :z (meters 539.4780) :w 1.0)))
@@ -2952,12 +3045,15 @@ BUGS:
                            ))
                         (tpos (new 'static 'vector
                             :x (meters 2471.7338)
-                            :y (meters 32.0317)
+                            :y (meters 32.4317)
                             :z (meters 464.1085)
                             :w 1.0
                            ))
                     )
                 (turn-to-scene-camera camera-loc tpos #t)
+                (when (cpad-pressed? 0 triangle)
+                    (set! pro-i 2754)
+                )
                 (clear matt-str)
                 (clear *pc-encoded-matt-str*)
                 (format matt-str "<COLOR_WHITE>Then suddenly... a rift gate opens~%in the dark..."
@@ -2980,7 +3076,7 @@ BUGS:
                 (set! pro-i 0)
                 (set! completed-tutorial? #t)
                 (set! tutorial-prologue #f)
-                (task-node-open! (game-task-node desert-turtle-training-resolution) #t)
+                ;(task-node-open! (game-task-node desert-turtle-training-resolution) #t)
             )
                  )
         )
@@ -3904,6 +4000,73 @@ BUGS:
             )
     (none)
   )
+
+(defun launch-mmenu ()
+    (initialize! *game-info* 'game (the-as game-save #f) "desert-bd-start" (the-as resetter-spec #f))
+        (send-event (ppointer->process *time-of-day*) 'change 'hour 19)
+            (set! (-> *time-of-day-context* mode) (the-as time-of-day-palette-id 5))
+            (send-event (ppointer->process *time-of-day*) 'change 'ratio 0.0)
+            (set! (-> *time-of-day-context* overide-enable) #t)
+            (set! (-> *mood-control* overide-weather-flag) #t)
+            (set! (-> *overide-mood-fog-table*
+                                   data
+                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                                   fog-color
+                                   x
+                                   )
+                               255.0
+                               )
+            (set! (-> *overide-mood-fog-table*
+                                   data
+                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                                   fog-color
+                                   y
+                                   )
+                               0.0
+                               )
+            (set! (-> *overide-mood-fog-table*
+                                   data
+                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                                   fog-color
+                                   z
+                                   )
+                               255.0
+                               )
+            (set! (-> *overide-mood-color-table*
+                                   data
+                                   (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2))
+                                   lgt-color
+                                   y
+                                   )
+                               1.0
+                               )
+            (set! (-> *overide-mood-color-table*
+                                   data
+                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                                   lgt-color
+                                   y
+                                   )
+                               0.0
+                               )
+            (set! (-> *overide-mood-color-table*
+                                   data
+                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                                   lgt-color
+                                   z
+                                   )
+                               1.0
+                               )
+            (set! (-> *overide-mood-color-table*
+                                   data
+                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                                   lgt-color
+                                   w
+                                   )
+                               1.0
+                               )
+    (set! mainmenu-camera #t)
+    (none)
+)
 
   
 (defskelgroup skel-dm-skyship dm-ship dm-ship-lod0-jg dm-ship-idle-ja
