@@ -254,7 +254,9 @@
   ;mainmenu stuff
   (defun-extern launch-mmenu (none))
   (defun-extern disable-hudmap (none))
+  (defun-extern spawn-jak3logo vector float float float none)
   (define mainmenu-camera #f)
+  (define spawned-logo? #f)
 
   (define warp-room-spawned? #f)
   (define warp-room-tutorial? #f)

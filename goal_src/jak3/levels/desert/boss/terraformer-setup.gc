@@ -1165,7 +1165,7 @@
        ((method-of-type cam-float-seeker init) (the-as cam-float-seeker (-> self foot-lock)) 0.0 0.005 0.04 0.9)
        (set! (-> self foot-lock initialized) #f)
        (set! (-> self foot-marks) (new 'process 'terraformer-foot-mark-pt-array))
-       (when (= weather-dark-mode #f)
+       (when (and (= weather-dark-mode #f)(task-node-closed? (game-task-node desert-final-boss-introduction)))
         (cond
          ((zero? (-> self side))
           (if (= arg3 58.0)
@@ -2025,7 +2025,7 @@
           )
         )
       )
-    (if (and (zero? v1-23)(= weather-dark-mode #f))
+    (if (and (zero? v1-23)(= weather-dark-mode #f)(task-node-closed? (game-task-node desert-final-boss-introduction)))
         (go-virtual frozen)
         (set! (-> *game-info* counter) (the float v1-23))
         )

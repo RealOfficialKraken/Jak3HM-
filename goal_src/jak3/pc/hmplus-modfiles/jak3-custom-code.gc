@@ -2819,6 +2819,7 @@ BUGS:
                 (set! (-> *mood-control* overide-weather-flag) #f)
             )
 
+
         (when
             (and
                 (= mainmenu-camera #t)
@@ -2829,7 +2830,7 @@ BUGS:
             )
             (let ((camera-loc (new 'static 'vector
                         :x (meters 2717.8078)
-                        :y (meters 39.5143)
+                        :y (meters 32.5143)
                         :z (meters 436.8793)
                         :w 1.0
                         ))
@@ -2841,21 +2842,45 @@ BUGS:
                         ))
                 )
             (turn-to-scene-camera camera-loc tpos #t)
+            (task-node-close! (game-task-node desert-logo-title1) #t)
             (disable-hudmap)
             )
         (clear matt-str)
         (clear *pc-encoded-matt-str*)
         (format matt-str "<COLOR_PINK>Press Start"
-        di-s
         )
         (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
         (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
         ;; reset bucket settings prior to drawing - font won't do self for us, and
         ;; draw-raw-image can sometimes mess them up. (intro sequence)
         (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
-        (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 255 315 0.0 (font-color default) (font-flags middle shadow kerning large))))
+        (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 255 335 0.0 (font-color default) (font-flags middle shadow kerning large))))
         (set! (-> font-ctx scale) 0.825)
         (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+        #|(clear matt-str)
+        (clear *pc-encoded-matt-str*)
+        (format matt-str "<COLOR_RED>Hero-Mode<COLOR_ORANGE>+"
+        )
+        (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+        (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+        ;; reset bucket settings prior to drawing - font won't do self for us, and
+        ;; draw-raw-image can sometimes mess them up. (intro sequence)
+        (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+        (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 255 35 0.0 (font-color default) (font-flags middle shadow kerning large))))
+        (set! (-> font-ctx scale) 1.325)
+        (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
+        (clear matt-str)
+        (clear *pc-encoded-matt-str*)
+        (format matt-str "<COLOR_WHITE>By <COLOR_BLUE>Kraken"
+        )
+        (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
+        (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id debug-no-zbuf1))
+        ;; reset bucket settings prior to drawing - font won't do self for us, and
+        ;; draw-raw-image can sometimes mess them up. (intro sequence)
+        (dma-buffer-add-gs-set-flusha buf (alpha-1 (new 'static 'gs-alpha :b #x1 :d #x1)) (tex1-1 (new 'static 'gs-tex1 :mmag #x1 :mmin #x1)))
+        (let ((font-ctx (new 'stack 'font-context *font-default-matrix* 315 85 0.0 (font-color default) (font-flags middle shadow kerning large))))
+        (set! (-> font-ctx scale) 0.35)
+        (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))|#
         (when 
             (or
                 (cpad-pressed? 0 x)
@@ -2920,12 +2945,16 @@ BUGS:
                     (+! pro-i 1)
                     (when (= pro-i 1)
                         (disable-hudmap)
-                        ;(task-node-close! (game-task-node desert-turtle-training-resolution) #t)
+                        (task-node-close! (game-task-node desert-logo-title1) #t)
+                        (task-node-close! (game-task-node desert-logo-title2) #t)
+                        (let ((vec (new 'static 'vector :x (meters 2767.4487) :y (meters 27.7348) :z (meters 485.2892) :w 1.0)))
+                            (spawn-jak3logo vec 1.0 1.0 1.0)
+                        )
                     )
             (when (and (>= pro-i 1) (< pro-i 600))
                 (let ((camera-loc (new 'static 'vector
                             :x (meters 2717.8078)
-                            :y (meters 39.5143)
+                            :y (meters 32.5143)
                             :z (meters 436.8793)
                             :w 1.0
                            ))
@@ -2969,6 +2998,8 @@ BUGS:
                            ))
                     )
                 (turn-to-scene-camera camera-loc tpos #t)
+                (kill-by-name "jak3logo" *default-pool*)
+                (set! spawned-logo? #f)
                 (when (cpad-pressed? 0 triangle)
                     (set! pro-i 1195)
                 )
@@ -4003,67 +4034,67 @@ BUGS:
 
 (defun launch-mmenu ()
     (initialize! *game-info* 'game (the-as game-save #f) "desert-bd-start" (the-as resetter-spec #f))
-        (send-event (ppointer->process *time-of-day*) 'change 'hour 19)
-            (set! (-> *time-of-day-context* mode) (the-as time-of-day-palette-id 5))
-            (send-event (ppointer->process *time-of-day*) 'change 'ratio 0.0)
-            (set! (-> *time-of-day-context* overide-enable) #t)
-            (set! (-> *mood-control* overide-weather-flag) #t)
-            (set! (-> *overide-mood-fog-table*
-                                   data
-                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
-                                   fog-color
-                                   x
-                                   )
-                               255.0
-                               )
-            (set! (-> *overide-mood-fog-table*
-                                   data
-                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
-                                   fog-color
-                                   y
-                                   )
-                               0.0
-                               )
-            (set! (-> *overide-mood-fog-table*
-                                   data
-                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
-                                   fog-color
-                                   z
-                                   )
-                               255.0
-                               )
-            (set! (-> *overide-mood-color-table*
-                                   data
-                                   (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2))
-                                   lgt-color
-                                   y
-                                   )
-                               1.0
-                               )
-            (set! (-> *overide-mood-color-table*
-                                   data
-                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
-                                   lgt-color
-                                   y
-                                   )
-                               0.0
-                               )
-            (set! (-> *overide-mood-color-table*
-                                   data
-                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
-                                   lgt-color
-                                   z
-                                   )
-                               1.0
-                               )
-            (set! (-> *overide-mood-color-table*
-                                   data
-                                   (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
-                                   lgt-color
-                                   w
-                                   )
-                               1.0
-                               )
+    (send-event (ppointer->process *time-of-day*) 'change 'hour 19)
+    (set! (-> *time-of-day-context* mode) (the-as time-of-day-palette-id 5))
+    (send-event (ppointer->process *time-of-day*) 'change 'ratio 0.0)
+    (set! (-> *time-of-day-context* overide-enable) #t)
+    (set! (-> *mood-control* overide-weather-flag) #t)
+    (set! (-> *overide-mood-fog-table*
+                            data
+                            (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                            fog-color
+                            x
+                            )
+                        255.0
+                        )
+    (set! (-> *overide-mood-fog-table*
+                            data
+                            (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                            fog-color
+                            y
+                            )
+                        0.0
+                        )
+    (set! (-> *overide-mood-fog-table*
+                            data
+                            (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                            fog-color
+                            z
+                            )
+                        255.0
+                        )
+    (set! (-> *overide-mood-color-table*
+                            data
+                            (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2))
+                            lgt-color
+                            y
+                            )
+                        1.0
+                        )
+    (set! (-> *overide-mood-color-table*
+                            data
+                            (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                            lgt-color
+                            y
+                            )
+                        0.0
+                        )
+    (set! (-> *overide-mood-color-table*
+                            data
+                            (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                            lgt-color
+                            z
+                            )
+                        1.0
+                        )
+    (set! (-> *overide-mood-color-table*
+                            data
+                            (the-as uint (logand (-> *time-of-day-context* mode) (time-of-day-palette-id unk0 unk1 unk2)))
+                            lgt-color
+                            w
+                            )
+                        1.0
+                        )
     (set! mainmenu-camera #t)
     (none)
 )
@@ -4111,6 +4142,8 @@ BUGS:
     (kill-by-name "vin-effect" *default-pool*)
     (kill-by-name "toad-boss" *default-pool*)
     (kill-by-name "task-arrow-custom" *default-pool*)
+    (kill-by-name "jak3logo" *default-pool*)
+    (set! spawned-logo? #f)
     (set! mine-boss-fireball? #f)
     (set! onfoot-battle? #f)
     (set! spawned-vin-circle? #f)

@@ -528,6 +528,7 @@
   "tm-desertc-anchor.o"
   "tm-desertg-anchor.o"
   "tm-ctyinda-anchor.o"
+  "mod-title-obs.o"
   "tm-vin-intro.o"
   "warp-room.o"
   "credits-h.o"
