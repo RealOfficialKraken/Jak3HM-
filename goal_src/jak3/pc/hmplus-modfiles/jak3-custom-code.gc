@@ -5,63 +5,32 @@
 
 #|IDEAS TO IMPLEMENT
 
-Desert POI's
----------------------------------------------------------------
-- Add a battle sequence that jak happens upon with wastelanders.
-Each encounter will be a random count for enemies, with the last
-one being incredibly strong. It will then give a lot of XP and 
-potentially a weapon
+----------------------------------------
+custom ghost enemy
+----------------------------------------
+spawns a custom nav-enemy that roams around the
+dark world as a red particle blob. Upon approach,
+the blob will spawn a red transparent entity that
+one-shots you with an ability. These ghosts can only
+be destroyed with a weapon mod that freezes entities
 
-- Custom bosses will be scattered around the desert in specific spots.
-All of these bosses are different from neo-sat, instead they are
-recolored, rescaled, entities from Jak 3.
-
-- Make a custom boss sequence with maker towards the end, 
-called planetboss. They can be fought in the desert on foot.
-You will face one at the end of Jak 3's story, just Before
-Jak climbs up for errol fight. Jak can also fight planetboss
-by wandering the desert while over notoriety-level 75.
-They are the only creatures that drop gun-mods, which 
-are overpowered upgrades for all weapons. The Beam Reflexor
-is included in the drop pool for this.
-
-- All of these will occur while (= in-desert-game-task? #t)
-
----------------------------------------------------------------
-Random Desert Storm Occurances
----------------------------------------------------------------
-- The wasteland will have a dynamic storm timer that happens on 
-occasion, and will do damage to jak's vehicle and jak if hes out
-of the vehicle.
-
-- Before the storm arrives, there's a timer that warns jak to find
-a safe space. This will not occur while (= in-desert-game-task? #t)
-
----------------------------------------------------------------
-
+----------------------------------------
+dark-world objectives
+----------------------------------------
+gives the player things to do in the dark world.
+Like encounter bosses, fight satellites, and to farm
+in wascity. Some quests go here, that entail to accessing
+areas and finding a crate
 
 TODO:
-- create rest of enemy ID's and aliases
-- find a way to make a pickup-type, then add the skeleton for the eco crystals
-These will drop from any enemy at a rare chance, giving jak his darkjak special 
-powers after obtaining a certain amount
-- make a questline with kliever to unlock the upgrades in the secrets menu. 
-The questline should consist of going back to certain areas and killing select enemies
-- Make anchors in the wasteland and haven city
-These are giant scale battles that require a lot of skill and level to complete
-Winning these can give XP, orbs/gems, eco crystals, a weapon mod, or a gun mod 
-at rare chances.
-- create warp gates for the levels you cant travel back to
-These will be utilized with quests from NPCs: delivering something, killing X amount of
-enemies, finding something, and killing bosses
-- Make mostly all enemies have faster attacks the higher the level they are
+- find out how to implement the flut-racers to know the race they're in
+- add to title screen
 
 BUGS:
 - jak has vulcan fury in arena 3
-- find a way to include dark-world with the oasis mission (if u can, ig)
-- some of the satellite fights crash the game still
-- decrease chances of weaponmod drop from satellites
-
+- levelup explosion runs out of memory, or happens outside of goal code
+- dropped boss crates dont reset their vectors
+- Bipedal Boss' shield isnt strength 999
 
 |#
 (defun-extern level-up! int none)
@@ -4149,6 +4118,7 @@ BUGS:
     (kill-by-name "toad-boss" *default-pool*)
     (kill-by-name "task-arrow-custom" *default-pool*)
     (kill-by-name "jak3logo" *default-pool*)
+    (kill-by-name "flut-racer" *default-pool*)
     (set! spawned-logo? #f)
     (set! mine-boss-fireball? #f)
     (set! onfoot-battle? #f)

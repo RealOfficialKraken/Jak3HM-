@@ -233,7 +233,7 @@ Finally, the tasks get opened again after dying, or the process goes dead
                                     (set! (-> self fog-i) 1.0)
                                 )
                             )
-                            (format *stdcon* "~%~%active: general-i = ~D~%fog-i: ~F~%~%" (-> self general-i) (-> self fog-i))
+                            (format *stdebug* "~%~%active: general-i = ~D~%fog-i: ~F~%~%" (-> self general-i) (-> self fog-i))
                         )
                     )
                     (
@@ -282,7 +282,7 @@ Finally, the tasks get opened again after dying, or the process goes dead
                 (>= (-> *time-of-day-context* time) 13.0)
                 (go-virtual dead)
             )
-            (format *stdcon* "~%tm-desertf-anchor is dormant~%~%")
+            (format *stdebug* "~%tm-desertf-anchor is dormant~%~%")
             (suspend)
         )
     )
@@ -295,7 +295,7 @@ Finally, the tasks get opened again after dying, or the process goes dead
         (set! *waste-ship-anchor* #t)
         (dm-dark-ship (-> self spawn-pos))
         (loop 
-            (format *stdcon* "~%tm-desertf-anchor is idle~%~%")
+            (format *stdebug* "~%tm-desertf-anchor is idle~%~%")
             (when (= in-desert-game-task? #t)
                 (go-virtual dormant)
             )
@@ -371,7 +371,7 @@ Finally, the tasks get opened again after dying, or the process goes dead
                                     )
                                     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                     (set! enemy-noto 54)
-                    (format *stdcon* "~%tm-desertf-anchor battle started")
+                    (format *stdebug* "~%tm-desertf-anchor battle started")
                     (go-virtual start-battle)
             )
             (cond 
@@ -486,7 +486,7 @@ Finally, the tasks get opened again after dying, or the process goes dead
                 )
                 (set-continue! *game-info* "wasdoors-city" #t)
             )
-            (format *stdcon* "~%general-handler: blast-i = ~D/800~%general-handler: fling-i = ~D/~D~%~%general-handler: wave = ~D/11~%" (-> self blast-i) (-> self fling-i) (-> self fling-max) (-> self wave))
+            (format *stdebug* "~%general-handler: blast-i = ~D/800~%general-handler: fling-i = ~D/~D~%~%general-handler: wave = ~D/11~%" (-> self blast-i) (-> self fling-i) (-> self fling-max) (-> self wave))
             (suspend)
         )
     )
@@ -543,7 +543,7 @@ Finally, the tasks get opened again after dying, or the process goes dead
                 )
                 (go-virtual general-handler)
             )
-            (format *stdcon* "~%lightning-blast: general-i = ~D/300~%~%" (-> self general-i))
+            (format *stdebug* "~%lightning-blast: general-i = ~D/300~%~%" (-> self general-i))
             (suspend)
         )
     )

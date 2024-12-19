@@ -162,7 +162,7 @@
                                     (set! (-> self fog-i) 1.0)
                                 )
                             )
-                            (format *stdcon* "~%~%active: general-i = ~D~%fog-i: ~F~%~%" (-> self general-i) (-> self fog-i))
+                            (format *stdebug* "~%~%active: general-i = ~D~%fog-i: ~F~%~%" (-> self general-i) (-> self fog-i))
                         )
                     )
                     (
@@ -211,7 +211,7 @@
                 (>= (-> *time-of-day-context* time) 13.0)
                 (go-virtual dead)
             )
-            (format *stdcon* "~%tm-desertg-anchor is dormant~%~%")
+            (format *stdebug* "~%tm-desertg-anchor is dormant~%~%")
             (suspend)
         )
     )
@@ -224,7 +224,7 @@
         (set! *waste-ship-anchor* #t)
         (dm-dark-ship (-> self spawn-pos))
         (loop 
-            (format *stdcon* "~%tm-desertg-anchor is idle~%~%")
+            (format *stdebug* "~%tm-desertg-anchor is idle~%~%")
             (when (= in-desert-game-task? #t)
                 (go-virtual dormant)
             )
@@ -300,7 +300,7 @@
                                     )
                                     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                     (set! enemy-noto 54)
-                    (format *stdcon* "~%tm-desertg-anchor battle started")
+                    (format *stdebug* "~%tm-desertg-anchor battle started")
                     (go-virtual start-battle)
             )
             (cond 
@@ -415,7 +415,7 @@
                 )
                 (set-continue! *game-info* "wasdoors-city" #t)
             )
-            (format *stdcon* "~%general-handler: blast-i = ~D/800~%general-handler: fling-i = ~D/~D~%~%general-handler: wave = ~D/11~%" (-> self blast-i) (-> self fling-i) (-> self fling-max) (-> self wave))
+            (format *stdebug* "~%general-handler: blast-i = ~D/800~%general-handler: fling-i = ~D/~D~%~%general-handler: wave = ~D/11~%" (-> self blast-i) (-> self fling-i) (-> self fling-max) (-> self wave))
             (suspend)
         )
     )
@@ -470,7 +470,7 @@
                 )
                 (go-virtual general-handler)
             )
-            (format *stdcon* "~%lightning-blast: general-i = ~D/300~%~%" (-> self general-i))
+            (format *stdebug* "~%lightning-blast: general-i = ~D/300~%~%" (-> self general-i))
             (suspend)
         )
     )
