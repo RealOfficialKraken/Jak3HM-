@@ -78,7 +78,7 @@
     (set! (-> *part-id-table* 1702 init-specs 5 initial-valuef) 255.0) ;r
     (set! (-> *part-id-table* 1702 init-specs 6 initial-valuef) 255.0) ;g
     (set! (-> *part-id-table* 1702 init-specs 7 initial-valuef) 0.0) ;b
-    (set! (-> *part-id-table* 1702 init-specs 8 initial-valuef) (the float notoriety-level)) ;a
+    (set! (-> *part-id-table* 1702 init-specs 8 initial-valuef) (the float (+ notoriety-level 1))) ;a ;(the float (+ notoriety-level 1))
 ;
     (set! (-> *part-id-table* 1703 init-specs 5 initial-valuef) 255.0) ;r
     (set! (-> *part-id-table* 1703 init-specs 6 initial-valuef) 255.0) ;g
@@ -831,7 +831,7 @@
             )
             (when ;DARK-WORLD
                 (and
-                    (!= enemy-noto 154)
+                    (!= enemy-noto (+ notoriety-level 26))
                 )
                 (set! enemy-noto 154)
             )

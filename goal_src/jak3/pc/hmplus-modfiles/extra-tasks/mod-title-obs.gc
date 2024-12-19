@@ -4,6 +4,8 @@
 
 ;code
 
+
+;spawn the jak3 sign as a manipy
 (defun spawn-jak3logo ((vec vector) (arg0 float) (arg1 float) (arg2 float))
     (let ((logo (the manipy 
                 (ppointer->process
@@ -48,7 +50,7 @@
     )
   )
 
-  (defstate active (jak3logo)
+  (defstate active (jak3logo) ;looped from CDR, or virtual startup.
     :virtual #t
     :code (behavior ()
       (spawn-dust-storm)
@@ -61,7 +63,7 @@
     )
   )
 
-  (defstate check-for-flicker (jak3logo)
+  (defstate check-for-flicker (jak3logo) ;run turn-on a couple times, then run cdr
     :virtual #t
     :code (behavior ()
       (+! (-> self flicker-count) 1)
@@ -69,6 +71,9 @@
       (set! (-> self wait-timer) 0)
       (let ((vec (new 'static 'vector :x (meters 2767.4487) :y (meters 27.7348) :z (meters 485.2892) :w 1.0)))
         (spawn-jak3logo vec 1.0 1.0 1.0)
+      )
+      (when (= torch-flicker #t)
+        (set! torch-flicker #f)
       )
       (loop
         (+! (-> self wait-timer) 1)
@@ -91,11 +96,14 @@
     )
   )
 
-  (defstate turn-on (jak3logo)
+  (defstate turn-on (jak3logo) ;turn the sign on
     :virtual #t
     :code (behavior ()
       (let ((vec (new 'static 'vector :x (meters 2767.4487) :y (meters 27.7348) :z (meters 485.2892) :w 1.0)))
         (spawn-jak3logo vec 2.7 2.7 2.7)
+      )
+      (when (= torch-flicker #f)
+        (set! torch-flicker #t)
       )
       (set! (-> self wait-timer) 0)
       (set! (-> self wait-max) (rand-vu-int-range 4 18))
@@ -111,7 +119,7 @@
     )
   )
 
-  (defstate cdr (jak3logo)
+  (defstate cdr (jak3logo) ;cool down for flicker
     :virtual #t
     :code (behavior ()
       (set! (-> self wait-timer) 0)
@@ -135,7 +143,7 @@
     )
   )
 
-  (defstate dead (jak3logo)
+  (defstate dead (jak3logo) ;make process dead, clean up
     :virtual #t
     :code (behavior ()
       (kill-by-name "jak3logo" *default-pool*)

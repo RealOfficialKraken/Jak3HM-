@@ -257,6 +257,7 @@
   (defun-extern spawn-jak3logo vector float float float none)
   (define mainmenu-camera #f)
   (define spawned-logo? #f)
+  (define torch-flicker #f)
 
   (define warp-room-spawned? #f)
   (define warp-room-tutorial? #f)
