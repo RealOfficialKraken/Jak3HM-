@@ -523,6 +523,7 @@
   "maker-projectile.o"
   "planetboss.o"
   "brute-dagger.o"
+  "rage-ghost.o"
   "look-for-warpgate.o"
   "tm-desertf-anchor.o"
   "tm-desertc-anchor.o"

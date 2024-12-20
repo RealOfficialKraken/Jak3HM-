@@ -1115,7 +1115,7 @@
         (until (and (-> self ring-manager-entity) (= (-> *game-info* counter) 0.0))
           (when (< (-> self hacked-count) 16)
             (let ((vec (new 'static 'vector :x (meters 2240.2834) :y (meters 7.0479) :z (meters -40.7634) :w 1.0)))
-              (process-spawn flut-racer vec :name "flut-racer")
+              ;(process-spawn flut-racer vec :name "flut-racer")
               (+! (-> self hacked-count) 1)
             )
           )

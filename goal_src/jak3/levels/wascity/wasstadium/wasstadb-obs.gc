@@ -203,66 +203,7 @@
   (none)
   )
 
-(defpartgroup group-arena-token
-  :id 499
-  :flags (sp0)
-  :bounds (static-bspherem 0 0 0 10)
-  :parts ((sp-item 1968 :fade-after (meters 100) :period (seconds 0.167) :length (seconds 0.035))
-    (sp-item 1969 :fade-after (meters 100) :period (seconds 0.167) :length (seconds 0.035))
-    (sp-item 1970 :fade-after (meters 100) :period (seconds 0.167) :length (seconds 0.035))
-    )
-  )
 
-(defpart 1968
-  :init-specs ((:texture (starflash level-default-sprite))
-    (:num 1.0)
-    (:scale-x (meters 1))
-    (:scale-y :copy scale-x)
-    (:r 20.0)
-    (:g 20.0)
-    (:b 128.0)
-    (:a 200.0)
-    (:rotvel-z (degrees 0.1))
-    (:timer (seconds 0.335))
-    (:flags (sp-cpuinfo-flag-3))
-    (:func 'sparticle-track-root)
-    )
-  )
-
-(defpart 1969
-  :init-specs ((:texture (starflash level-default-sprite))
-    (:num 1.0)
-    (:scale-x (meters 1))
-    (:scale-y :copy scale-x)
-    (:r 20.0)
-    (:g 20.0)
-    (:b 128.0)
-    (:a 200.0)
-    (:rotvel-z (degrees -0.1))
-    (:timer (seconds 0.335))
-    (:flags (sp-cpuinfo-flag-3))
-    (:func 'sparticle-track-root)
-    )
-  )
-
-(defpart 1970
-  :init-specs ((:texture (laser-hit level-default-sprite))
-    (:num 1.0)
-    (:scale-x (meters 0.5))
-    (:rot-z (degrees 0) (degrees 360))
-    (:scale-y :copy scale-x)
-    (:r 20.0)
-    (:g 20.0)
-    (:b 255.0)
-    (:a 255.0)
-    (:scalevel-x (meters 0.01))
-    (:scalevel-y :copy scalevel-x)
-    (:fade-a -1.275)
-    (:timer (seconds 0.667))
-    (:flags (sp-cpuinfo-flag-3))
-    (:func 'sparticle-track-root)
-    )
-  )
 
 (defpartgroup group-arena-token-pickup
   :id 500
@@ -342,11 +283,7 @@
     )
   )
 
-(defskelgroup skel-arena-token arena-token arena-token-lod0-jg arena-token-idle-ja
-              ((arena-token-lod0-mg (meters 999999)))
-              :bounds (static-spherem 0 0 0 1)
-              :shadow arena-token-shadow-mg
-              )
+
 
 (deftype arena-token (process-drawable)
   ((root      collide-shape-moving :override)
