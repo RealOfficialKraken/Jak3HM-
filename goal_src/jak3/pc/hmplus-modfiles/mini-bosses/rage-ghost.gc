@@ -384,17 +384,18 @@
 
 
 (deftype rage-ghost (nav-enemy)
-  ((patrol-anim             rage-ghost-anim-info)
-   (charge-anim             rage-ghost-anim-info)
-   (attack-anim             rage-ghost-anim-info)
-   (intro-path              path-control)
-   (use-charge-anim-index   int8                :offset 640)
-   (jumping-ambush-path-pt  int8)
-   (rage-ghost-flags             rage-ghost-flags)
-   (state-timeout2          time-frame)
-   (next-warn-time          time-frame)
-   (dest                    vector              :inline)
-   (minimap                 connection-minimap  :offset 704)
+  ((patrol-anim                   rage-ghost-anim-info)
+   (charge-anim                   rage-ghost-anim-info)
+   (attack-anim                   rage-ghost-anim-info)
+   (intro-path                    path-control)
+   (use-charge-anim-index         int8                :offset 640)
+   (jumping-ambush-path-pt        int8)
+   (rage-ghost-flags              rage-ghost-flags)
+   (state-timeout2                time-frame)
+   (next-warn-time                time-frame)
+   (dest                          vector              :inline)
+   (minimap                       connection-minimap  :offset 704)
+   (part-pos                      vector)
    )
   (:state-methods
     attack
@@ -1180,23 +1181,23 @@
     :knocked-off #t
     :callback-info #f
     :use-momentum #t
-    :use-frustration #t
-    :use-stop-chase #t
+    :use-frustration #f
+    :use-stop-chase #f
     :use-circling #t
     :use-pacing #t
     :walk-anim 11
     :turn-anim -1
     :run-anim 14
     :taunt-anim 19
-    :run-travel-speed (meters 7)
-    :run-acceleration (meters 6)
-    :run-turning-acceleration (meters 50)
-    :walk-travel-speed (meters 4)
-    :walk-acceleration (meters 6)
-    :walk-turning-acceleration (meters 3)
+    :run-travel-speed (meters 64)
+    :run-acceleration (meters 64)
+    :run-turning-acceleration (meters 4)
+    :walk-travel-speed (meters 64)
+    :walk-acceleration (meters 64)
+    :walk-turning-acceleration (meters 1.5)
     :maximum-rotation-rate (degrees 360)
-    :notice-nav-radius (meters 2)
-    :frustration-distance (meters 8)
+    :notice-nav-radius (meters 9)
+    :frustration-distance (meters 999)
     :frustration-time (seconds 4)
     :blocked-time (seconds 0.3)
     :circle-dist-lo 20480.0
@@ -1209,8 +1210,30 @@
 
 (defmethod event-handler ((this rage-ghost) (arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
   (case arg2
+    (('touched 'touch)
+      (let ((gp-0 (new 'stack-no-clear 'explosion-init-params)))
+          (set! (-> gp-0 spawn-point quad) (-> self root trans quad))
+          (quaternion-identity! (-> gp-0 spawn-quat))
+          (set! (-> gp-0 radius) 42200.0)
+          ;(set! (-> gp-0 scale) 1.0)
+          (set! (-> gp-0 group) (-> *part-group-id-table* 999999)) ;(-> *part-group-id-table* 499)
+          (set! (-> gp-0 collide-with)
+                  (collide-spec backgnd jak crate civilian obstacle vehicle-sphere hit-by-others-list player-list pusher)
+                  )
+          (set! (-> gp-0 damage) 777.0)
+          (set! (-> gp-0 damage-scale) 777.0)
+          (set! (-> gp-0 vehicle-damage-factor) 777.0)
+          (set! (-> gp-0 vehicle-impulse-factor) 777.0)
+          (set! (-> gp-0 ignore-proc) (process->handle #f))
+          (explosion-spawn gp-0 (the-as process-drawable *default-pool*))
+          (when (<= (-> *target* fact health) 0.0)
+            (kill-by-name "rage-ghost" *default-pool*)
+          )
+      )
+    )
     (('hit 'hit-knocked)
-     (logclear! (-> this mask) (process-mask actor-pause))
+     (when (= gunmod-freeze #t)
+      (logclear! (-> this mask) (process-mask actor-pause))
      (logclear! (-> this focus-status) (focus-status dangerous))
      (logclear! (-> this enemy-flags) (enemy-flag use-notice-distance))
      (logior! (-> this enemy-flags) (enemy-flag alert))
@@ -1224,6 +1247,9 @@
      (process-contact-action arg0)
      (send-event arg0 'get-attack-count 1)
      (freeze-hit-begin)
+     (when (<= (-> this hit-points) 0.0)
+      (go (method-of-object this knocked))
+     )
      (cond
        ((= (-> this hit-points) 0.0)
         (let ((s5-1 (-> this incoming knocked-type)))
@@ -1247,16 +1273,11 @@
              (set! (-> this incoming knocked-type) (knocked-type none))
              (go (method-of-object this knocked))
              )
-            (else
-              (go (method-of-object this knocked))
-              )
             )
           )
         )
-       (else
-         (go (method-of-object this knocked))
-         )
        )
+     )
      #t
      )
     (else
@@ -1594,6 +1615,12 @@
 (defstate hostile (rage-ghost)
   :virtual #t
   :trans (behavior ()
+    (let ((vec (new-stack-vector0))
+            (vec2 (new-stack-vector0))
+          (offset (new 'static 'vector :x (meters 0) :y (meters 4) :z (meters 0) :w 1.0)))
+      (vector-copy! vec (vector+! vec2 (-> self root trans) offset))
+      (spawn (-> self part) vec)
+    )
     (let ((t9-0 (-> (method-of-type nav-enemy hostile) trans)))
       (if t9-0
           (t9-0)
@@ -2236,7 +2263,7 @@
 (defmethod init-enemy! ((this rage-ghost))
   (initialize-skeleton
     this
-    (the-as skeleton-group (art-group-get-by-name *level* "skel-rage-ghost" (the-as (pointer level) #f)))
+    (the-as skeleton-group (art-group-get-by-name *level* "skel-grunt" (the-as (pointer level) #f)))
     (the-as pair 0)
     )
   (init-enemy-defaults! this (get-enemy-info this))
@@ -2282,6 +2309,20 @@
     (new 'static 'vector :x -1433.6 :y 2785.28 :z -1761.28 :w 163840.0)
     )
   (set! (-> this minimap) (add-icon! *minimap* this (the-as uint 108) (the-as int #f) (the-as vector #t) 0))
+  (set! (-> *part-id-table* 1968 init-specs 4 initial-valuef) 255.0) ;r
+  (set! (-> *part-id-table* 1968 init-specs 5 initial-valuef) 20.0) ;g
+  (set! (-> *part-id-table* 1968 init-specs 6 initial-valuef) 20.0) ;b
+  (set! (-> *part-id-table* 1968 init-specs 7 initial-valuef) 4800.0) ;a
+  (set! (-> *part-id-table* 1969 init-specs 4 initial-valuef) 255.0) ;r
+  (set! (-> *part-id-table* 1969 init-specs 5 initial-valuef) 20.0) ;g
+  (set! (-> *part-id-table* 1969 init-specs 6 initial-valuef) 20.0) ;b
+  (set! (-> *part-id-table* 1969 init-specs 7 initial-valuef) 4800.0) ;a
+  (set! (-> *part-id-table* 1970 init-specs 5 initial-valuef) 255.0) ;r
+  (set! (-> *part-id-table* 1970 init-specs 6 initial-valuef) 0.0) ;g
+  (set! (-> *part-id-table* 1970 init-specs 7 initial-valuef) 0.0) ;b
+  (set! (-> *part-id-table* 1970 init-specs 8 initial-valuef) 12200.0) ;a
+  (set! (-> this part) (create-launch-control (-> *part-group-id-table* 158) this))
+  (logior! (-> this draw status) (draw-control-status no-draw))
   0
   (none)
   )
@@ -2319,5 +2360,5 @@
     (set! (-> self path curve cverts) cverts)
     (set! (-> self path curve num-cverts) 3)
     )
-    (go (method-of-object self idle))
+    (go (method-of-object self pacing))
   )

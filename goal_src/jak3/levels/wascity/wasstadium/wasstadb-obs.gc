@@ -512,6 +512,18 @@
     (the-as skeleton-group (art-group-get-by-name *level* "skel-arena-token" (the-as (pointer level) #f)))
     (the-as pair 0)
     )
+  (set! (-> *part-id-table* 1968 init-specs 4 initial-valuef) 20.0) ;r
+  (set! (-> *part-id-table* 1968 init-specs 5 initial-valuef) 20.0) ;g
+  (set! (-> *part-id-table* 1968 init-specs 6 initial-valuef) 128.0) ;b
+  (set! (-> *part-id-table* 1968 init-specs 7 initial-valuef) 200.0) ;a
+  (set! (-> *part-id-table* 1969 init-specs 4 initial-valuef) 20.0) ;r
+  (set! (-> *part-id-table* 1969 init-specs 5 initial-valuef) 20.0) ;g
+  (set! (-> *part-id-table* 1969 init-specs 6 initial-valuef) 128.0) ;b
+  (set! (-> *part-id-table* 1969 init-specs 7 initial-valuef) 200.0) ;a
+  (set! (-> *part-id-table* 1970 init-specs 5 initial-valuef) 20.0) ;r
+  (set! (-> *part-id-table* 1970 init-specs 6 initial-valuef) 20.0) ;g
+  (set! (-> *part-id-table* 1970 init-specs 7 initial-valuef) 255.0) ;b
+  (set! (-> *part-id-table* 1970 init-specs 8 initial-valuef) 255.0) ;a
   (set! (-> this part) (create-launch-control (-> *part-group-id-table* 499) this))
   (set! (-> this trans-y) (-> this root trans y))
   (set! (-> this offset) (rand-vu-float-range 0.0 4.0))

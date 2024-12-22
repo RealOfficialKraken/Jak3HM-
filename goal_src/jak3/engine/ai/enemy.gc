@@ -1881,6 +1881,9 @@
                     ((= enemy-name 'bipedal-boss)
                       (set! enemy-string "Kh'aast Moorog")
                     )
+                    ((= enemy-name 'rage-ghost)
+                      (set! enemy-string "Rage Ghost")
+                    )
                     (else 
                       (set! enemy-string (the string enemy-name))
                     )

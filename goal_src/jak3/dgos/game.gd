@@ -500,6 +500,8 @@
   "neo-wasp.o"
   "flamer-lava.o"
   "manta.o"
+  "debug-part.o"
+  "rage-ghost.o"
   "spiky-frog.o"
   "jak3-custom-code.o" ;custom-mod
   "xp-level.o"
@@ -523,7 +525,6 @@
   "maker-projectile.o"
   "planetboss.o"
   "brute-dagger.o"
-  "rage-ghost.o"
   "look-for-warpgate.o"
   "tm-desertf-anchor.o"
   "tm-desertc-anchor.o"
