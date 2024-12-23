@@ -25,7 +25,7 @@
   )
 
 (defmethod event-handler ((this nav-enemy) (arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
-  (cond
+  #|(cond
   ((= arg2 'attack)
       (set! draw-enemy-noto enemy-noto)
       (if (logtest? (-> *game-info* secrets) (game-secrets hero-mode))
@@ -35,7 +35,7 @@
       (set! hpbar-hit-points (-> this hit-points))
       (set! enemy-hp #t)
     )
-    )
+    )|#
   (case arg2
     (('nav-mesh-kill)
      (deactivate this)

@@ -1,0 +1,425 @@
+;;-*-Lisp-*-
+(in-package goal)
+
+;; name: leaper-boss.gc
+
+
+  (deftype leaper-boss (spiky-frog)
+    ()
+  )
+
+  (define *leaper-boss* (the (pointer manipy) #f))
+
+  (defmethod init-enemy! ((this leaper-boss))
+  (initialize-skeleton
+    this
+    (the-as skeleton-group (art-group-get-by-name *level* "skel-spiky-frog" (the-as (pointer level) #f)))
+    (the-as pair 0)
+    )
+  (init-enemy-defaults! this *spiky-frog-nav-enemy-info*)
+  (init-eyes! this 0 24)
+  (init-eyes! this 1 25)
+  (set! (-> this sound-id) (new-sound-id))
+  (if (= in-debug? #f)
+    (logior! (-> this draw status) (draw-control-status no-draw))
+    (logclear! (-> this draw status) (draw-control-status no-draw))
+  )
+  (let ((leaper (-> this child))
+        (veccy (new 'stack-no-clear 'vector))
+        )
+    (set! leaper
+      (process-spawn manipy
+      :init
+      manipy-init
+      (target-pos 0)
+      #f
+      (art-group-get-by-name *level* "skel-flutflut" (the (pointer level) #f))
+      #f
+      0
+      #f
+      :name "leaper-boss"
+      :to this
+      :from *default-dead-pool*
+      )
+    )
+    (when leaper
+      (send-event (ppointer->process leaper) 'shadow #t)
+      (set! (-> veccy x) 2.5)
+      (set! (-> veccy y) 2.5)
+      (set! (-> veccy z) 2.5)
+      (send-event (ppointer->process leaper) 'scale veccy)
+      (send-event (ppointer->process leaper) 'max-vis-dist 9999999.0)
+    )
+  )
+  0
+  (none)
+  )
+
+  (defmethod init-enemy-collision! ((this leaper-boss))
+  (let ((s5-0 (new 'process 'collide-shape-moving this (collide-list-enum usually-hit-by-player))))
+    (set! (-> s5-0 dynam) (copy *standard-dynamics* 'process))
+    (set! (-> s5-0 reaction) cshape-reaction-default)
+    (set! (-> s5-0 no-reaction)
+          (the-as (function collide-shape-moving collide-query vector vector object) nothing)
+          )
+    (set! (-> s5-0 penetrated-by) (penetrate
+                                    generic-attack
+                                    lunge
+                                    flop
+                                    punch
+                                    spin
+                                    roll
+                                    uppercut
+                                    bonk
+                                    tube
+                                    flut-attack
+                                    board
+                                    mech-punch
+                                    dark-punch
+                                    dark-smack
+                                    flut
+                                    )
+          )
+    (let ((s4-0 (new 'process 'collide-shape-prim-group s5-0 (the-as uint 2) 0)))
+      (set! (-> s5-0 total-prims) (the-as uint 3))
+      (set! (-> s4-0 prim-core collide-as) (collide-spec enemy))
+      (set! (-> s4-0 prim-core collide-with)
+            (collide-spec backgnd jak bot crate obstacle hit-by-others-list player-list)
+            )
+      (set! (-> s4-0 prim-core action) (collide-action solid deadly no-standon))
+      (set-vector! (-> s4-0 local-sphere) 0.0 (* 4096.0 4.0) 0.0 (* 8192.0 4.0))
+      (set! (-> s5-0 root-prim) s4-0)
+      )
+    (let ((v1-13 (new 'process 'collide-shape-prim-sphere s5-0 (the-as uint 0))))
+      (set! (-> v1-13 prim-core collide-as) (collide-spec enemy))
+      (set! (-> v1-13 prim-core collide-with)
+            (collide-spec backgnd jak bot crate obstacle hit-by-others-list player-list)
+            )
+      (set! (-> v1-13 prim-core action) (collide-action solid deadly no-standon))
+      (set-vector! (-> v1-13 local-sphere) 0.0 (* 4915.2 4.0) (* 1638.4 4.0) (* 4915.2 4.0))
+      )
+    (let ((v1-15 (new 'process 'collide-shape-prim-sphere s5-0 (the-as uint 0))))
+      (set! (-> v1-15 prim-core collide-as) (collide-spec enemy))
+      (set! (-> v1-15 prim-core collide-with) (collide-spec jak bot player-list))
+      (set! (-> v1-15 prim-core action) (collide-action deadly))
+      (set! (-> v1-15 transform-index) 6)
+      (set-vector! (-> v1-15 local-sphere) 0.0 0.0 (* 2048.0 4.0) (* 2662.4 4.0))
+      )
+    (set! (-> s5-0 nav-radius) 4096.0)
+    (let ((v1-17 (-> s5-0 root-prim)))
+      (set! (-> s5-0 backup-collide-as) (-> v1-17 prim-core collide-as))
+      (set! (-> s5-0 backup-collide-with) (-> v1-17 prim-core collide-with))
+      )
+    (set! (-> s5-0 max-iteration-count) (the-as uint 3))
+    (set! (-> this root) s5-0)
+    )
+  0
+  (none)
+  )
+
+  (defmethod event-handler ((this leaper-boss) (arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
+  (case arg2
+    (('move-trans)
+      (let ((leaper (-> this child)))
+        (send-event (ppointer->process leaper) 'rot-quat (-> this root quat))
+        (send-event (ppointer->process leaper) 'trans (-> this root trans))
+      )
+    )
+    (('hit 'hit-flinch 'hit-knocked)
+      (when (string= (-> this name) "Skull Snapper")
+      (if (logtest? (-> *game-info* secrets) (game-secrets hero-mode))
+                (set! hpbar-max-hit-points (+ 4400.0 (* (the float enemy-noto) 3)))
+                (set! hpbar-max-hit-points (+ 2200.0 (* (the float enemy-noto) 3)))
+              )
+              (when (> hpbar-hit-points hpbar-max-hit-points)
+                (set! hpbar-hit-points hpbar-max-hit-points)
+              )
+              (set! hpbar-hit-points (-> this hit-points))
+              (set! enemy-string "Skull Snapper")
+              (set! enemy-hp #t)
+     )
+     (when
+      (and
+        (string= (-> this name) "Skull Snapper")
+        (<= (-> this hit-points) 0.0)
+      )
+      (when (rand-vu-percent? 0.83)
+        (drop-loot-crate! (-> this root trans) 0.3 0.14)
+        (boss-killed? 2500.0)
+      )
+      (go (method-of-object this knocked))
+     )
+     (logclear! (-> this mask) (process-mask actor-pause))
+     (logclear! (-> this focus-status) (focus-status dangerous))
+     (logclear! (-> this enemy-flags) (enemy-flag use-notice-distance))
+     (logior! (-> this enemy-flags) (enemy-flag alert))
+     (logior! (-> this focus-status) (focus-status hit))
+     (when (and
+              (= (-> this hit-points) 0.0)
+              (< (-> *game-info* side-enemies-killed?) 16)
+              (task-node-open? (game-task-node wascity-kleeverquest-lavatoad))
+            )
+      (side-enemy-killed?)
+      (when (= (-> *game-info* side-enemies-killed?) 16)
+        (r3-hint)
+        (auto-save-user)
+        (task-node-close! (game-task-node wascity-kleeverquest-lavatoad) #t)
+      )
+     )
+     (if (= (-> this hit-points) 0.0)
+         (logior! (-> this focus-status) (focus-status dead))
+         )
+     (logclear! (-> this enemy-flags) (enemy-flag lock-focus))
+     (enemy-method-69 this)
+     (logior! (-> this enemy-flags) (enemy-flag lock-focus))
+     (process-contact-action arg0)
+     (send-event arg0 'get-attack-count 1)
+     (freeze-hit-begin)
+     )
+    (else
+      ((method-of-type nav-enemy event-handler) this arg0 arg1 arg2 arg3)
+      )
+    )
+  )
+
+  (defstate rolling-start (leaper-boss)
+  :virtual #t
+  :event enemy-event-handler
+  :enter (behavior ()
+    (logclear! (-> self enemy-flags) (enemy-flag alert))
+    (logior! (-> self enemy-flags) (enemy-flag lock-focus))
+    (logior! (-> self focus-status) (focus-status dangerous))
+    (set! (-> self root penetrate-using) (penetrate generic-attack lunge))
+    (reset-penetrate! self)
+    (let* ((v1-9 *game-info*)
+           (a0-5 (+ (-> v1-9 attack-id) 1))
+           )
+      (set! (-> v1-9 attack-id) a0-5)
+      (set! (-> self attack-id) a0-5)
+      )
+    (stop-look-at! self)
+    (let ((v1-12 self))
+      (set! (-> v1-12 enemy-flags) (the-as enemy-flag (logclear (-> v1-12 enemy-flags) (enemy-flag ef37))))
+      (set! (-> v1-12 nav callback-info) *null-nav-callback-info*)
+      )
+    0
+    (spiky-frog-method-196 self)
+    )
+  :code (behavior ()
+    (ja-channel-push! 1 (seconds 0.2))
+    (let ((f30-0 1.5))
+      (ja-no-eval :group! spiky-frog-ball0-start-ja :num! (seek! max f30-0) :frame-num 0.0)
+      (until (ja-done? 0)
+        (suspend)
+        (ja :num! (seek! max f30-0))
+        )
+      (ja-no-eval :group! spiky-frog-ball0-turn-ja :num! (seek! max f30-0) :frame-num 0.0)
+      (until (ja-done? 0)
+        ;;;
+        (let ((leaper (-> self child)))
+            (send-event (ppointer->process leaper) 'rot-quat (-> self root quat))
+            (send-event (ppointer->process leaper) 'trans (-> self root trans))
+          )
+        ;;;
+        (seek! (-> self roll-transform trans y) 3645.44 (* 12288.0 (seconds-per-frame)))
+        (seek-to-point-toward-point! (-> self root) (-> self focus-pos) (* 131072.0 f30-0) (seconds 0.02))
+        (suspend)
+        (ja :num! (seek! max f30-0))
+        )
+      )
+    (go-virtual rolling)
+    )
+  :post nav-enemy-simple-post
+  )
+
+  (defstate rolling (leaper-boss)
+  :virtual #t
+  :event enemy-event-handler
+  :enter (behavior ()
+    (let ((v1-0 self))
+      (if (not (logtest? (enemy-flag ef37) (-> v1-0 enemy-flags)))
+          (set! (-> v1-0 enemy-flags) (the-as enemy-flag (logior (enemy-flag ef39) (-> v1-0 enemy-flags))))
+          )
+      (set! (-> v1-0 enemy-flags) (the-as enemy-flag (logior (enemy-flag ef37) (-> v1-0 enemy-flags))))
+      (set! (-> v1-0 nav callback-info) (-> v1-0 enemy-info callback-info))
+      )
+    0
+    (let ((v1-3 self))
+      (set! (-> v1-3 enemy-flags) (the-as enemy-flag (logior (enemy-flag ef38) (-> v1-3 enemy-flags))))
+      )
+    0
+    (logior! (-> self focus-status) (focus-status dangerous))
+    (set-time! (-> self state-time))
+    (set! (-> self time-out) (seconds 1))
+    (let ((a0-16 (vector-z-quaternion! (new 'stack-no-clear 'vector) (-> self root quat)))
+          (gp-0 (-> self move-dest))
+          )
+      (vector+float*! gp-0 (-> self root trans) a0-16 65536.0)
+      (closest-point-on-mesh (-> self nav) gp-0 gp-0 (the-as nav-poly #f))
+      (let ((v1-16 (-> self nav state)))
+        (logclear! (-> v1-16 flags) (nav-state-flag directional-mode))
+        (logior! (-> v1-16 flags) (nav-state-flag target-poly-dirty))
+        (set! (-> v1-16 target-pos quad) (-> gp-0 quad))
+        )
+      )
+    0
+    (nav-enemy-method-177 self)
+    )
+  :exit (behavior ()
+    (logclear! (-> self enemy-flags) (enemy-flag lock-focus))
+    (if (logtest? (-> self enemy-flags) (enemy-flag dangerous-backup))
+        (logior! (-> self focus-status) (focus-status dangerous))
+        (logclear! (-> self focus-status) (focus-status dangerous))
+        )
+    (sound-stop (-> self sound-id))
+    )
+  :trans (behavior ()
+      (nav-enemy-method-171 self)
+    ;;;
+    (let ((leaper (-> self child)))
+        (send-event (ppointer->process leaper) 'rot-quat (-> self root quat))
+        (send-event (ppointer->process leaper) 'trans (-> self root trans))
+        (send-event (ppointer->process leaper) 'art-joint-anim "flutflut-flutflut-walk-ja")
+      )
+    ;;;
+    (when (time-elapsed? (-> self state-time) (-> self reaction-time))
+      (let ((gp-0 (-> self focus aware)))
+        (if (or (nav-enemy-method-174 self)
+                (time-elapsed? (-> self state-time) (-> self time-out))
+                (>= 2 (the-as int gp-0))
+                (not (get-focus! self))
+                (< (vector-vector-xz-distance (-> self root trans) (-> self move-dest)) 4096.0)
+                (not (get-focus! self))
+                )
+            (go-virtual rolling-start)
+            )
+        )
+      )
+    )
+  :code (behavior ()
+    (sleep-code)
+    )
+  :post (behavior ()
+    (let* ((t9-0 lerp-scale)
+           (a0-0 0.0)
+           (a1-0 187512.44)
+           (v1-1 (-> self root transv))
+           (f0-4 (t9-0 a0-0 a1-0 (sqrtf (+ (* (-> v1-1 x) (-> v1-1 x)) (* (-> v1-1 z) (-> v1-1 z)))) 0.0 65536.0))
+           (gp-0 (new 'stack-no-clear 'quaternion))
+           )
+      (quaternion-vector-angle! gp-0 *x-vector* (* f0-4 (seconds-per-frame)))
+      (quaternion*! (-> self roll-transform quat) (-> self roll-transform quat) gp-0)
+      )
+    (sound-play "frog-roll" :id (-> self sound-id))
+    (nav-enemy-travel-post)
+    )
+  )
+
+  (defstate rolling-stop (leaper-boss)
+  :virtual #t
+  :event enemy-event-handler
+  :enter (behavior ()
+    (let ((v1-0 self))
+      (set! (-> v1-0 enemy-flags) (the-as enemy-flag (logclear (-> v1-0 enemy-flags) (enemy-flag ef37))))
+      (set! (-> v1-0 nav callback-info) *null-nav-callback-info*)
+      )
+    0
+    (let ((v1-3 self))
+      (set! (-> v1-3 enemy-flags) (the-as enemy-flag (logior (enemy-flag ef38) (-> v1-3 enemy-flags))))
+      )
+    0
+    )
+  :code (behavior ()
+    (ja-channel-push! 1 (seconds 0.2))
+    (ja-no-eval :group! spiky-frog-ball0-end-ja :num! (seek! max 0.8) :frame-num 0.0)
+    (until (ja-done? 0)
+      (seek! (-> self roll-transform trans y) 0.0 (* 5324.8 (seconds-per-frame)))
+      (quaternion-slerp!
+        (-> self roll-transform quat)
+        (-> self roll-transform quat)
+        *unity-quaternion*
+        (* 8.0 (seconds-per-frame))
+        )
+      (suspend)
+      (ja :num! (seek! max 0.8))
+      )
+    (clear-roll-joint-callback self)
+    (go-virtual stare)
+    )
+  :post nav-enemy-simple-post
+  )
+
+(defstate turn (leaper-boss)
+  :virtual #t
+  :event enemy-event-handler
+  :code (behavior ()
+    (ja-channel-push! 1 (seconds 0.1))
+    ;;;
+    (let ((leaper (-> self child)))
+        (send-event (ppointer->process leaper) 'rot-quat (-> self root quat))
+        (send-event (ppointer->process leaper) 'trans (-> self root trans))
+      )
+    ;;;
+    (let ((v1-0 self))
+      (set! (-> v1-0 enemy-flags) (the-as enemy-flag (logior (enemy-flag ef38) (-> v1-0 enemy-flags))))
+      )
+    0
+    (ja-no-eval :group! spiky-frog-rotate-left-start-ja :num! (seek!) :frame-num 0.0)
+    (until (ja-done? 0)
+      (suspend)
+      (ja :num! (seek!))
+      )
+    (let ((v1-26 self))
+      (set! (-> v1-26 enemy-flags) (the-as enemy-flag (logclear (-> v1-26 enemy-flags) (enemy-flag ef38))))
+      )
+    0
+    (ja-no-eval :group! spiky-frog-rotate-left-end-ja :num! (seek!) :frame-num 0.0)
+    (until (ja-done? 0)
+      (suspend)
+      (ja :num! (seek!))
+      )
+    (go-best-state self)
+    )
+  :post (behavior ()
+    (let ((a0-0 self))
+      (if (logtest? (enemy-flag ef38) (-> a0-0 enemy-flags))
+          (seek-to-point-toward-point! (-> self root) (-> self focus-pos) 81920.0 (seconds 0.02))
+          )
+      )
+    (nav-enemy-simple-post)
+    )
+  )
+  
+
+  (defbehavior leaper-boss-init-by-other leaper-boss ((vec vector))
+      (init-enemy-collision! self)
+      (set! (-> self root trans quad) (-> vec quad))
+      (quaternion-identity! (-> self root quat))
+      (vector-identity! (-> self root scale))
+      (init-enemy! self)
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      (let ((nav (find-nearest-nav-mesh vec 0.0)) ;; try to find a nav mesh in the vicinity
+        ;; verts for the path
+        (cverts (new 'static 'inline-array vector 3
+                (static-vectorm 1 0 0)
+                (static-vectorm 0 1 0)
+                (static-vectorm 0 0 1)
+                )
+          )
+        )
+    ;; if a nav mesh is close by, use that, otherwise use default
+    (if nav
+      (change-to nav self)
+      (change-to *default-nav-mesh* self)
+      )
+    ;; allocate path
+    (set! (-> self path) (new 'process 'path-control self 'path 0.0 (the entity #f) #f))
+    (set! (-> self path curve cverts) cverts)
+    (set! (-> self path curve num-cverts) 3)
+    )
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    (set! (-> self hit-points) (+ (+ 2200.0 (* enemy-noto 10)) (/ (the float enemy-noto) 3)))
+  (go (method-of-object self ambush))
+  (none)
+)
+

@@ -62,6 +62,7 @@
 (define-extern bombbot type)
 (declare-type rage-ghost process-focusable)
 (define *rage-ghost* (the (pointer rage-ghost) #f))
+(declare-type leaper-boss process-focusable)
 (defun remap-enemy-type-name ((en-type type))
   "returns the appropriate type name (symbol) for the stats tracker"
 
@@ -118,6 +119,7 @@
     ((type-type? en-type dp-bipedal-c) 'dp-bipedal-c)
     ((type-type? en-type bipedal-boss) 'bipedal-boss)
     ((type-type? en-type rage-ghost) 'rage-ghost)
+    ((type-type? en-type leaper-boss) 'leaper-boss)
     (else (-> en-type symbol)))
   )
 

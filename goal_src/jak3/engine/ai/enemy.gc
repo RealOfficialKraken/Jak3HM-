@@ -1697,6 +1697,7 @@
             (when (and
                     (not (string= (-> this name) "Bipedal Boss"))
                     (not (string= (-> this name) "toad-boss"))
+                    (not (string= (-> this name) "rage-ghost"))
                   )
               (if (logtest? (-> *game-info* secrets) (game-secrets hero-mode))
                 (set! hpbar-max-hit-points (+ (* 2.0 (-> self enemy-info default-hit-points)) (* (the float enemy-noto) 3)))
@@ -1817,9 +1818,16 @@
                       (set! enemy-string "Metalhead Flamer")
                     )
                     ((= enemy-name 'spiky-frog)
-                      (set! enemy-string "Lava Toad")
-                      (when (logtest? (-> *game-info* secrets) (game-secrets hero-mode))
-                        (set! enemy-string "Lava Frong")
+                      (cond
+                        ((string= (-> self name) "Skull Snapper")
+                          (set! enemy-string "Skull Snapper")
+                        )
+                        (else
+                          (set! enemy-string "Lava Toad")
+                          (when (logtest? (-> *game-info* secrets) (game-secrets hero-mode))
+                            (set! enemy-string "Lava Frong")
+                          )
+                        )
                       )
                     )
                     ((= enemy-name 'tomb-baby-spider)

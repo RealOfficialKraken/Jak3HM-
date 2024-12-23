@@ -3245,7 +3245,10 @@
       0
       )
     )
-  (when (and (zero? (-> this count-alive)) (zero? (-> this count)))
+  (when (and 
+        (zero? (-> this count-alive)) 
+        (zero? (-> this count))
+        )
     (let ((s5-2 #t))
       (let ((s4-1 (handle->process (-> this platform 0))))
         (when (and (if (type? s4-1 wstd-fight-plat-large)

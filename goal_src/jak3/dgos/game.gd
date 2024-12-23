@@ -500,9 +500,10 @@
   "neo-wasp.o"
   "flamer-lava.o"
   "manta.o"
-  "debug-part.o"
+  "flut.o"
   "rage-ghost.o"
   "spiky-frog.o"
+  "leaper-boss.o"
   "jak3-custom-code.o" ;custom-mod
   "xp-level.o"
   "wasteland-spawner.o"

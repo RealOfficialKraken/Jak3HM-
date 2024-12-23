@@ -2430,7 +2430,7 @@
                )
            (suspend)
            )
-         (activate-progress *dproc* 'icon-info)
+         ;;(activate-progress *dproc* 'icon-info)
          (while *progress-process*
            (suspend)
            )

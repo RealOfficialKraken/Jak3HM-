@@ -769,10 +769,13 @@
     )
   )
 
+
+
 (defstate wait-more (task-manager-arena-training)
   :virtual #t
   :parent (task-manager-arena-training active)
   :enter (behavior ()
+    (activate-progress *dproc* 'icon-info)
     (dotimes (gp-0 (length (-> self actor-group 0)))
       (let ((v1-2 (-> self actor-group 0 data gp-0)))
         (when (logtest? (-> *arena-trainer-checkpoint-tokens* 0) (ash 1 gp-0))
