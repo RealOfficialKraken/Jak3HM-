@@ -3178,6 +3178,9 @@
 
 (deftype task-manager-arena-fight-3 (task-manager-arena-fight-2)
   ()
+  (:state-methods
+    boss-summon
+  )
   )
 
 
@@ -3261,12 +3264,26 @@
           )
         )
       (if s5-2
-          (go (method-of-object this done))
+          (go (method-of-object this boss-summon))
           )
       )
     )
   (none)
   )
+
+(defstate boss-summon (task-manager-arena-fight-3)
+  :virtual #t
+  :code
+  (behavior ()
+    (process-spawn leaper-boss2 (target-pos 0) :name "Skull Snapper")
+    (loop 
+      (when (not (search-process-tree *active-pool* (lambda ((p process)) (type? p leaper-boss2))))
+        (go-virtual done)
+      )
+      (suspend)
+    )
+  )
+)
 
 (defstate done (task-manager-arena-fight-3)
   :virtual #t

@@ -176,6 +176,8 @@
 
   (define desertspawn-mcount 0)
 
+  (define leaperboss-spawned? #f)
+
   (define turbo-held? #f)
   (define turbo-supply-float 0.0)
   (define turbo-max 0.0)

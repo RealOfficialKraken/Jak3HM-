@@ -516,6 +516,7 @@
   "dp-bipedal-shot.o"
   "dp-bipedal.o"
   "marauder.o"
+  "leaper-boss2.o"
   "marauder-c.o"
   "maker-part.o"
   "target-turret-shot.o"
