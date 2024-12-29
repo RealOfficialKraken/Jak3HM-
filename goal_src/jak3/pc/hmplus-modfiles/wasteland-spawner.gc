@@ -1121,7 +1121,6 @@
                         :w 1.0)))
                         (when (and 
                                 (= in-volcano-level? #t)
-                                (task-node-closed? (game-task-node volcano-darkeco-resolution))
                                 (and
                                     (!= (-> (level-get-target-inside *level*) name) 'volcanoa)
                                     (!= (-> (level-get-target-inside *level*) name) 'volcanob)

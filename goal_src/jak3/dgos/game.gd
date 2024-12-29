@@ -459,6 +459,7 @@
   "proc-focusable-spawner.o"
   "enemy-h.o"
   "nav-enemy-h.o"
+  "xp-level.o"
   "enemy.o"
   "enemy-states.o"
   "nav-enemy.o"
@@ -505,7 +506,6 @@
   "spiky-frog.o"
   "leaper-boss.o"
   "jak3-custom-code.o" ;custom-mod
-  "xp-level.o"
   "wasteland-spawner.o"
   "rope-system-h.o"
   "rope-system.o"

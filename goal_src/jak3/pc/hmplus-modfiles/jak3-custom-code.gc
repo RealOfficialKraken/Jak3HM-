@@ -32,7 +32,7 @@ BUGS:
 - levelup explosion runs out of memory, or happens outside of goal code
 - dropped boss crates dont reset their vectors
 - Bipedal Boss' shield isnt strength 999
-- Potential crash upon loading a save from main menu, while jak's in volcano level
+- Crash from volcano-level in retail-mode
 - Vin mission saves infinitely upon close, only in dark-world though
 
 |#
@@ -3730,6 +3730,7 @@ BUGS:
         ;(process-spawn dm-mine-spider-spawner vspwnr1 :name "dm-spawner")
         (process-spawn dm-mine-spider-spawner vspwnr2 :name "dm-spawner")
         (process-spawn dm-mine-spider-spawner vspwnr3 :name "dm-spawner")
+        (none)
     )
   )
 

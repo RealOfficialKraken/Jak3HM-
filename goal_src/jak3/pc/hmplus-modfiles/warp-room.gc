@@ -3,6 +3,22 @@
 ;name: warp-room.gc
 
 (defun run-warp-room ()
+    (when
+        (and
+            (= (pause-allowed?) #t)
+            *target*
+            (= test-level-loaded? #t)
+            (or
+                (= in-volcano-level? #t)
+                (= in-mine-level? #t)
+                (= in-factory-level? #t)
+            )
+        )
+            (set! in-volcano-level? #f)
+            (set! in-mine-level? #f)
+            (set! in-factory-level? #f)
+        )
+
     (when ;wasdoors gates spawn
         (and
             (= (pause-allowed?) #t)

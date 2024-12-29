@@ -2351,6 +2351,8 @@
       (when (and 
               (zero? (-> this hit-points))
             )
+        (set! global-parent-mask (-> this mask))
+        (set! global-root-trans (-> this root trans))
         (enemy-killed? (rand-vu-float-range 15.0 50.0))))
     (if (not (logtest? (-> this enemy-flags) (enemy-flag auto-reset-penetrate)))
         (set! (-> this root penetrated-by) (get-penetrated-by this))
