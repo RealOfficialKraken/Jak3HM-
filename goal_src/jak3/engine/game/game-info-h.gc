@@ -159,6 +159,8 @@
   (define start-was-uprising #f)
   (define wasi 0)
 
+  (define level-override #f)
+
   (define matt-str (new 'global 'string 2048 (the-as string #f)))
   (define *pc-encoded-matt-str* (new 'global 'string 2048 (the-as string #f)))
 

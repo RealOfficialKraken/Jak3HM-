@@ -1781,6 +1781,7 @@ BUGS:
     (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
 )
 
+
 (when 
     (and
         (= desert-spawn-mission-deserta #t) ;exit the task marauder mission when far away

@@ -1529,7 +1529,7 @@
               )
             :on-open #f
             :manager (new 'static 'task-manager-info
-              :level 'desert
+              :level #f
               :type-to-spawn 'jak3logo
               :intro-scene #f
               :resolution-scene #f

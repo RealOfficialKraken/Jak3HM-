@@ -302,6 +302,7 @@
    (y-ofs         float)
    (xp-string     string)
    (xp-gain       float)
+   (rep-string    string)
    )
   (:state-methods
     active
@@ -310,14 +311,24 @@
     (initialize-font (_type_) font-context))
   )
 
+
 (defstate active (reputation-text)
   :virtual #t
 
   :trans (behavior ()
-
+    
     (when (not (logtest? (-> *kernel-context* prevent-from-run) (-> self parent-mask)))
       ;; make font float upwards
-      (+! (-> self y-ofs) (* 2.0 (-> self clock time-adjust-ratio)))
+      (when 
+        (and 
+            (> (-> self y-ofs) 32.0) 
+            (< (-> self y-ofs) 33.0)
+            (<= notoriety-level (- enemy-noto 7))
+        )
+        (set! (-> self rep-string) "(+ High Level Bonus)~%~S: +~D Reputation")
+        (set! (-> self xp-gain) (+ *xp-gain* (* (/ 120.0 (the float notoriety-level)) 2)))
+      )
+      (+! (-> self y-ofs) (* 0.6 (-> self clock time-adjust-ratio)))
       )
 
     ;; convert 3D -> 2D screen now (result in trans-2d)
@@ -335,7 +346,7 @@
   :code (behavior ()
     (let ((state-time (current-time)))
         ;; move up for a bit
-        (until (>= (- (current-time) state-time) (seconds 1))
+        (until (>= (- (current-time) state-time) (seconds 2.5))
           (suspend))
         ;; now fade out
         (set! state-time (current-time))
@@ -347,7 +358,7 @@
 
   :post (behavior ()
     (when (-> self on-screen?)
-      (print-game-text (string-format "~S: +~D Reputation" (-> self xp-string) (the int (-> self xp-gain))) (-> self font) #f 44 (bucket-id debug-no-zbuf1)))
+      (print-game-text (string-format (-> self rep-string) (-> self xp-string) (the int (-> self xp-gain))) (-> self font) #f 44 (bucket-id debug-no-zbuf1)))
     )
   )
 
@@ -365,6 +376,7 @@
       (set! (-> self font) (new 'process 'font-context *font-default-matrix* 0 0 0.0 (font-color default) (font-flags shadow kerning))))
   (set! (-> self xp-string) xp-string)
   (set! (-> self xp-gain) *xp-gain*)
+  (set! (-> self rep-string) "~S: +~D Reputation")
   (set-scale! (-> self font) 0.325)
   (set-flags! (-> self font) (font-flags shadow kerning large middle))
   (set-width! (-> self font) 350)
@@ -494,7 +506,17 @@
         (when (> xp-gain2 2500.0)
             (set! xp-gain2 2500.0)
         )
-        (+! (-> *game-info* karma) xp-gain2)
+        (set! *xp-gain* (/ (* xp-gain enemy-noto) 1.5))
+        (cond 
+          ((<= notoriety-level (- enemy-noto 7))
+            (set! xp-gain2 (+ xp-gain2 (* (/ 120 (the float notoriety-level)) 2)))
+            (+! (-> *game-info* karma) xp-gain2)
+          )
+          (else
+            (+! (-> *game-info* karma) xp-gain2)
+            (set! *xp-gain* xp-gain2)
+          )
+        )
         (when (focus-test? *target* pilot)
             (when (> xp-gain3 2500.0)
                 (set! xp-gain3 2500.0)
@@ -502,9 +524,8 @@
             (+! (-> *game-info* fuel) xp-gain3)
         )
         (set! xp-string "Enemy Killed")
-    (set! *xp-gain* xp-gain2)
-    (spawn-rep-text)
-    (set! xpi 0)
+        (spawn-rep-text)
+        (set! xpi 0)
     )
     (none)
 )
@@ -1045,7 +1066,8 @@
 
         ;level based enemy-levels
 
-        (when
+        (when (not level-override)
+            (when
             (and 
                 (not (logtest? (-> *game-info* secrets) (game-secrets hero-mode)))
                 (task-node-closed? (game-task-node arena-training-1-introduction))
@@ -1375,6 +1397,7 @@
                     (set! start-was-uprising #f)
                 )
             )
+        )
 
 
     (when 
@@ -1390,11 +1413,6 @@
         (+! xpi 1)
         (when (and (= xpi 3)(= xp-draw-override #t))
             (process-spawn reputation-text global-root-trans global-parent-mask)
-        )
-        (when (= xpi 90)
-            (set! xpi 0)
-            (set! xp-draw #f)
-            (set! xp-draw-override #f)
         )
         (when (= xp-draw-override #f)
             (let ((y 50))
@@ -1417,6 +1435,11 @@
             (set! (-> font-ctx scale) 0.325)
             (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
         )
+        )
+         (when (= xpi 90)
+            (set! xpi 0)
+            (set! xp-draw #f)
+            (set! xp-draw-override #f)
         )
     )
 

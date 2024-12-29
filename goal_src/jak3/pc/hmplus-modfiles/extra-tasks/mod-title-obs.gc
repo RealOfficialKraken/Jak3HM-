@@ -53,6 +53,7 @@
   (defstate active (jak3logo) ;looped from CDR, or virtual startup.
     :virtual #t
     :code (behavior ()
+      (when (not (task-node-closed? (game-task-node arena-training-1-introduction)))
       (spawn-dust-storm)
       (task-node-close! (game-task-node desert-interceptors-attack) #t)
       (set! (-> self wait-timer) 0)
@@ -60,6 +61,7 @@
       (set! (-> self flicker-max) (rand-vu-int-range 3 10))
       (kill-by-name "jak3logo" *default-pool*)
       (go-virtual check-for-flicker)
+      )
     )
   )
 
