@@ -326,7 +326,7 @@
             (<= notoriety-level (- enemy-noto 7))
         )
         (set! (-> self rep-string) "(+ High Level Bonus)~%~S: +~D Reputation")
-        (set! (-> self xp-gain) (+ *xp-gain* (* (/ 120.0 (the float notoriety-level)) 2)))
+        (set! (-> self xp-gain) (+ (-> self xp-gain) (* (-> self xp-gain) 0.32)))
       )
       (+! (-> self y-ofs) (* 0.6 (-> self clock time-adjust-ratio)))
       )
@@ -509,7 +509,7 @@
         (set! *xp-gain* (/ (* xp-gain enemy-noto) 1.5))
         (cond 
           ((<= notoriety-level (- enemy-noto 7))
-            (set! xp-gain2 (+ xp-gain2 (* (/ 120 (the float notoriety-level)) 2)))
+            (set! xp-gain2 (+ xp-gain2 (* xp-gain2 0.32)))
             (+! (-> *game-info* karma) xp-gain2)
           )
           (else

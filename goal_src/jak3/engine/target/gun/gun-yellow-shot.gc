@@ -150,7 +150,16 @@
         )
       (set! (-> s4-1 timeout) (seconds 4))
       (vector-float*! (-> s4-1 vel) s5-2 819200.0)
-      (the-as (pointer gun-yellow-shot-3) (spawn-projectile gun-yellow-shot-3 s4-1 this *default-dead-pool*))
+      (the-as (pointer gun-yellow-shot-3) 
+        (cond
+          ((= gunmod-fireball #t)
+            (spawn-target-fireball (-> s4-1 pos) (-> s4-1 vel) (rand-vu-float-range 6000.0 327000.0))
+          )
+          (else
+            (spawn-projectile gun-yellow-shot-3 s4-1 this *default-dead-pool*)
+          )
+        )
+      )
       )
     )
   )
