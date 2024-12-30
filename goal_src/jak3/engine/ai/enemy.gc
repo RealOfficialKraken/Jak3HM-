@@ -1698,6 +1698,7 @@
                     (not (string= (-> this name) "Bipedal Boss"))
                     (not (string= (-> this name) "toad-boss"))
                     (not (string= (-> this name) "rage-ghost"))
+                    (not (string= (-> this name) "roboguard-giant"))
                     (not (string= (-> this name) "Skull Snapper"))
                   )
               (if (logtest? (-> *game-info* secrets) (game-secrets hero-mode))
@@ -1893,6 +1894,9 @@
                     ((= enemy-name 'rage-ghost)
                       (set! enemy-string "Rage Ghost")
                     )
+                    ((= enemy-name 'robogiant)
+                      (set! enemy-string "Terry!")
+                    )
                     (else 
                       (set! enemy-string (the string enemy-name))
                     )
@@ -2045,6 +2049,7 @@
      (when (or ;hack to make enemy immune to knockback
           (not (string= (-> this name) "goredrinker"))
           (not (string= (-> this name) "Black Harbinger"))
+          (not (string= (-> this name) "roboguard-giant"))
           (!= (remap-enemy-type-name (-> this type)) 'bipedal-boss)
          )
      (go (method-of-object this knocked))

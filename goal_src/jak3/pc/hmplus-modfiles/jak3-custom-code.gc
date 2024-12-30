@@ -4174,6 +4174,7 @@ BUGS:
     (kill-by-name "jak3logo" *default-pool*)
     (kill-by-name "flut-racer" *default-pool*)
     (kill-by-name "rage-ghost" *default-pool*)
+    (kill-by-name "roboguard-giant" *default-pool*)
     (set! *rage-ghost* #f)
     (set! spawned-logo? #f)
     (set! mine-boss-fireball? #f)

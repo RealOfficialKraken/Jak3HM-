@@ -527,6 +527,7 @@
   "maker-projectile.o"
   "planetboss.o"
   "brute-dagger.o"
+  "roboguard-giant.o"
   "look-for-warpgate.o"
   "tm-desertf-anchor.o"
   "tm-desertc-anchor.o"
