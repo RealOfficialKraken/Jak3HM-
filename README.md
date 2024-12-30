@@ -15,6 +15,6 @@ FEATURES AND SPOILERS
 - A brand new collecable called Dark Eco Crystals, which are used as a rare currency
 - Weapons can be obtained via enemy drop, some from specific enemies. These drops hold a quest to obtain said weapon
 - Weapon Mods are boosters on Jak's guns that make weapons overpowered.
-- These are incredibly rare legendary drops from enemy crates, obtained after Notoriety level 30
+  These weapon mods are incredibly rare legendary drops from enemy crates, obtained after Notoriety level 30
 - Custom healthbars
 - Tap boost with vehicles + auto regenerating boost
