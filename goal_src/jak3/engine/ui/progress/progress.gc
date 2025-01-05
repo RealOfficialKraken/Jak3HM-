@@ -3006,7 +3006,7 @@
 (defmethod respond-progress ((this menu-missions-option) (arg0 progress) (arg1 symbol))
   (let ((v1-0 #f))
     (let ((f0-1 (the float (+ (-> arg0 total-num-tasks) -1))))
-      (cond
+      #|(cond
         ((or (cpad-pressed? 0 up l-analog-up)
              (and (cpad-hold? 0 up l-analog-up) (= (-> this current-index) (-> this target-index)))
              )
@@ -3047,11 +3047,12 @@
          (set! (-> this scroll-speed) 1000.0)
          (set! (-> this target-index) (fmin (+ 5.0 (-> this target-index)) f0-1))
          )
-        )
+        )|#
       )
     (if v1-0
         (sound-play "mission-scroll")
         )
+    ;(activate-progress *dproc* 'error-disc-removed)
     )
   0
   )

@@ -5,14 +5,6 @@
 
 #|IDEAS TO IMPLEMENT
 
-----------------------------------------
-custom ghost enemy
-----------------------------------------
-spawns a custom nav-enemy that roams around the
-dark world as a red particle blob. Upon approach,
-the blob will spawn a red transparent entity that
-one-shots you with an ability. These ghosts can only
-be destroyed with a weapon mod that freezes entities
 
 ----------------------------------------
 dark-world objectives
@@ -20,20 +12,21 @@ dark-world objectives
 gives the player things to do in the dark world.
 Like encounter bosses, fight satellites, and to farm
 in wascity. Some quests go here, that entail to accessing
-areas and finding a crate
+areas like the palace or the arena with process-platforms spawned
 
 TODO:
 - find out how to implement the flut-racers to know the race they're in
-- add to title screen
+- add to title screen, like a dark ship or enemies in the background, or the rage ghost
 
 BUGS:
-- Enemies spawning happens before level transition, so enemies have default health even though they're high level
-- jak has vulcan fury in arena 3
 - levelup explosion runs out of memory, or happens outside of goal code
-- dropped boss crates dont reset their vectors
+- dropped boss/group crates dont reset their vectors
 - Bipedal Boss' shield isnt strength 999
-- Crash from volcano-level in retail-mode
+- Crystal in hud has no texture
 - Vin mission saves infinitely upon close, only in dark-world though
+
+:CRASHES
+- Crash from warp gates in wascity-doors after the player goes through the custom main menu
 
 |#
 (defun-extern level-up! int none)
@@ -45,34 +38,7 @@ BUGS:
 (defun-extern spawn-rage-ghost none)
 (defun-extern boss-leaper! vector none)
 
-(defun title-progress ((arg0 symbol))
-  (setup
-    *screen-filter*
-    (new 'static 'vector :w 128.0)
-    (new 'static 'vector :w 128.0)
-    (seconds-per-frame)
-    (bucket-id tex-hud-pris2)
-    #x3fffff
-    #x33001
-    #t
-    )
-  (set-setting! 'allow-progress #t 0.0 0)
-  (apply-settings *setting-control*)
-  (activate-progress *dproc* arg0)
-  (set-setting! 'allow-progress #f 0.0 0)
-  (dotimes (gp-1 5)
-    (suspend)
-    )
-  (disable *screen-filter*)
-  (remove-setting! 'allow-error)
-  (while (-> *blit-displays-work* menu-mode)
-    (suspend)
-    )
-  (set-setting! 'allow-error #f 0.0 0)
-  (apply-settings *setting-control*)
-  (set-blackout-frames (seconds 0.2))
-  0
-  )
+
 
 
 (define spider-1-vec (new 'static 'vector 
@@ -3218,9 +3184,9 @@ BUGS:
         (set-continue! *game-info* "factorys-start" #t)
     )
 
-    ;anchor triggers
+    ;anchor triggers, to spawn anchors on its own
 
-    (when 
+    (when               ;desertf
         (and
             (not *scene-player*)
             (= (paused?) #f)
@@ -3228,7 +3194,7 @@ BUGS:
             *target*
             (= in-desertf-anchor? #t)
             (= anchor-cooldown #f)
-            (task-node-closed? (game-task-node wascity-kleeverquest-lavatoad))
+            (task-node-closed? (game-task-node desert-vin-quest-resolution))
             (= anchor-day? #t)
             (not (task-node-open? (game-task-node desertf-anchor-resolution)))
         )
@@ -3242,7 +3208,7 @@ BUGS:
             *target*
             (= in-desertc-anchor? #t)
             (= anchor-cooldown #f)
-            (task-node-closed? (game-task-node wascity-kleeverquest-lavatoad))
+            (task-node-closed? (game-task-node desert-vin-quest-resolution))
             (= anchor-day? #t)
             (not (task-node-open? (game-task-node desertc-anchor-resolution)))
         )
@@ -3256,7 +3222,7 @@ BUGS:
             *target*
             (= in-ctyinda-anchor? #t)
             (= anchor-cooldown #f)
-            (task-node-closed? (game-task-node wascity-kleeverquest-lavatoad))
+            (task-node-closed? (game-task-node desert-vin-quest-resolution))
             (= anchor-day? #t)
             (not (task-node-open? (game-task-node ctyinda-anchor-resolution)))
         )
@@ -3270,7 +3236,7 @@ BUGS:
             *target*
             (= in-desertg-anchor? #t)
             (= anchor-cooldown #f)
-            (task-node-closed? (game-task-node wascity-kleeverquest-lavatoad))
+            (task-node-closed? (game-task-node desert-vin-quest-resolution))
             (= anchor-day? #t)
             (not (task-node-open? (game-task-node desertg-anchor-resolution)))
         )
@@ -3278,20 +3244,24 @@ BUGS:
     )
 
     (when 
-        (and
-            (not *scene-player*)
-            (= (paused?) #f)
-            (= (pause-allowed?) #t)
-            *target*
-            (= in-desertf-anchor? #f)
-            (= in-desertc-anchor? #f)
-            (= in-ctyinda-anchor? #f)
-            (= in-desertg-anchor? #f)
-            (not (task-node-open? (game-task-node desertf-anchor-resolution)))
-            (not (task-node-open? (game-task-node desertc-anchor-resolution)))
-            (not (task-node-open? (game-task-node desertg-anchor-resolution)))
-            (not (task-node-open? (game-task-node ctyinda-anchor-resolution)))
-            (task-node-closed? (game-task-node wascity-kleeverquest-lavatoad))
+        (or
+            (and
+                (not *scene-player*)
+                (= (paused?) #f)
+                (= (pause-allowed?) #t)
+                *target*
+                (= in-desertf-anchor? #f)
+                (= in-desertc-anchor? #f)
+                (= in-ctyinda-anchor? #f)
+                (= in-desertg-anchor? #f)
+                (not (task-node-open? (game-task-node desertf-anchor-resolution)))
+                (not (task-node-open? (game-task-node desertc-anchor-resolution)))
+                (not (task-node-open? (game-task-node desertg-anchor-resolution)))
+                (not (task-node-open? (game-task-node ctyinda-anchor-resolution)))
+                (task-node-closed? (game-task-node desert-vin-quest-resolution))
+                (= *waste-ship-anchor* #t)
+            )
+            (= in-desert-game-task? #t)
             (= *waste-ship-anchor* #t)
         )
             (kill-by-name "dm-ship" *default-pool*)
@@ -3325,7 +3295,8 @@ BUGS:
             (= in-desertc-anchor? #f)
             (= in-desertg-anchor? #f)
             (= in-ctyinda-anchor? #f)
-            (task-node-closed? (game-task-node wascity-gungame-resolution))
+            (= in-desert-game-task? #f)
+            (task-node-closed? (game-task-node desert-vin-quest-resolution))
         )
             (pick-random-anchor)
         )
@@ -4063,6 +4034,7 @@ BUGS:
 
 (defun launch-mmenu ()
     (initialize! *game-info* 'game (the-as game-save #f) "desert-bd-start" (the-as resetter-spec #f))
+    (set! (-> *game-info* mode) 'play)
     (send-event (ppointer->process *time-of-day*) 'change 'hour 19)
     (set! (-> *time-of-day-context* mode) (the-as time-of-day-palette-id 5))
     (send-event (ppointer->process *time-of-day*) 'change 'ratio 0.0)

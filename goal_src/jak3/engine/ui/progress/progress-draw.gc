@@ -1239,7 +1239,7 @@
                     (set! sv-368 print-game-text)
                     (set! sv-384 format)
                     (let ((a0-48 (clear *temp-string*))
-                          (a1-18 "~S")
+                          (a1-18 "Missions Hidden, this tab would otherwise crash the game")
                           )
                       (sv-384 a0-48 a1-18 s0-3)
                       )
@@ -3725,7 +3725,7 @@
   (draw-string-adv *pc-encoded-matt-str* buf font-ctx)))
   (clear matt-str)
   (clear *pc-encoded-matt-str*)
-  (format matt-str "<COLOR_YELLOW>To <COLOR_CYAN>Hat Kid<COLOR_YELLOW>, <COLOR_PINK>Barg<COLOR_YELLOW>, <COLOR_RED>Majora<COLOR_YELLOW>, <COLOR_RED>Zed<COLOR_YELLOW>, and <COLOR_ORANGE>Kuitar<COLOR_YELLOW>.~%This mod would not be possible without you.~%~%Thank you~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_WHITE>Continue"
+  (format matt-str "<COLOR_YELLOW>To <COLOR_ORANGE>Mortis, <COLOR_CYAN>Hat Kid<COLOR_YELLOW>, <COLOR_PINK>Barg<COLOR_YELLOW>, <COLOR_RED>Majora<COLOR_YELLOW>, <COLOR_RED>Zed<COLOR_YELLOW>, and <COLOR_ORANGE>Kuitar<COLOR_YELLOW>.~%This mod would not be possible without you.~%~%Thank you~%~%~%~%~%~%~%~%~%~%~%~%~%<COLOR_WHITE>Continue"
   )
   (pc-encode-utf8-string matt-str *pc-encoded-matt-str*)
   (with-dma-buffer-add-bucket ((buf (-> (current-frame) global-buf)) (bucket-id hud-draw-hud-alpha))

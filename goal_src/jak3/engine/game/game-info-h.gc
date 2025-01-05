@@ -61,6 +61,7 @@
 (define-extern flying-turret type)
 (define-extern bombbot type)
 (define-extern roboguard-giant type)
+(define-extern wland-passenger type)
 (declare-type rage-ghost process-focusable)
 (define *rage-ghost* (the (pointer rage-ghost) #f))
 (declare-type leaper-boss process-focusable)
@@ -122,6 +123,7 @@
     ((type-type? en-type rage-ghost) 'rage-ghost)
     ((type-type? en-type leaper-boss) 'leaper-boss)
     ((type-type? en-type roboguard-giant) 'robogiant)
+    ((type-type? en-type wland-passenger) 'wland-passenger)
     (else (-> en-type symbol)))
   )
 

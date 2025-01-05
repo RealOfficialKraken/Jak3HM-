@@ -1052,6 +1052,13 @@
            (sound-play "turbo-pickup")
            )
        (+! (-> this turbo-supply) 1.0)
+       (let ((f0-0 (the-as float (-> arg3 param 0)))
+           (f1-0 (-> this hit-points))
+           )
+       (if (< 0.0 f1-0)
+           (+! (-> this hit-points) 0.1)
+           )
+       )
        (set! turbo-supply-float (-> this turbo-supply))
 
        ;(set! (-> this turbo-supply) (fmin 3.0 (-> this turbo-supply)))
