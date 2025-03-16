@@ -18,3 +18,6 @@ FEATURES AND SPOILERS
   These weapon mods are incredibly rare legendary drops from enemy crates, obtained after Notoriety level 30
 - Custom healthbars
 - Tap boost with vehicles + auto regenerating boost
+- Crystals progress the main quest
+- TP-FB is back and harder than ever
+- Fight an epic battle between you and a powerful boss to be reckoned with, The Entity
